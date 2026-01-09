@@ -7,23 +7,30 @@
   <title>Programvare – etterspenning og forankringer</title>
   <meta name="description"
         content="Programvare for etterspenning og forankringer: injisering, oppspenning og dokumentasjon. Tilpasset norsk praksis og relevante europeiske standarder." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="site.js" defer></script>
 </head>
 
 <body>
 
-  <header>
-    <div>Etterspenning.no</div>
-    <nav aria-label="Hovedmeny">
-      <a href="/">Hjem</a>
-      <a href="/forankringer">Forankringer</a>
-      <a href="/verktoy">Verktøy</a>
-      <a href="/software.html" aria-current="page">Software</a>
-      <a href="/data">Data</a>
-      <a href="/bilder">Bilder</a>
-      <a href="/kontakt">Kontakt</a>
-    </nav>
-    <hr />
+  <header class="site-header">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Meny</span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <div class="site-title">Etterspenning.no</div>
   </header>
+  <nav id="site-nav" class="site-nav" aria-label="Hovedmeny">
+    <a href="index.html">Hjem</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html" class="active">Software</a>
+    <a href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
 
   <main>
     <h1>Programvare for etterspenning og forankringer</h1>
@@ -75,8 +82,7 @@
   </main>
 
   <footer>
-    <hr />
-    <p>© 2026 Etterspenning.no</p>
+    <p>© 2025 Etterspenning.no</p>
   </footer>
 
 </body>
