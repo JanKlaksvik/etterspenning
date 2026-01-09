@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etterspenning.no - Data</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #003366;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav {
+      background: #005599;
+      display: flex;
+      justify-content: flex-end;
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 0 10px;
+    }
+    nav a {
+      color: white;
+      padding: 15px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background-color: #004080;
+    }
+    nav a.active {
+      text-decoration: underline;
+    }
+    section {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+      background-color: white;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9em;
+      background-color: #eee;
+    }
+    .form-section {
+      background: #f9f9f9;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .form-section input {
+      padding: 6px;
+      margin: 4px;
+      width: 100px;
+    }
+    .warning {
+      color: red;
+      font-size: 0.9em;
+    }
+    .pdf-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 30px;
+    }
+    .pdf-link img {
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      Etterspenning.no
+    </div>
+    <nav>
+      <a href="index.html">Hjem</a>
+      <a href="forankringer.html">Forankringer</a>
+      <a href="verktoy.html">Verktøy</a>
+      <a href="software.html">Software</a>
+      <a class="active" href="data.html">Data</a>
+      <a href="bilder.html">Bilder</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <section>
+    <h1>Data</h1>
+    <p>Her er de mest vanlige spenntau typer brukt i Scandinavia.</p>
+
+    <h2>Grunn data på spenntau</h2>
+    <table>
+      <tr>
+        <th>Spenntau</th>
+        <th>Type</th>
+        <th>Diameter [mm]</th>
+        <th>Areal [mm²]</th>
+        <th>Flyt [MPa]</th>
+        <th>Brudd [MPa]</th>
+        <th>Vekt [g/m]</th>
+        <th>E-Modul (+/-10)</th>
+      </tr>
+      <tr>
+        <td>T15</td>
+        <td>Normal</td>
+        <td>15,2</td>
+        <td>140</td>
+        <td>1640</td>
+        <td>1860</td>
+        <td>1,093</td>
+        <td>196.000</td>
+      </tr>
+      <tr>
+        <td>T15S</td>
+        <td>Super</td>
+        <td>15,7</td>
+        <td>150</td>
+        <td>1640</td>
+        <td>1860</td>
+        <td>1,172</td>
+        <td>196.000</td>
+      </tr>
+      <tr>
+        <td>T15C</td>
+        <td>Compakt</td>
+        <td>15,2</td>
+        <td>165</td>
+        <td>1640</td>
+        <td>1860</td>
+        <td>1,289</td>
+        <td>196.000</td>
+      </tr>
+    </table>
+
+    <h2>Kalkulasjon</h2>
+    <div class="form-section">
+      <label>Antall spenntau:</label>
+      <input type="number" id="antall" min="1" max="37" value="1"><br>
+      <label>Tverrsnitt [mm²]:</label>
+      <select id="areal">
+        <option value="140">140</option>
+        <option value="150">150</option>
+        <option value="165">165</option>
+      </select><br>
+      <label>Lengde per forankring [m]:</label>
+      <input type="number" id="lengde" value="8"><br>
+      <label>Antall forankringer:</label>
+      <input type="number" id="forankringer" value="1"><br>
+      <p id="advarsel" class="warning"></p>
+      <p id="resultat"></p>
+      <p><em>For mer info, vennligst ta kontakt via kontakt skjema</em></p>
+    </div>
+
+    <div class="pdf-link">
+      <a href="data-line.pdf" download>
+        <img src="pdf-icon.png" alt="Last ned PDF"> Last ned data-line.pdf
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Etterspenning.no
+  </footer>
+
+  <script>
+    const antallInput = document.getElementById("antall");
+    const arealInput = document.getElementById("areal");
+    const lengdeInput = document.getElementById("lengde");
+    const forankringInput = document.getElementById("forankringer");
+    const resultat = document.getElementById("resultat");
+    const advarsel = document.getElementById("advarsel");
+
+    function kalkuler() {
+      const antall = parseInt(antallInput.value);
+      const areal = parseInt(arealInput.value);
+      const lengde = parseFloat(lengdeInput.value);
+      const forankringer = parseInt(forankringInput.value);
+
+      const flytMPa = 1640;
+      const bruddMPa = 1860;
+      let vekt;
+      if (areal === 140) vekt = 1.093;
+      else if (areal === 150) vekt = 1.172;
+      else if (areal === 165) vekt = 1.289;
+      else vekt = 0;
+
+      const flytResultat = Math.round((flytMPa * areal * antall) / 1000);
+      const bruddResultat = Math.round((bruddMPa * areal * antall) / 1000);
+      const totalLengde = lengde * forankringer * antall;
+      const totalVekt = Math.round(totalLengde * vekt);
+
+      let anbefalt = "";
+      if (antall <= 4) anbefalt = "4 liners kileplate";
+      else if (antall <= 7) anbefalt = "7 liners kileplate";
+      else if (antall <= 9) anbefalt = "9 liners kileplate";
+      else if (antall <= 12) anbefalt = "12 liners kileplate";
+      else if (antall <= 15) anbefalt = "15 liners kileplate";
+      else if (antall <= 19) anbefalt = "19 liners kileplate";
+      else anbefalt = "anbefaler å kontakte leverandør";
+
+      resultat.innerHTML = `
+        <strong>Flyt:</strong> ${flytResultat} kN<br>
+        <strong>Brudd:</strong> ${bruddResultat} kN<br>
+        <strong>Estimert vekt:</strong> ${totalVekt} kg<br>
+        <strong>Anbefalt forankringshode:</strong> ${anbefalt}<br>
+        <em>Tar forbehold for evt. feil</em>
+      `;
+
+      if (lengde < 8) {
+        advarsel.textContent = "Anbefaler sterkt å anvende minst 4 meter frilengde og minst 4 meter forankringslengde";
+      } else {
+        advarsel.textContent = "";
+      }
+    }
+
+    antallInput.addEventListener("input", kalkuler);
+    arealInput.addEventListener("change", kalkuler);
+    lengdeInput.addEventListener("input", kalkuler);
+    forankringInput.addEventListener("input", kalkuler);
+
+    kalkuler();
+  </script>
+</body>
+</html>

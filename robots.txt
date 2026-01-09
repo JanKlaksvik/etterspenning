@@ -1,0 +1,4 @@
+﻿https://etterspenning.no/robots.txt
+
+User-agent: *
+Allow: /

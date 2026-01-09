@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etterspenning.no - Kontakt</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #003366;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav {
+      background: #005599;
+      display: flex;
+      justify-content: flex-end;
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 0 10px;
+    }
+    nav a {
+      color: white;
+      padding: 15px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background-color: #004080;
+    }
+    nav a.active {
+      text-decoration: underline;
+    }
+    section {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      background-color: white;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, textarea, button {
+      padding: 10px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #005599;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004080;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9em;
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      Etterspenning.no
+    </div>
+    <nav>
+      <a href="index.html">Hjem</a>
+      <a href="forankringer.html">Forankringer</a>
+      <a href="verktoy.html">Verktøy</a>
+      <a href="software.html">Software</a>
+      <a href="data.html">Data</a>
+      <a href="bilder.html">Bilder</a>
+      <a class="active" href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <section>
+    <h1>Kontakt</h1>
+    <p>Fyll ut skjemaet under så tar vi kontakt med deg så snart som mulig.</p>
+    <form>
+      <label for="navn">Navn:</label>
+      <input type="text" id="navn" name="navn" required>
+
+      <label for="epost">E-post:</label>
+      <input type="email" id="epost" name="epost" required>
+
+      <label for="melding">Melding:</label>
+      <textarea id="melding" name="melding" rows="5" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2025 Etterspenning.no
+  </footer>
+</body>
+</html>
