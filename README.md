@@ -21,6 +21,7 @@ This repository contains:
 |-- index.html
 |-- software*.html
 |-- data*.html
+|-- verktoy*.html
 |-- bilder*.html
 |-- forankringer*.html
 |-- kontakt*.html
