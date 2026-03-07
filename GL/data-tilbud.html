@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="no">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TSNDL4ZB7Y');
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data | Etterspenning.no</title>
+  <meta name="description" content="Beregninger og tilbudsforespørsel for etterspenning og forankringer." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 60px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;margin:0 auto;
+      padding:14px 18px;
+      display:flex;align-items:center;gap:16px
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{
+      width:38px;height:38px;border-radius:10px;
+      background: linear-gradient(135deg, var(--blue), rgba(32,79,133,.45));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      display:grid;place-items:center;
+      font-weight:700;
+    }
+
+    nav.primary{
+      display:flex;flex-wrap:wrap;gap:10px;margin-left:auto
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger + off-canvas */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+    }
+
+    /* Sideinnhold */
+    .hero{padding:28px 0 18px}
+    .hero h1{margin:0 0 8px;font-size: clamp(24px, 3.2vw, 40px);letter-spacing:-0.02em}
+    .hero p{margin:0;color:var(--muted);max-width:72ch;line-height:1.5}
+    .grid{display:grid;gap:14px;grid-template-columns: 1.15fr .85fr;align-items:start}
+    @media (max-width: 920px){.grid{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    @media (max-width:620px){.row{grid-template-columns:1fr}}
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input, select, textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(6,10,18,.55);
+      color:var(--text);
+      padding:11px 12px;
+      outline:none;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(244,122,32,.55);
+      box-shadow: 0 0 0 4px rgba(244,122,32,.10);
+    }
+    textarea{min-height:92px;resize:vertical}
+    .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .btn{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:600;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    .kpi .box{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+    }
+    .kpi .val{font-size:18px;font-weight:700;margin-top:4px}
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+    .notice{
+      border-radius:14px;
+      border:1px solid rgba(244,122,32,.35);
+      background: rgba(244,122,32,.10);
+      padding:12px;
+      color: var(--text);
+      line-height:1.45;
+      font-size:13px;
+    }
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    /* Små hjelpeklasser */
+    .hidden{display:none !important;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">E</div>
+      <div>
+        <div style="font-weight:800;letter-spacing:.2px">Etterspenning.no</div>
+        <div style="font-size:12px;color:var(--muted)">Data & beregninger</div>
+      </div>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="menu-btn" id="openMenu" aria-label="Åpne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <!-- Desktop nav -->
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktøy</a>
+      <a class="navlink" href="software.html">Software</a>
+      <a class="navlink active" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Overlay + Drawer -->
+<div class="overlay" id="overlay" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html">Software</a>
+    <a class="active" href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Data, beregninger og tilbudsforespørsel</h1>
+    <p>
+      Denne siden lar deg gjøre en rask kontrollberegning (kraft, spenning og teoretisk forlengelse)
+      og sende en strukturert forespørsel med samme input direkte i e-post.
+    </p>
+  </section>
+
+  <div class="grid">
+
+    <!-- INPUT / BEREGNING -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Prosjekt og input</h2>
+          <small>Fyll inn – beregning oppdateres automatisk</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="row">
+          <div>
+            <label for="projectName">Prosjektnavn</label>
+            <input id="projectName" placeholder="f.eks. Kai K241 / Fundament / Bru" />
+          </div>
+          <div>
+            <label for="projectNo">Prosjektnummer</label>
+            <input id="projectNo" placeholder="f.eks. 24-00123" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="contactName">Kontaktperson</label>
+            <input id="contactName" placeholder="Navn" />
+          </div>
+          <div>
+            <label for="contactEmail">E-post (avsender)</label>
+            <input id="contactEmail" type="email" placeholder="navn@firma.no" />
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="row">
+          <div>
+            <label for="systemType">System</label>
+            <select id="systemType">
+              <option value="strands">Spenntau (strand)</option>
+              <option value="bars">Stang (bar)</option>
+            </select>
+          </div>
+
+          <!-- Dette feltet skifter rolle:
+               - Strand: antall spenntau
+               - Bar: stangdiameter (Ø mm) -->
+          <div>
+            <label for="nElements" id="nElementsLabel">Antall spenntau</label>
+            <input id="nElements" type="number" min="1" step="1" value="12" />
+            <div class="hint" id="nElementsHint">Antall elementer (spenntau) i beregningen.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="areaOneSelect">Tverrsnitt pr. element, A (mm²)</label>
+
+            <!-- Strand: fast valg -->
+            <select id="areaOneSelect">
+              <option value="140" selected>140 mm²</option>
+              <option value="150">150 mm²</option>
+              <option value="165">165 mm²</option>
+            </select>
+
+            <!-- Bar: beregnet A (readonly) -->
+            <input id="areaOneBar" class="hidden" type="number" step="0.1" readonly />
+
+            <div class="hint" id="areaHint">Velg standard tverrsnitt for elementet.</div>
+          </div>
+
+          <div>
+            <label for="lengthL">Fri lengde, L (m)</label>
+            <input id="lengthL" type="number" min="0.1" step="0.01" value="10.0" />
+            <div class="hint">Bruk effektiv lengde for beregning av teoretisk forlengelse.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="sigma">Målspenning, σ (MPa)</label>
+            <input id="sigma" type="number" min="1" step="1" value="1200" />
+            <div class="hint">Typisk nivå avhenger av system/prosedyre og prosjekteringsgrunnlag.</div>
+          </div>
+          <div>
+            <label for="E">E-modul, E (MPa)</label>
+            <input id="E" type="number" min="1000" step="100" value="195000" readonly />
+            <div class="hint">Settes automatisk: 195 000 (strand) / 205 000 (bar).</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="notes">Tilleggsinfo (valgfrie kommentarer)</label>
+            <textarea id="notes" placeholder="Krav, omfang, standardhenvisninger, leveringstid, tegninger, etc."></textarea>
+          </div>
+          <div>
+            <div class="notice">
+              <strong>Merk:</strong> Dette er en enkel kontrollberegning (lineær elastisk) for å få en ryddig forespørsel.
+              Prosjektering/utførelse må alltid følge prosjektdokumenter og relevante standarder.
+            </div>
+
+            <div class="btnrow">
+              <button class="btn" id="btnReset" type="button">Nullstill</button>
+              <button class="btn secondary" id="btnCopy" type="button">Kopier oppsummering</button>
+              <button class="btn primary" id="btnQuote" type="button">Be om tilbud</button>
+            </div>
+
+            <div class="hint" id="sendHint" style="margin-top:10px">
+              “Be om tilbud” åpner e-postklienten din med ferdig utfylt innhold (mailto).
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RESULTAT -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Resultater</h2>
+          <small>Oppdateres live</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Totalt areal, A<sub>tot</sub> (mm²)</div>
+            <div class="val mono" id="outAtot">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Totalkraft, F (kN)</div>
+            <div class="val mono" id="outF">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Spenning, σ (MPa)</div>
+            <div class="val mono" id="outSigma">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Teoretisk forlengelse, ΔL (mm)</div>
+            <div class="val mono" id="outdL">–</div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div style="font-size:12px;color:var(--muted);line-height:1.55">
+          <div><strong>Formler (forenklet):</strong></div>
+          <div class="mono">A_tot = n · A</div>
+          <div class="mono">F = σ · A_tot  (1 MPa = 1 N/mm²)</div>
+          <div class="mono">ΔL = (σ/E) · L</div>
+          <div class="hint">ΔL beregnes på totalspenning i stål og fri lengde (uten tapsmekanismer).</div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div>
+          <label for="preview">E-post-innhold (forhåndsvisning)</label>
+          <textarea id="preview" readonly></textarea>
+          <div class="hint">Dette er teksten som legges inn i e-posten når du trykker “Be om tilbud”.</div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Data-siden. Denne nettsiden bruker Google Analytics for anonym trafikkstatistikk. Ingen informasjonskapsler brukes til markedsføring. Ingen cookies.
+  </footer>
+</div>
+
+<script>
+  // ========= KONFIG =========
+  const RECEIVER_EMAIL = "jan@etterspenning.no";
+
+  // ========= SMÅHJELP =========
+  const fmt = (x, digits=2) => {
+    if (!isFinite(x)) return "–";
+    return Number(x).toLocaleString("no-NO", { maximumFractionDigits: digits, minimumFractionDigits: digits });
+  };
+
+  function getEl(id){ return document.getElementById(id); }
+
+  function getVal(id){
+    const el = getEl(id);
+    if (!el) return "";
+    return (el.value ?? "").toString().trim();
+  }
+
+  function getNumFromValue(v){
+    const n = parseFloat(String(v).replace(",", "."));
+    return isFinite(n) ? n : NaN;
+  }
+
+  function getNum(id){
+    return getNumFromValue(getVal(id));
+  }
+
+  function isBars(){
+    return getVal("systemType") === "bars";
+  }
+
+  // ========= LOGIKK: UI ved systemskifte =========
+  // Strand:
+  //  - nElements = antall spenntau
+  //  - A = velges 140/150/165
+  //
+  // Bar:
+  //  - nElements = stangdiameter Ø (mm)
+  //  - A beregnes automatisk og settes i feltet for A pr. element (readonly)
+  //  - n (antall) settes til 1 i beregningen (enkeltbar som standard)
+  function updateSystemUI(){
+    const bars = isBars();
+
+    const nLabel = getEl("nElementsLabel");
+    const nInput = getEl("nElements");
+    const nHint  = getEl("nElementsHint");
+
+    const areaSelect = getEl("areaOneSelect");
+    const areaBar    = getEl("areaOneBar");
+    const areaHint   = getEl("areaHint");
+
+    if (bars){
+      nLabel.textContent = "Stangdiameter, Ø (mm)";
+      nInput.type = "number";
+      nInput.min = "1";
+      nInput.step = "0.1";
+      if (!nInput.value || getNum("nElements") === 12){ nInput.value = "32"; } // fornuftig default ved bytte
+      nHint.textContent = "Skriv inn diameter på stang. Areal beregnes automatisk.";
+
+      areaSelect.classList.add("hidden");
+      areaBar.classList.remove("hidden");
+      areaHint.textContent = "A beregnes fra Ø: A = π·Ø²/4 (mm²).";
+    } else {
+      nLabel.textContent = "Antall spenntau";
+      nInput.type = "number";
+      nInput.min = "1";
+      nInput.step = "1";
+      if (!nInput.value || getNum("nElements") === 32){ nInput.value = "12"; } // fornuftig default ved bytte
+      nHint.textContent = "Antall elementer (spenntau) i beregningen.";
+
+      areaSelect.classList.remove("hidden");
+      areaBar.classList.add("hidden");
+      areaHint.textContent = "Velg standard tverrsnitt for elementet.";
+    }
+
+    updateEmodulus();
+    compute();
+  }
+
+  // ========= LOGIKK: E-modul basert på system =========
+  function updateEmodulus(){
+    const eField = getEl("E");
+    if (!eField) return;
+    eField.value = isBars() ? "205000" : "195000";
+  }
+
+  // ========= LOGIKK: A pr element =========
+  function getAreaOneMm2(){
+    if (!isBars()){
+      return getNumFromValue(getVal("areaOneSelect"));
+    }
+    // Bars: A = pi * d^2 / 4
+    const d = getNum("nElements"); // her er nElements = diameter
+    if (!isFinite(d) || d <= 0) return NaN;
+    const A = Math.PI * d * d / 4.0; // mm²
+    // sett i readonly feltet
+    getEl("areaOneBar").value = isFinite(A) ? (Math.round(A * 10) / 10).toString() : "";
+    return A;
+  }
+
+  // ========= SUMMARY =========
+  function buildSummary(calcs){
+    const bars = isBars();
+    const systemText = bars ? "Stang (bar)" : "Spenntau (strand)";
+
+    const lines = [];
+    lines.push("TILBUDSFORESPØRSEL – Etterspenning.no");
+    lines.push("");
+    lines.push("PROSJEKT");
+    lines.push(`- Prosjektnavn: ${getVal("projectName") || "—"}`);
+    lines.push(`- Prosjektnr.:  ${getVal("projectNo") || "—"}`);
+    lines.push("");
+    lines.push("KONTAKT");
+    lines.push(`- Kontaktperson: ${getVal("contactName") || "—"}`);
+    lines.push(`- E-post:        ${getVal("contactEmail") || "—"}`);
+    lines.push("");
+    lines.push("INPUT");
+    lines.push(`- System:        ${systemText}`);
+
+    if (bars){
+      lines.push(`- Stangdiameter: Ø ${getVal("nElements") || "—"} mm`);
+      lines.push(`- Antall:        1`);
+      lines.push(`- A pr. stang:   ${fmt(calcs.A, 1)} mm²`);
+    } else {
+      lines.push(`- Antall:        ${getVal("nElements") || "—"}`);
+      lines.push(`- A pr. element: ${getVal("areaOneSelect") || "—"} mm²`);
+    }
+
+    lines.push(`- Fri lengde L:  ${getVal("lengthL") || "—"} m`);
+    lines.push(`- Målspenning σ: ${getVal("sigma") || "—"} MPa`);
+    lines.push(`- E-modul E:     ${getVal("E") || "—"} MPa`);
+    lines.push("");
+    lines.push("BEREGNING (forenklet)");
+    lines.push(`- A_tot: ${fmt(calcs.Atot, 1)} mm²`);
+    lines.push(`- F:     ${fmt(calcs.FkN, 1)} kN`);
+    lines.push(`- ΔL:    ${fmt(calcs.dLmm, 1)} mm`);
+    lines.push("");
+    lines.push("TILLEGG / KOMMENTARER");
+    lines.push(getVal("notes") || "—");
+    lines.push("");
+    lines.push("Vedlegg: (legg ved tegninger/beskrivelse ved behov).");
+
+    return lines.join("\n");
+  }
+
+  // ========= BEREGNING =========
+  function compute(){
+    updateEmodulus();
+
+    const bars = isBars();
+
+    // n:
+    // - strands: nElements = antall
+    // - bars: n = 1 (enkeltbar), og nElements = diameter
+    const n = bars ? 1 : getNum("nElements");
+
+    const A = getAreaOneMm2();       // mm2 pr element/stang
+    const Lm = getNum("lengthL");    // m
+    const sigma = getNum("sigma");   // MPa = N/mm2
+    const E = getNum("E");           // MPa
+
+    const Atot = n * A;              // mm2
+    const F_N = sigma * Atot;        // N (MPa = N/mm²)
+    const FkN = F_N / 1000.0;        // kN
+
+    const Lmm = Lm * 1000.0;         // mm
+    const dLmm = (sigma / E) * Lmm;  // mm
+
+    const calcs = { Atot, FkN, dLmm, sigma, A };
+
+    getEl("outAtot").textContent  = isFinite(Atot) ? fmt(Atot, 1) : "–";
+    getEl("outF").textContent     = isFinite(FkN) ? fmt(FkN, 1) : "–";
+    getEl("outSigma").textContent = isFinite(sigma) ? fmt(sigma, 0) : "–";
+    getEl("outdL").textContent    = (isFinite(dLmm) && isFinite(E) && E>0) ? fmt(dLmm, 1) : "–";
+
+    const summary = buildSummary(calcs);
+    getEl("preview").value = summary;
+
+    return { calcs, summary };
+  }
+
+  function attachEvents(){
+    const ids = [
+      "projectName","projectNo","contactName","contactEmail",
+      "systemType","nElements",
+      "areaOneSelect","lengthL","sigma","notes"
+    ];
+
+    ids.forEach(id => {
+      const el = getEl(id);
+      if (!el) return;
+      el.addEventListener("input", compute);
+      el.addEventListener("change", compute);
+    });
+
+    getEl("systemType").addEventListener("change", updateSystemUI);
+
+    getEl("btnReset").addEventListener("click", () => {
+      getEl("projectName").value = "";
+      getEl("projectNo").value = "";
+      getEl("contactName").value = "";
+      getEl("contactEmail").value = "";
+      getEl("systemType").value = "strands";
+
+      // tilbake til strand-default
+      getEl("nElements").value = "12";
+      getEl("areaOneSelect").value = "140";
+      getEl("lengthL").value = "10.0";
+      getEl("sigma").value = "1200";
+      getEl("notes").value = "";
+
+      updateSystemUI();
+      compute();
+    });
+
+    getEl("btnCopy").addEventListener("click", async () => {
+      const { summary } = compute();
+      const hint = getEl("sendHint");
+      try{
+        await navigator.clipboard.writeText(summary);
+        hint.textContent = "Oppsummering kopiert til utklippstavle.";
+      }catch(e){
+        hint.textContent = "Kunne ikke kopiere automatisk. Marker teksten og kopier manuelt.";
+      }
+      setTimeout(()=> hint.textContent = "“Be om tilbud” åpner e-postklienten din med ferdig utfylt innhold (mailto).", 2800);
+    });
+
+    getEl("btnQuote").addEventListener("click", () => {
+      const { summary } = compute();
+
+      const email = getVal("contactEmail");
+      if (!email || !email.includes("@")) {
+        getEl("sendHint").textContent = "Legg inn en gyldig e-post (avsender) før du sender forespørsel.";
+        return;
+      }
+
+      const subjProject = (getVal("projectName") || getVal("projectNo") || "Prosjekt").slice(0, 80);
+      const subject = `Tilbudforespørsel – ${subjProject}`;
+
+      const mailto = `mailto:${encodeURIComponent(RECEIVER_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary)}`;
+      window.location.href = mailto;
+    });
+  }
+
+  // ========= MENY (hamburger) =========
+  function initMenu(){
+    const openBtn = getEl("openMenu");
+    const closeBtn = getEl("closeMenu");
+    const overlay = getEl("overlay");
+    const drawer = getEl("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+  }
+
+  // Init
+  initMenu();
+  attachEvents();
+  updateSystemUI(); // setter riktig UI + E før første compute
+</script>
+
+</body>
+</html>

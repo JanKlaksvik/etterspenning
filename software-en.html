@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software | Etterspenning.no</title>
+  <meta name="description" content="Software and digital tools for post-tensioning and anchors: protocols, grouting, traceability, quality and documentation." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    /* ===== HEADER + NAV + DRAWER (same as index.html) ===== */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    /* Brand (left) */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
+    }
+
+    /* New: image logo */
+    .logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .logo img{
+      height: 38px;
+      width: auto;
+      display:block;
+      border-radius: 10px;
+    }
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger button (hidden on desktop) */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Overlay + off-canvas */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    /* Mobile: show hamburger, hide desktop nav */
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* Language button (same as index) */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    /* ===== Page content (unchanged) ===== */
+    .hero{padding:28px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:84ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1.15fr .85fr;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 6px;font-size:14px;letter-spacing:-0.01em}
+    .section p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+
+    .tiles{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width:720px){
+      .tiles{grid-template-columns:1fr;}
+    }
+
+    .tile{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      min-width:0;
+    }
+    .tile .t{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      min-width:0;
+    }
+    .tile .title{
+      font-weight:900;
+      min-width:0;
+      overflow-wrap:anywhere;
+    }
+    .tile .badge{
+      font-size:11px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:normal;
+      overflow-wrap:anywhere;
+      max-width:100%;
+    }
+    .tile .desc{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.5}
+
+    ul{margin:10px 0 0 18px;color:var(--muted);font-size:13px;line-height:1.55}
+    li{margin:6px 0}
+
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:700;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media (max-width:620px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:13px;font-weight:900;margin-top:6px}
+
+    /* Inputs (used in access/login card) */
+    .input{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      width:100%;
+    }
+    .help{
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+
+<!-- Header is loaded from the same source as index.html -->
+<div id="site-header"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Software</h1>
+    <p>
+      The goal is simple: make documentation and control <strong>easy to do correctly</strong> in the field - with structure,
+      traceability and audit trail. The software is a practical supplement to routines, not a replacement for engineering judgement.
+    </p>
+
+    <div class="pillrow">
+      <div class="pill">Protocols (stressing)</div>
+      <div class="pill">Grouting (EN 445/446/447)</div>
+      <div class="pill">Traceability and audit trail</div>
+      <div class="pill">Roles and access</div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- MAIN CONTENT -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Digital tools</h2>
+          <small>Modules supporting the full chain from input to final protocol</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section">
+          <h3>Why software for post-tensioning work?</h3>
+          <p>
+            In practice, deviations often occur in the handoff between planning and execution: unclear drawings, wrong field data,
+            missing traceability, or protocols completed too late. Properly designed software can:
+          </p>
+          <ul>
+            <li>enforce minimum data (so a protocol is actually complete),</li>
+            <li>reduce manual errors (format, units, rounding),</li>
+            <li>provide better history (who did what and when),</li>
+            <li>make handover easier (PDF/report with attachments).</li>
+          </ul>
+        </div>
+
+        <div class="tiles">
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Grouting</div>
+              <div class="badge">EN 445/446/447/206</div>
+            </div>
+            <div class="desc">
+              Registration of project data, borehole and length data, mixing (water amount/time), parameters, and testing.
+              The goal is stable quality and a traceable log that can be exported.
+            </div>
+            <ul>
+              <li>Project data: name, number, anchor count, type (bar/strand)</li>
+              <li>Borehole/geometry data: lengths/diameters, steel casing/liners</li>
+              <li>Log: temperature, consistency, time, volume/pressure (where relevant)</li>
+            </ul>
+          </div>
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Stressing / protocol</div>
+              <div class="badge">Execution</div>
+            </div>
+            <div class="desc">
+              Stressing protocol according to standards, linking force, steps, elongation, and checkpoints.
+              Data can be imported from the basis and completed in the field.
+            </div>
+            <ul>
+              <li>Stepwise loading and acceptance limits</li>
+              <li>ΔL measurements and deviation log</li>
+              <li>Calibration reference (jack/gauge/measuring tool)</li>
+              <li>Jack selection (library) + QR verification on site</li>
+            </ul>
+          </div>
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Competence and training</div>
+              <div class="badge">Low threshold</div>
+            </div>
+            <div class="desc">
+              Short lessons and tests that support internal competence growth without presenting it as certification.
+            </div>
+            <ul>
+              <li>Tasks and checkpoints per role</li>
+              <li>Short tests (4 answer options) and history</li>
+              <li>Can be linked to projects/equipment (relevant training)</li>
+            </ul>
+          </div>
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Deviation and improvement</div>
+              <div class="badge">Audit trail</div>
+            </div>
+            <div class="desc">
+              A simple way to register field deviations (text/image), notify responsible parties, and follow up actions.
+            </div>
+            <ul>
+              <li>Register an event with image + short description</li>
+              <li>Notify admin/quality responsible</li>
+              <li>Status, responsibility, action, and closure</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="btnrow">
+          <a class="btn primary" href="data-en.html">Data & calculations</a>
+          <a class="btn secondary" href="verktoy-en.html">Tools</a>
+          <a class="btn" href="kontakt-en.html">Contact</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Access, roles and traceability</h2>
+          <small>A practical setup that works on site</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section" id="tilgang">
+          <h3>Restricted tool area</h3>
+          <p>
+            The tools require access. A project manager can invite installers to projects, and all registrations are auditable.
+          </p>
+
+          <div class="sep"></div>
+
+          <h3 style="margin-top:0">Log in</h3>
+          <p style="margin-bottom:10px">
+            Login grants access based on your company’s active agreement. If you do not have an account yet, use "Request access" below.
+          </p>
+
+          <form id="loginForm" autocomplete="on" style="display:grid;gap:10px">
+            <label style="display:grid;gap:6px">
+              <span class="help">Email</span>
+              <input class="input" name="email" type="email" required>
+            </label>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Password</span>
+              <input class="input" name="password" type="password" required>
+            </label>
+
+            <label class="help" style="display:flex;align-items:center;gap:8px">
+              <input id="showPasswordToggle" type="checkbox">
+              Show password
+            </label>
+
+            <button class="btn" type="submit" style="justify-content:center">Log in</button>
+            <div class="help">
+              Access is controlled by the company subscription level.
+            </div>
+            <div class="help">
+              <strong>Access package:</strong> Project management + grouting + stressing + jack control.
+            </div>
+            <div class="help" id="loginInfo" style="display:none"></div>
+            <div class="btnrow" id="loginLinks" style="display:none;margin-top:0">
+              <a class="btn secondary" href="software-prosjektstyring.html">Go to Project management</a>
+              <a class="btn" href="software-injisering.html">Go to Grouting</a>
+              <a class="btn" id="jackLinkAfterLogin" href="software-jekk.html">Go to Jack control</a>
+              <a class="btn secondary" id="adminUsersLinkAfterLogin" href="software-personell.html" style="display:none">Personnel admin</a>
+              <button class="btn" id="logoutBtn" type="button">Log out</button>
+            </div>
+          </form>
+
+          <div class="sep"></div>
+
+          <h3 style="margin-top:0">Request access</h3>
+          <p style="margin-bottom:10px">
+            Send a request with the modules you need. You decide who gets access.
+          </p>
+
+          <form id="accessForm" style="display:grid;gap:10px">
+            <label style="display:grid;gap:6px">
+              <span class="help">Name</span>
+              <input class="input" name="name" type="text" required>
+            </label>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Company</span>
+              <input class="input" name="company" type="text" required>
+            </label>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Email</span>
+              <input class="input" name="email" type="email" required>
+            </label>
+
+            <div style="display:grid;gap:8px">
+              <div class="help">Access package</div>
+              <div class="help">
+                <strong>Standard:</strong> Project management + grouting + stressing + jack control.
+              </div>
+              <input type="hidden" name="accessLevel" value="level2">
+              <div class="help">
+                Free tools are available under <a href="data-en.html">Data & calculations</a>.
+              </div>
+            </div>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Comment (optional)</span>
+              <textarea class="input" name="comment" rows="3"></textarea>
+            </label>
+
+            <button class="btn primary" type="submit" style="justify-content:center">Send request</button>
+
+            <div class="help">
+              Send request with desired access.
+            </div>
+          </form>
+        </div>
+
+        <div class="section">
+          <h3>Audit trail</h3>
+          <p>
+            For each registration it is useful to store: who, when, which device/user, and what was changed.
+            This provides stronger auditability and easier internal control.
+          </p>
+        </div>
+
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Goal</div>
+            <div class="val">Fewer deviations, less rework, better handover</div>
+          </div>
+          <div class="box">
+            <div class="lab">Principle</div>
+            <div class="val">Minimum field friction, maximum documentation value</div>
+          </div>
+          <div class="box">
+            <div class="lab">Export</div>
+            <div class="val">PDF report + attachments (photos/logs) per project/anchor</div>
+          </div>
+          <div class="box">
+            <div class="lab">Integration</div>
+            <div class="val">Can be connected to rental/calibration and project registry</div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Software. This website uses Google Analytics for anonymized traffic statistics. No cookies are used for marketing.
+  </footer>
+
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇳🇴 NO";
+      langBtn.setAttribute("aria-label", "Switch to Norwegian");
+      langBtn.setAttribute("title", "Switch to Norwegian");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "software.html";
+      });
+    }
+  }
+
+  // Include header and set the correct active link automatically (desktop + mobile)
+  (async function () {
+    const mount = document.getElementById("site-header");
+    if (!mount) return;
+
+    try{
+      const res = await fetch("header-en.html", { cache: "no-cache" });
+      if (!res.ok) return;
+      mount.innerHTML = await res.text();
+      initHeaderUi();
+
+      const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+
+      // Desktop
+      mount.querySelectorAll("nav.primary a.navlink").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+
+      // Mobile
+      mount.querySelectorAll(".drawer-nav a").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+    }catch(e){
+      console.warn("Could not load header-en.html", e);
+    }
+  })();
+</script>
+
+<script>
+  // ====== SOFTWARE: login + access level per company ======
+  (function initSoftwareAccess(){
+    const STORAGE_AUTH_KEY = "esp_pm_auth_v1";
+    // Optional override: set window.ESP_API_BASE = "/api" before this script loads.
+    const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+
+    const loginForm = document.getElementById("loginForm");
+    const loginInfo = document.getElementById("loginInfo");
+    const loginLinks = document.getElementById("loginLinks");
+    const jackLinkAfterLogin = document.getElementById("jackLinkAfterLogin");
+    const adminUsersLinkAfterLogin = document.getElementById("adminUsersLinkAfterLogin");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const accessForm = document.getElementById("accessForm");
+    const showPasswordToggle = document.getElementById("showPasswordToggle");
+    const passwordInput = loginForm ? loginForm.querySelector('input[name="password"]') : null;
+
+    function tierLabel(){
+      return "Standard";
+    }
+
+    function apiUrl(path){
+      return API_BASE + "/" + path.replace(/^\/+/, "");
+    }
+
+    function postLoginTarget(session){
+      const active = session || readSession();
+      if (active && active.role === "admin") return "software-personell.html";
+      if (active && active.role === "onsite_user") return "software-onsite-en.html";
+      return "software-prosjektstyring.html";
+    }
+
+    function parseEpochMs(value){
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string"){
+        const parsed = Date.parse(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return 0;
+    }
+
+    function normalizeSession(session){
+      if (!session || typeof session !== "object") return null;
+
+      const tier = "level2";
+      const expiresAtMs = parseEpochMs(session.expiresAt);
+      if (!expiresAtMs) return null;
+
+      const baseModules = {
+        projectHandling: true,
+        grouting: true,
+        stressing: true,
+        jackData: true,
+        jackControl: true
+      };
+      const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+      return {
+        ...session,
+        tier,
+        modules: {
+          ...baseModules,
+          ...incomingModules,
+          projectHandling: true,
+          grouting: true
+        },
+        loginAt: session.loginAt || new Date().toISOString(),
+        expiresAt: expiresAtMs
+      };
+    }
+
+    function readSession(){
+      try {
+        const raw = localStorage.getItem(STORAGE_AUTH_KEY);
+        if (!raw) return null;
+        const parsed = normalizeSession(JSON.parse(raw));
+        if (!parsed || parsed.expiresAt < Date.now()) {
+          localStorage.removeItem(STORAGE_AUTH_KEY);
+          return null;
+        }
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeSession(session){
+      const normalized = normalizeSession(session);
+      if (!normalized) return null;
+      localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(normalized));
+      return normalized;
+    }
+
+    function clearSession(){
+      localStorage.removeItem(STORAGE_AUTH_KEY);
+    }
+
+    async function requestApi(path, options){
+      const opts = options || {};
+      const headers = {};
+      if (opts.body) headers["Content-Type"] = "application/json";
+
+      const res = await fetch(apiUrl(path), {
+        method: opts.method || "GET",
+        credentials: "include",
+        headers,
+        body: opts.body
+      });
+
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (e) {}
+
+      if (!res.ok || !data || data.ok === false) {
+        const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ("HTTP " + res.status);
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    async function backendHealthHint(){
+      try {
+        const data = await requestApi("health.php");
+        const checks = (data && typeof data === "object" && data.checks && typeof data.checks === "object")
+          ? data.checks
+          : null;
+        if (!checks) return "";
+        const pdoOk = checks.pdo_mysql === true;
+        const dbOk = checks.db === true;
+        const sessionOk = checks.session === true;
+        if (pdoOk && dbOk && sessionOk) return "";
+        return " [System check: pdo_mysql=" + (pdoOk ? "OK" : "FAIL") + ", db=" + (dbOk ? "OK" : "FAIL") + ", session=" + (sessionOk ? "OK" : "FAIL") + "]";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function isLocalPreviewHost(){
+      const host = (window.location.hostname || "").toLowerCase();
+      if (window.location.protocol === "file:") return true;
+      if (!host) return true;
+      if (host === "etterspenning.no" || host.endsWith(".etterspenning.no")) return false;
+      return true;
+    }
+
+    function previewFallbackSession(email){
+      const nowIso = new Date().toISOString();
+      return {
+        type: "company_access",
+        userId: 0,
+        name: "Preview user",
+        fullName: "Preview user",
+        email: (email || "preview@local").toString().trim().toLowerCase(),
+        role: "admin",
+        companyId: "preview-local",
+        companyName: "Preview company",
+        companyLogo: "",
+        tier: "level2",
+        tierLabel: "Level 2",
+        modules: {
+          projectHandling: true,
+          grouting: true,
+          stressing: true,
+          jackData: true,
+          jackControl: true
+        },
+        previewMode: true,
+        loginAt: nowIso,
+        expiresAt: Date.now() + (12 * 60 * 60 * 1000)
+      };
+    }
+
+    async function loginViaApi(email, password){
+      try {
+        const data = await requestApi("login.php", {
+          method: "POST",
+          body: JSON.stringify({ email, password })
+        });
+        const session = writeSession(data.session);
+        if (!session) throw new Error("Invalid session from server.");
+        return { session, fallback: false };
+      } catch (err) {
+        if (!isLocalPreviewHost()) throw err;
+        const session = writeSession(previewFallbackSession(email));
+        if (!session) throw err;
+        return { session, fallback: true };
+      }
+    }
+
+    function updateLoginUi(session){
+      if (!loginInfo || !loginLinks || !jackLinkAfterLogin) return;
+      if (!session){
+        loginInfo.style.display = "none";
+        loginInfo.textContent = "";
+        loginLinks.style.display = "none";
+        return;
+      }
+
+      loginInfo.style.display = "";
+      loginLinks.style.display = "";
+      jackLinkAfterLogin.style.display = session.modules?.jackData ? "" : "none";
+      if (adminUsersLinkAfterLogin) {
+        adminUsersLinkAfterLogin.style.display = session.role === "admin" ? "" : "none";
+      }
+      const roleLabel = session.role === "onsite_user" ? "Onsite user" : (session.role === "admin" ? "Admin" : "Project manager");
+      loginInfo.textContent =
+        "Logged in: " + (session.companyName || "-") +
+        " (" + tierLabel(session.tier) + "). Role: " + roleLabel + ".";
+    }
+
+    async function refreshSessionFromApi(){
+      try {
+        const data = await requestApi("me.php");
+        if (!data.authenticated || !data.session){
+          clearSession();
+          updateLoginUi(null);
+          return null;
+        }
+        const session = writeSession(data.session);
+        updateLoginUi(session);
+        return session;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function confirmSessionAfterLogin(attempts){
+      const maxAttempts = Number.isInteger(attempts) && attempts > 0 ? attempts : 3;
+      for (let i = 0; i < maxAttempts; i += 1) {
+        const session = await refreshSessionFromApi();
+        if (session) return session;
+        if (i < maxAttempts - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 250 * (i + 1)));
+        }
+      }
+      return null;
+    }
+
+    if (showPasswordToggle && passwordInput) {
+      showPasswordToggle.addEventListener("change", () => {
+        passwordInput.type = showPasswordToggle.checked ? "text" : "password";
+      });
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fd = new FormData(loginForm);
+        const email = (fd.get("email") || "").toString().trim().toLowerCase();
+        const password = (fd.get("password") || "").toString();
+
+        if (!email || !password){
+          if (loginInfo){
+            loginInfo.style.display = "";
+            loginInfo.textContent = "Please enter email and password.";
+          }
+          if (loginLinks) loginLinks.style.display = "none";
+          return;
+        }
+
+        try {
+          const outcome = await loginViaApi(email, password);
+          const confirmedSession = outcome.fallback ? outcome.session : await confirmSessionAfterLogin(3);
+          if (!confirmedSession) {
+            throw new Error("Login could not be confirmed by server. Please allow cookies for etterspenning.no and try again.");
+          }
+          updateLoginUi(confirmedSession);
+          if (outcome.fallback && loginInfo){
+            loginInfo.style.display = "";
+            loginInfo.textContent = "Preview login active: API unavailable, local session used.";
+          }
+          window.location.href = postLoginTarget(confirmedSession);
+        } catch (err) {
+          if (loginInfo){
+            loginInfo.style.display = "";
+            const rawMessage = (err?.message || "unknown error").toString();
+            const healthHint = await backendHealthHint();
+            loginInfo.textContent =
+              rawMessage === "Login failed"
+                ? ("Login failed: backend error. Check DB/PHP setup and server logs." + healthHint)
+                : ("Login failed: " + rawMessage + healthHint);
+          }
+          if (loginLinks) loginLinks.style.display = "none";
+        }
+      });
+    }
+
+    if (logoutBtn){
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await requestApi("logout.php", { method: "POST", body: "{}" });
+        } catch (e) {}
+        clearSession();
+        updateLoginUi(null);
+      });
+    }
+
+    const existingSession = readSession();
+    updateLoginUi(existingSession);
+    if (existingSession && (existingSession.role === "admin" || existingSession.role === "onsite_user")) {
+      window.location.href = postLoginTarget(existingSession);
+    } else {
+      refreshSessionFromApi().then((session) => {
+        if (session && (session.role === "admin" || session.role === "onsite_user")) {
+          window.location.href = postLoginTarget(session);
+        }
+      });
+    }
+
+    if (accessForm) {
+      accessForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const YOUR_EMAIL = "jan@etterspenning.no";
+
+        const fd = new FormData(accessForm);
+        const name = (fd.get("name") || "").toString().trim();
+        const company = (fd.get("company") || "").toString().trim();
+        const email = (fd.get("email") || "").toString().trim();
+        const comment = (fd.get("comment") || "").toString().trim();
+
+        const selectedLevel = "level2";
+        const requestedModules = ["Project management", "Grouting", "Stressing", "Jack control"];
+
+        const subject = `Access request - ${company || "Unknown company"}`;
+        const bodyLines = [
+          "Request for access to Etterspenning.no - Software",
+          "",
+          `Name: ${name}`,
+          `Company: ${company}`,
+          `Email: ${email}`,
+          `Requested level: ${selectedLevel === "level2" ? "Full access" : "Not selected"}`,
+          `Requested modules: ${requestedModules.length ? requestedModules.join(", ") : "Not selected"}`,
+          "",
+          "Access package:",
+          "- Full access = Project management + grouting + stressing + jack control",
+          "",
+          "Comment:",
+          comment ? comment : "-",
+          "",
+          "Requested role:",
+          "- Project manager or installer (specify in your reply)",
+          "",
+          "Note:",
+          "- Project manager creates sessions (grouting/stressing/lift-off) and can invite installers.",
+          "- Installer can only register in assigned sessions (no changes to master data)."
+        ];
+
+        const mailto =
+          `mailto:${encodeURIComponent(YOUR_EMAIL)}` +
+          `?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+
+        window.location.href = mailto;
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - Onsite Oppgaver | Etterspenning.no</title>
+  <meta name="description" content="Oversikt for onsite-personell: prosjekter og tildelte oppgaver i felt." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --ok:#8bb93d;
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:20px 18px 70px}
+    header{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1120px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo img{
+      height:36px;width:auto;max-width:140px;display:block;border-radius:8px;object-fit:contain;
+    }
+    .brandtitle{font-weight:900}
+    .brandsub{font-size:12px;color:var(--muted)}
+    .brandmini{font-size:11px;color:var(--muted)}
+    .top-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+    .hero{padding:20px 0 10px}
+    .hero h1{margin:0 0 8px;font-size:clamp(24px,3vw,38px);line-height:1.08}
+    .hero p{margin:0;color:var(--muted);max-width:88ch;line-height:1.55}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.50);
+      color:var(--text);
+      padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color:rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    }
+    .cardbody{padding:16px}
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+    .assignList{display:grid;gap:12px}
+    .assignCard{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.28);
+      border-radius:14px;
+      padding:12px;
+    }
+    .assignHead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .assignTitle{font-weight:900}
+    .assignMeta{font-size:12px;color:var(--muted)}
+    .assignRows{display:grid;gap:8px;margin-top:10px}
+    .assignRow{
+      display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:10px;
+      padding:8px 10px;
+      background:rgba(16,26,47,.25);
+    }
+    .badge{
+      font-size:11px;color:var(--muted);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      padding:4px 8px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <a class="logo" href="index.html" aria-label="Til forsiden">
+        <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+      </a>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - Onsite oppgaver</div>
+        <div class="brandmini" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="refreshBtn" type="button">Oppdater</button>
+      <button class="btn" id="logoutBtn" type="button">Logg ut</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Mine feltoppgaver</h1>
+    <p>Velg prosjekt og oppgave du er tildelt av prosjektleder. Listen viser injisering felt og TM1 felt for din bruker.</p>
+  </section>
+
+  <section class="card">
+    <div class="cardhead">
+      <strong id="welcomeTitle">Laster bruker...</strong>
+      <span class="badge" id="countBadge">0 oppgaver</span>
+    </div>
+    <div class="cardbody">
+      <div id="assignments" class="assignList"></div>
+      <div id="msg" class="msg">Laster oppgaver...</div>
+    </div>
+  </section>
+</div>
+
+<script src="company-branding.js"></script>
+<script>
+  (function initOnsitePage(){
+    const STORAGE_AUTH_KEY = "esp_pm_auth_v1";
+    const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+
+    function $(id){ return document.getElementById(id); }
+
+    function parseEpochMs(value){
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string"){
+        const parsed = Date.parse(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return 0;
+    }
+
+    function normalizeSession(session){
+      if (!session || typeof session !== "object") return null;
+      const expiresAtMs = parseEpochMs(session.expiresAt);
+      if (!expiresAtMs) return null;
+      return {
+        ...session,
+        expiresAt: expiresAtMs
+      };
+    }
+
+    function readSession(){
+      try {
+        const raw = localStorage.getItem(STORAGE_AUTH_KEY);
+        if (!raw) return null;
+        const parsed = normalizeSession(JSON.parse(raw));
+        if (!parsed || parsed.expiresAt < Date.now()) {
+          localStorage.removeItem(STORAGE_AUTH_KEY);
+          return null;
+        }
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeSession(session){
+      const normalized = normalizeSession(session);
+      if (!normalized) return null;
+      localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(normalized));
+      return normalized;
+    }
+
+    function clearSession(){
+      localStorage.removeItem(STORAGE_AUTH_KEY);
+    }
+
+    function apiUrl(path){
+      return API_BASE + "/" + path.replace(/^\/+/, "");
+    }
+
+    async function requestApi(path, options){
+      const opts = options || {};
+      const headers = {};
+      if (opts.body) headers["Content-Type"] = "application/json";
+
+      const res = await fetch(apiUrl(path), {
+        method: opts.method || "GET",
+        credentials: "include",
+        headers,
+        body: opts.body
+      });
+
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (e) {}
+
+      if (!res.ok || !data || data.ok === false) {
+        const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ("HTTP " + res.status);
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    async function refreshSessionFromApi(){
+      try {
+        const data = await requestApi("me.php");
+        if (!data.authenticated || !data.session) {
+          clearSession();
+          return null;
+        }
+        return writeSession(data.session);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function normalizeEmail(value){
+      return (value || "").toString().trim().toLowerCase();
+    }
+
+    function fmtDate(iso){
+      if (!iso) return "-";
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "-";
+      return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+    }
+
+    function setMsg(text, type){
+      const el = $("msg");
+      if (!el) return;
+      el.textContent = text || "";
+      el.classList.remove("ok", "error");
+      if (type) el.classList.add(type);
+    }
+
+    function projectLabel(project){
+      const name = (project.name || "Uten navn").toString();
+      const number = (project.number || "").toString().trim();
+      return number ? (name + " (" + number + ")") : name;
+    }
+
+    function projectAssignmentsForEmail(project, email){
+      const normalizedEmail = normalizeEmail(email);
+      const modules = (project && project.modules && typeof project.modules === "object") ? project.modules : {};
+      const rows = [];
+
+      const groutingEmail = normalizeEmail(project && (project.groutingAssignedEmail || project.siteEmail || ""));
+      if (modules.grouting && groutingEmail && groutingEmail === normalizedEmail) {
+        rows.push({
+          typeLabel: "Injisering felt",
+          href: "software-injisering-felt.html?projectId=" + encodeURIComponent(project.id || "")
+        });
+      }
+
+      const tm1Email = normalizeEmail(project && project.stressingAssignedEmail);
+      if (modules.stressing && tm1Email && tm1Email === normalizedEmail) {
+        rows.push({
+          typeLabel: "TM1 felt",
+          href: "software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(project.id || "")
+        });
+      }
+
+      return rows;
+    }
+
+    function renderAssignments(session, projects){
+      const list = $("assignments");
+      const title = $("welcomeTitle");
+      const badge = $("countBadge");
+      if (!list || !title || !badge) return;
+
+      const userEmail = normalizeEmail(session.email || "");
+      const mapped = (Array.isArray(projects) ? projects : [])
+        .filter((project) => project && typeof project === "object" && project.id)
+        .map((project) => ({
+          project,
+          assignments: projectAssignmentsForEmail(project, userEmail)
+        }))
+        .filter((item) => item.assignments.length > 0)
+        .sort((a, b) => {
+          const at = new Date(a.project.updatedAt || a.project.createdAt || 0).getTime();
+          const bt = new Date(b.project.updatedAt || b.project.createdAt || 0).getTime();
+          return bt - at;
+        });
+
+      const totalAssignments = mapped.reduce((sum, item) => sum + item.assignments.length, 0);
+      badge.textContent = totalAssignments.toLocaleString("no-NO") + " oppgaver";
+      title.textContent = "Innlogget: " + ((session.fullName || session.email || "-").toString());
+
+      if (mapped.length === 0) {
+        list.innerHTML = "";
+        setMsg("Ingen oppgaver er tildelt din onsite-bruker enda.", "ok");
+        return;
+      }
+
+      list.innerHTML = mapped.map((item) => {
+        const project = item.project;
+        const rows = item.assignments.map((assignment) =>
+          '<div class="assignRow">' +
+            '<strong>' + assignment.typeLabel + "</strong>" +
+            '<a class="btn primary" href="' + assignment.href + '">Aapne</a>' +
+          "</div>"
+        ).join("");
+
+        return '<article class="assignCard">' +
+          '<div class="assignHead">' +
+            '<div class="assignTitle">' + projectLabel(project) + "</div>" +
+            '<div class="assignMeta">Sist oppdatert: ' + fmtDate(project.updatedAt || project.createdAt || "") + "</div>" +
+          "</div>" +
+          '<div class="assignRows">' + rows + "</div>" +
+        "</article>";
+      }).join("");
+
+      setMsg("Oppgaver lastet.", "ok");
+    }
+
+    async function loadAssignments(session){
+      try {
+        const data = await requestApi("projects.php");
+        const projects = Array.isArray(data && data.projects) ? data.projects : [];
+        renderAssignments(session, projects);
+      } catch (err) {
+        setMsg("Kunne ikke hente prosjektliste: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    async function logout(){
+      try {
+        await requestApi("logout.php", { method: "POST", body: "{}" });
+      } catch (e) {}
+      clearSession();
+      window.location.href = "software.html";
+    }
+
+    async function init(){
+      let session = readSession();
+      const fresh = await refreshSessionFromApi();
+      if (fresh) session = fresh;
+
+      if (!session) {
+        window.location.href = "software.html?next=" + encodeURIComponent("software-onsite.html");
+        return;
+      }
+
+      if (session.role !== "onsite_user") {
+        setMsg("Denne siden er for onsite-personell. Bruk prosjektstyring for prosjektleder.", "error");
+        window.location.href = "software-prosjektstyring.html";
+        return;
+      }
+
+      if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+        window.CompanyBranding.apply({ session: session });
+      }
+
+      await loadAssignments(session);
+    }
+
+    $("refreshBtn").addEventListener("click", async () => {
+      const session = readSession();
+      if (!session) return;
+      setMsg("Oppdaterer...", "");
+      await loadAssignments(session);
+    });
+    $("logoutBtn").addEventListener("click", logout);
+
+    init();
+  })();
+</script>
+</body>
+</html>

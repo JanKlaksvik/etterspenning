@@ -1,0 +1,3846 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - Prosjektstyring | Etterspenning.no</title>
+  <meta name="description" content="Lukket prosjektstyring for prosjektleder: start, rediger og avslutt prosjekt med moduler for injisering og oppspenning." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --danger:#ff6b6b;
+      --ok:#8bb93d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1180px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+    .brandtitle{font-weight:900;letter-spacing:.2px}
+    .brandsub{font-size:12px;color:var(--muted)}
+
+    nav.primary{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;left:0;right:0;height:2px;background:var(--text);border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity:1;pointer-events:auto}
+
+    .drawer{
+      position: fixed; top:0; right:0;
+      height:100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{background: rgba(244,122,32,.12);border-color: rgba(244,122,32,.45)}
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    .hero{padding:24px 0 10px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(24px, 3.2vw, 40px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:92ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+    .viewSwitch{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .viewToolbar{
+      margin-top:12px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .viewToolbarActions{
+      margin-top:0;
+      margin-left:auto;
+    }
+    .viewPill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.30);
+      color:var(--muted);
+      font-weight:700;
+    }
+    .viewPill:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .viewPill.active{
+      background: rgba(244,122,32,.14);
+      border-color: rgba(244,122,32,.45);
+      color: var(--text);
+    }
+    .viewModeNote{
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .modalShell{
+      position:fixed;
+      inset:0;
+      z-index:120;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      background:rgba(0,0,0,.55);
+    }
+    .modalCard{
+      width:min(880px, 100%);
+      max-height:min(88vh, 900px);
+      overflow:auto;
+      background: linear-gradient(180deg, rgba(16,26,47,.96), rgba(15,26,51,.92));
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    }
+    .reportAnchorList{
+      margin-top:10px;
+      display:grid;
+      gap:8px;
+      max-height:42vh;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .reportAnchorCheck{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      background: rgba(7,11,20,.28);
+      padding:8px 10px;
+      font-size:13px;
+      line-height:1.35;
+    }
+    .reportAnchorCheck input{width:auto;margin-top:2px}
+    .reportAnchorMeta{
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+    .modalActions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:12px;
+    }
+    .modalActions .actions{margin-top:0}
+    .reportSelectionTools{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .btn.sm{
+      padding:7px 10px;
+      font-size:12px;
+      border-radius:10px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1.1fr .9fr;
+      align-items:start;
+      margin-top:14px;
+    }
+    .grid.singlePane{grid-template-columns:1fr}
+    @media (max-width: 1080px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 8px;font-size:14px;letter-spacing:-0.01em}
+
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns: 1fr 1fr 1fr;gap:10px}
+    @media (max-width: 780px){
+      .row{grid-template-columns:1fr}
+      .row3{grid-template-columns:1fr}
+    }
+
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      outline:none;
+      width:100%;
+      max-width:100%;
+    }
+    textarea{resize:vertical; min-height: 42px;}
+    input:focus, select:focus, textarea:focus{border-color: rgba(244,122,32,.55)}
+
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
+
+    .checkgrid{
+      display:grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap:8px;
+    }
+    @media (max-width:780px){.checkgrid{grid-template-columns:1fr}}
+    .check{
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      font-size:13px;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.20);
+      border-radius:10px;
+      padding:8px;
+    }
+    .check input{width:auto;margin-top:2px}
+    .check.option-disabled{
+      opacity:.5;
+      border-color:rgba(255,255,255,.06);
+      background:rgba(122,133,158,.16);
+    }
+    .check.option-disabled input{cursor:not-allowed}
+    .check.option-disabled span{color:#aab5d4}
+
+    .muted{color:var(--muted)}
+    .jackWarn{
+      display:block;
+      margin-top:4px;
+      font-size:11px;
+      line-height:1.35;
+    }
+    .jackWarn.overdue{color:#ffd3d3}
+    .jackWarn.due{color:#ffd9b0}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.ghost{background: rgba(16,26,47,.28)}
+    .btn.danger{
+      background: rgba(255,90,90,.12);
+      border-color: rgba(255,90,90,.35);
+    }
+
+    .kpi{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+      margin-top:8px;
+    }
+    @media (max-width:900px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:10px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:16px;font-weight:900;margin-top:4px}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      margin-top:8px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color: var(--muted);
+      font-weight:900;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+      font-size:13px;
+    }
+    tbody tr:last-child td{border-bottom:none}
+    .status{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.5);
+      font-weight:700;
+    }
+    .status.active{border-color:rgba(139,185,61,.6);background:rgba(139,185,61,.12)}
+    .status.finished{border-color:rgba(255,107,107,.6);background:rgba(255,107,107,.12)}
+
+    .rowActions{display:flex;flex-wrap:wrap;gap:8px}
+    .rowActions.projectActions{
+      margin-top:8px;
+      flex-wrap:wrap;
+      overflow:visible;
+      row-gap:6px;
+    }
+    .rowActions.projectActions .smallBtn{
+      white-space:nowrap;
+      padding:5px 8px;
+      font-size:11px;
+    }
+    .smallBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.45);
+      color:var(--text);
+      border-radius:10px;
+      padding:6px 9px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .smallBtn:hover{border-color:rgba(255,255,255,.18)}
+    .smallBtn.shareBtn.unassigned{
+      background:linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color:rgba(244,122,32,.70);
+      color:#130b04;
+    }
+    .smallBtn.shareBtn.unassigned:hover{border-color:rgba(244,122,32,.90)}
+    .smallBtn.shareBtn.assigned{
+      background:linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color:rgba(139,185,61,.70);
+      color:#071002;
+    }
+    .smallBtn.shareBtn.assigned:hover{border-color:rgba(139,185,61,.90)}
+    .assignBadge{
+      display:inline-flex;
+      align-items:center;
+      margin-top:6px;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.16);
+    }
+    .assignBadge.assigned{
+      border-color:rgba(139,185,61,.65);
+      background:rgba(139,185,61,.16);
+      color:#d8f0b3;
+    }
+    .assignBadge.unassigned{
+      border-color:rgba(244,122,32,.65);
+      background:rgba(244,122,32,.14);
+      color:#ffd8bc;
+    }
+
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      color: var(--muted);
+      font-size:13px;
+    }
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+
+    .hidden{display:none !important}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - Prosjektstyring</div>
+        <div class="brandsub" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="openMenu" aria-label="Apne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktoy</a>
+      <a class="navlink active" href="software.html">Software</a>
+      <a class="navlink" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktoy</a>
+    <a class="active" href="software.html">Software</a>
+    <a href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap" id="guardView">
+  <section class="hero">
+    <h1>Firma-innlogging</h1>
+    <p>
+      Logg inn med firma-konto. Minimumstilgang er Level 1 (prosjekthandtering + injisering).
+      Level 2 gir i tillegg stressing og jekk data.
+    </p>
+  </section>
+
+  <div class="card" style="max-width:560px">
+    <div class="cardhead">
+      <div>
+        <h2>Innlogging</h2>
+        <small>Tilgang etter betalt nivaa</small>
+      </div>
+    </div>
+    <div class="cardbody">
+      <form id="pmLoginForm" style="display:grid;gap:10px" autocomplete="off">
+        <label>
+          <span class="lab">E-post</span>
+          <input id="pmUser" type="email" required placeholder="pm@firma.no">
+        </label>
+        <label>
+          <span class="lab">Passord</span>
+          <input id="pmPass" type="password" required placeholder="********">
+        </label>
+        <button class="btn primary" type="submit" style="justify-content:center">Logg inn</button>
+      </form>
+
+      <div class="hint" style="margin-top:10px">
+        Innlogging styres av backend/API og tilgangsnivaa per firma.
+      </div>
+      <div class="hint">
+        Level 1: prosjekthandtering + injisering. Level 2: Level 1 + stressing + jekk data.
+      </div>
+      <div id="loginMsg" class="msg hidden"></div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Prosjektstyring (lukket). Ingen markedsforing-cookies.
+  </footer>
+</div>
+
+<div class="wrap" id="appView" hidden>
+  <section class="hero">
+    <h1 id="projectHeroTitle">Prosjektstyring</h1>
+    <p id="projectHeroText">
+      Start prosjekt, rediger innhold og marker prosjekt som ferdig. Moduler kan kombineres per prosjekt,
+      inkludert injisering, oppspenning og special stressing.
+    </p>
+    <div class="viewToolbar">
+      <div class="viewSwitch" aria-label="Velg prosjektvisning">
+        <a class="viewPill" id="projectViewNewLink" href="software-prosjektstyring.html?view=new">Nytt prosjekt</a>
+        <a class="viewPill" id="projectViewManageLink" href="software-prosjektstyring.html?view=manage">Eksisterende prosjekter</a>
+      </div>
+      <div class="actions viewToolbarActions">
+        <a class="btn secondary" id="jackPageLink" href="software-jekk.html">Jekk data</a>
+        <button class="btn ghost" id="logoutBtn" type="button">Logg ut</button>
+      </div>
+    </div>
+    <div class="viewModeNote" id="projectViewNote">Velg visning for a redusere stoy i arbeidsflaten.</div>
+    <div class="hint" id="accessInfo"></div>
+  </section>
+
+  <div class="grid" id="projectMainGrid">
+    <div class="card" id="projectFormCard">
+      <div class="cardhead">
+        <div>
+          <h2>Start / rediger prosjekt</h2>
+          <small id="formMode">Nytt prosjekt</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <form id="projectForm">
+          <div class="section">
+            <div class="row">
+              <label>
+                <span class="lab">Prosjektnavn *</span>
+                <input id="projectName" type="text" required placeholder="f.eks. E39 - Delstrekning 4">
+              </label>
+              <label>
+                <span class="lab">Prosjektnummer</span>
+                <input id="projectNo" type="text" placeholder="f.eks. 26-00412">
+              </label>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <label>
+                <span class="lab">Kunde / byggherre</span>
+                <input id="projectClient" type="text" placeholder="f.eks. Statens vegvesen">
+              </label>
+              <label>
+                <span class="lab">Lokasjon</span>
+                <input id="projectLocation" type="text" placeholder="f.eks. Bergen">
+              </label>
+            </div>
+            <label style="margin-top:10px">
+              <span class="lab">Kommentar</span>
+              <textarea id="projectNote" rows="3" placeholder="Kort prosjektbeskrivelse eller viktige merknader"></textarea>
+            </label>
+          </div>
+
+          <div class="section">
+            <h3>Moduler</h3>
+            <div class="checkgrid">
+              <label class="check"><input type="checkbox" id="modGrouting"> <span>Grouting (injisering)</span></label>
+              <label class="check"><input type="checkbox" id="modStressing"> <span>Stressing (oppspenning)</span></label>
+            </div>
+
+            <div id="stressingOptionsWrap" class="hidden" style="margin-top:10px">
+              <div class="lab" style="margin-bottom:6px">Oppspenning - kun Test Method 1 Acceptance er aktiv (andre metoder er deaktivert)</div>
+              <div class="checkgrid" id="stressingOptions"></div>
+            </div>
+
+            <div id="specialStressingWrap" style="margin-top:10px">
+              <div class="lab" style="margin-bottom:6px">Special stressing</div>
+              <div class="hint" style="margin-top:0;margin-bottom:8px">
+                Tradisionel oppspenning: Dette er brukt i mange ar i Norge, men vil snart bli fjernet.
+                Eurokode tillader ikke denne type oppspenning.
+              </div>
+              <div class="checkgrid">
+                <label class="check"><input type="checkbox" id="modLiftOff"> <span>Lift-off</span></label>
+                <label class="check"><input type="checkbox" id="modDiffBond"> <span>Differensiert bondlength</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="section" id="checklistSection">
+            <h3>Sjekklister</h3>
+            <label style="margin-top:8px">
+              <span class="lab">A1 Check før injisering</span>
+              <textarea id="checklistA1" rows="3" placeholder="Legg inn punkter, ett per linje"></textarea>
+            </label>
+            <label style="margin-top:10px">
+              <span class="lab">A2 Check etter injisering</span>
+              <textarea id="checklistA2" rows="3" placeholder="Legg inn punkter, ett per linje"></textarea>
+            </label>
+          </div>
+
+          <div class="section" id="jackSection">
+            <h3>Jacks brukt i stressing</h3>
+            <div class="hint" style="margin-top:0">
+              Velg tilgjengelige jacks fra jack-registeret. Listen hentes automatisk fra <a href="software-jekk.html">Jekk data</a>.
+            </div>
+            <div id="jackPool" style="margin-top:8px"></div>
+          </div>
+
+          <input id="editingId" type="hidden">
+
+          <div class="actions">
+            <button class="btn primary" id="saveProjectBtn" type="submit">Start prosjekt</button>
+            <button class="btn" id="resetFormBtn" type="button">Nullstill</button>
+            <button class="btn danger hidden" id="cancelEditBtn" type="button">Avbryt redigering</button>
+          </div>
+
+          <div id="formMsg" class="msg hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <aside class="card" id="projectListCard">
+      <div class="cardhead">
+        <div>
+          <h2>Prosjektoversikt</h2>
+          <small>Startet, aktive og ferdige prosjekter</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Totalt</div>
+            <div class="val" id="kpiTotal">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Aktive</div>
+            <div class="val" id="kpiActive">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Ferdige</div>
+            <div class="val" id="kpiFinished">0</div>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top:10px">
+          <div class="row3">
+            <label>
+              <span class="lab">Filter</span>
+              <select id="statusFilter">
+                <option value="all">Alle</option>
+                <option value="active">Aktive</option>
+                <option value="finished">Ferdige</option>
+              </select>
+            </label>
+            <label style="grid-column: span 2">
+              <span class="lab">Sok</span>
+              <input id="searchInput" type="text" placeholder="Sok etter navn eller nummer">
+            </label>
+          </div>
+        </div>
+
+        <table aria-label="Prosjektliste">
+          <thead>
+            <tr>
+              <th style="width:48%">Prosjekt</th>
+              <th style="width:10%">Ankere</th>
+              <th style="width:16%">Jekk</th>
+              <th style="width:10%">Status</th>
+              <th style="width:16%">Startet</th>
+            </tr>
+          </thead>
+          <tbody id="projectRows"></tbody>
+        </table>
+
+        <div id="listMsg" class="msg" style="margin-top:10px">Ingen prosjekter ennå.</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modalShell hidden" id="pdfReportModal" role="dialog" aria-modal="true" aria-labelledby="pdfReportTitle">
+    <div class="modalCard">
+      <div class="cardhead">
+        <div>
+          <h2 id="pdfReportTitle">Make PDF report</h2>
+          <small id="pdfReportSubtitle">Velg alle eller noen anker som skal inkluderes</small>
+        </div>
+        <button class="btn sm" id="pdfReportCloseBtn" type="button">Lukk</button>
+      </div>
+      <div class="cardbody">
+        <div class="hint" id="pdfReportProjectInfo">Velg prosjekt fra listen.</div>
+        <div class="reportSelectionTools">
+          <button class="btn sm" id="pdfSelectAllBtn" type="button">Velg alle</button>
+          <button class="btn sm" id="pdfSelectNoneBtn" type="button">Fjern alle</button>
+          <div class="hint" id="pdfReportSelectionCount" style="margin-top:0">0 valgt</div>
+        </div>
+        <div class="reportAnchorList" id="pdfAnchorSelector"></div>
+        <div class="msg hidden" id="pdfReportMsg"></div>
+        <div class="modalActions">
+          <div class="hint">Rapporten åpnes i nytt vindu. Velg "Lagre som PDF" i utskrift.</div>
+          <div class="actions">
+            <button class="btn primary" id="pdfGenerateBtn" type="button">Aapne PDF-rapport</button>
+            <button class="btn" id="pdfCancelBtn" type="button">Avbryt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Prosjektstyring (firma-tilgang).
+  </footer>
+</div>
+
+<script>
+  (function initMenu(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+  })();
+</script>
+
+<script src="company-branding.js"></script>
+<script>
+  const STORAGE = {
+    auth: "esp_pm_auth_v1",
+    projects: "esp_pm_projects_v1",
+    jacks: "esp_pm_jacks_v1"
+  };
+
+  const ACCESS_CONFIG = {
+    hours: 12
+  };
+  const FEATURE_FLAGS = {
+    stressingProjectModule: true
+  };
+  const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+  const CALIBRATION_INTERVAL_MONTHS = 12;
+  const CALIBRATION_WARNING_DAYS = 30;
+
+  function modulesForTier(tier){
+    const level2 = tier === "level2";
+    return {
+      projectHandling: true,
+      grouting: true,
+      stressing: level2,
+      jackData: level2
+    };
+  }
+
+  function tierLabel(tier){
+    return tier === "level2" ? "Level 2" : "Level 1";
+  }
+
+  function parseEpochMs(value){
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string"){
+      const parsed = Date.parse(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  function normalizeSession(session){
+    if (!session || typeof session !== "object") return null;
+    const tier = session.tier === "level2" ? "level2" : "level1";
+    const expiresAtMs = parseEpochMs(session.expiresAt);
+    if (!expiresAtMs) return null;
+    const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+    return {
+      ...session,
+      tier,
+      modules: {
+        ...modulesForTier(tier),
+        ...incomingModules,
+        projectHandling: true,
+        grouting: true
+      },
+      loginAt: session.loginAt || new Date().toISOString(),
+      expiresAt: expiresAtMs
+    };
+  }
+
+  function migrateLegacySession(raw){
+    if (!raw || raw.role !== "project_manager") return null;
+    const migrated = normalizeSession({
+      type: "company_access",
+      companyId: "legacy-pm",
+      companyName: "Legacy prosjektleder",
+      tier: "level2",
+      email: "",
+      modules: modulesForTier("level2"),
+      loginAt: raw.loginAt || new Date().toISOString(),
+      expiresAt: raw.expiresAt || (Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000))
+    });
+    if (!migrated) return null;
+    writeJson(STORAGE.auth, migrated);
+    return migrated;
+  }
+
+  function apiUrl(path){
+    return API_BASE + "/" + path.replace(/^\/+/, "");
+  }
+
+  async function requestApi(path, options){
+    const opts = options || {};
+    const headers = {};
+    if (opts.body) headers["Content-Type"] = "application/json";
+
+    const res = await fetch(apiUrl(path), {
+      method: opts.method || "GET",
+      credentials: "include",
+      headers,
+      body: opts.body
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {}
+
+    if (!res.ok || !data || data.ok === false) {
+      const msg = (data && (data.error || data.message))
+        ? (data.error || data.message)
+        : ("HTTP " + res.status);
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  function isLocalPreviewHost(){
+    const host = (window.location.hostname || "").toLowerCase();
+    if (window.location.protocol === "file:") return true;
+    if (!host) return true;
+    if (host === "etterspenning.no" || host.endsWith(".etterspenning.no")) return false;
+    return true;
+  }
+
+  function previewFallbackSession(email){
+    const nowIso = new Date().toISOString();
+    return {
+      type: "company_access",
+      userId: 0,
+      name: "Preview bruker",
+      fullName: "Preview bruker",
+      email: (email || "preview@local").toString().trim().toLowerCase(),
+      role: "admin",
+      companyId: "preview-local",
+      companyName: "Preview firma",
+      companyLogo: "",
+      tier: "level2",
+      tierLabel: "Level 2",
+      modules: {
+        projectHandling: true,
+        grouting: true,
+        stressing: true,
+        jackData: true,
+        jackControl: true
+      },
+      previewMode: true,
+      loginAt: nowIso,
+      expiresAt: Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000)
+    };
+  }
+
+  function writeSession(session){
+    const normalized = normalizeSession(session);
+    if (!normalized) return null;
+    writeJson(STORAGE.auth, normalized);
+    return normalized;
+  }
+
+  function clearSession(){
+    localStorage.removeItem(STORAGE.auth);
+  }
+
+  async function refreshSessionFromApi(){
+    try {
+      const data = await requestApi("me.php");
+      if (!data.authenticated || !data.session) {
+        clearSession();
+        return null;
+      }
+      return writeSession(data.session);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function loginViaApi(email, password){
+    try {
+      const data = await requestApi("login.php", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
+      });
+      const session = writeSession(data.session);
+      if (!session) throw new Error("Ugyldig sesjon fra server.");
+      return session;
+    } catch (err) {
+      if (!isLocalPreviewHost()) throw err;
+      const fallback = writeSession(previewFallbackSession(email));
+      if (!fallback) throw err;
+      return fallback;
+    }
+  }
+
+  function getSession(){
+    const raw = readJson(STORAGE.auth, null);
+    if (!raw) return null;
+
+    const normalized = normalizeSession(raw);
+    if (normalized) {
+      if (normalized.expiresAt < Date.now()) {
+        clearSession();
+        return null;
+      }
+      if (Number(raw.expiresAt) !== normalized.expiresAt) {
+        writeJson(STORAGE.auth, normalized);
+      }
+      return normalized;
+    }
+
+    const migrated = migrateLegacySession(raw);
+    if (!migrated || migrated.expiresAt < Date.now()) {
+      clearSession();
+      return null;
+    }
+    return migrated;
+  }
+
+  function hasAccess(){
+    const session = getSession();
+    return !!(
+      session &&
+      session.role !== "onsite_user" &&
+      session.modules &&
+      session.modules.projectHandling
+    );
+  }
+
+  function hasStressingAccess(){
+    const session = getSession();
+    return !!(FEATURE_FLAGS.stressingProjectModule && session && session.modules && session.modules.stressing);
+  }
+
+  function hasJackAccess(){
+    const session = getSession();
+    return !!(session && session.modules && session.modules.jackData);
+  }
+
+  const STRESS_OPTIONS = [
+    { id: "s1", label: "Test Method 1 - Investigation test", enabled: false },
+    { id: "s2", label: "Test Method 1 - Suitability test", enabled: false },
+    { id: "s3", label: "Test Method 1 - Acceptance test", enabled: true },
+    { id: "s4", label: "Test Method 2 - Investigation test", enabled: false },
+    { id: "s5", label: "Test Method 2 - Suitability test", enabled: false },
+    { id: "s6", label: "Test Method 2 - Acceptance test", enabled: false },
+    { id: "s7", label: "Test Method 3 - Investigation test", enabled: false },
+    { id: "s8", label: "Test Method 3 - Suitability test", enabled: false },
+    { id: "s9", label: "Test Method 3 - Acceptance test", enabled: false }
+  ];
+
+  function isStressOptionEnabled(optionId){
+    const option = STRESS_OPTIONS.find((opt) => opt.id === optionId);
+    return !!(option && option.enabled !== false);
+  }
+
+  function stressOptionCategory(optionId){
+    const option = STRESS_OPTIONS.find((opt) => opt.id === optionId);
+    const label = ((option && option.label) || "").toLowerCase();
+    if (label.includes("investigation")) return "investigation";
+    if (label.includes("suitability")) return "suitability";
+    if (label.includes("acceptance")) return "acceptance";
+    return "";
+  }
+
+  function checkedStressOptionIds(){
+    return Array.from(document.querySelectorAll(".stressOpt:checked"))
+      .map((el) => el.value)
+      .filter((id) => isStressOptionEnabled(id));
+  }
+
+  function enforceStressCategoryLimits(changedId){
+    const selected = checkedStressOptionIds();
+    const keepByCategory = {};
+
+    selected.forEach((id) => {
+      const category = stressOptionCategory(id);
+      if (!category) return;
+      if (!keepByCategory[category]) keepByCategory[category] = id;
+      if (changedId && id === changedId) keepByCategory[category] = id;
+    });
+
+    document.querySelectorAll(".stressOpt:checked").forEach((el) => {
+      const category = stressOptionCategory(el.value);
+      if (!category) return;
+      if (keepByCategory[category] !== el.value) {
+        el.checked = false;
+      }
+    });
+  }
+
+  function syncStressingRuleUi(){
+    if (!hasStressingAccess()) return;
+
+    const stressingEnabled = !!$("modStressing").checked;
+    const liftOffCheckbox = $("modLiftOff");
+    const diffBondCheckbox = $("modDiffBond");
+
+    // When stressing is selected, special stressing options are not allowed.
+    if (stressingEnabled) {
+      if (liftOffCheckbox) liftOffCheckbox.checked = false;
+      if (diffBondCheckbox) diffBondCheckbox.checked = false;
+    }
+
+    const specialSelected = !!(
+      (liftOffCheckbox && liftOffCheckbox.checked) ||
+      (diffBondCheckbox && diffBondCheckbox.checked)
+    );
+
+    document.querySelectorAll(".stressOpt").forEach((el) => {
+      const optionEnabled = isStressOptionEnabled(el.value);
+      if (!optionEnabled && el.checked) {
+        el.checked = false;
+      }
+      el.disabled = !optionEnabled || !stressingEnabled || specialSelected;
+    });
+
+    if (liftOffCheckbox) liftOffCheckbox.disabled = stressingEnabled;
+    if (diffBondCheckbox) diffBondCheckbox.disabled = stressingEnabled;
+  }
+
+  function $(id){ return document.getElementById(id); }
+
+  function readJson(key, fallback){
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function companyScopeId(){
+    const session = getSession();
+    const raw = session && session.companyId !== undefined && session.companyId !== null
+      ? String(session.companyId).trim()
+      : "";
+    return raw || "no_company";
+  }
+
+  function scopedStorageKey(baseKey){
+    return baseKey + "__company_" + companyScopeId();
+  }
+
+  function projectsStorageKey(){
+    return scopedStorageKey(STORAGE.projects);
+  }
+
+  function jacksStorageKey(){
+    return scopedStorageKey(STORAGE.jacks);
+  }
+
+  function isLegacyCompanyScope(){
+    return companyScopeId() === "legacy-pm";
+  }
+
+  function migrateScopedArrayStore(scopedKey, legacyKey){
+    if (!isLegacyCompanyScope()) return;
+    if (localStorage.getItem(scopedKey) !== null) return;
+
+    const markerKey = legacyKey + "__scoped_v1_migrated";
+    if (localStorage.getItem(markerKey) === "1") return;
+
+    const legacyValue = readJson(legacyKey, null);
+    if (Array.isArray(legacyValue)) {
+      writeJson(scopedKey, legacyValue);
+      localStorage.setItem(markerKey, "1");
+    }
+  }
+
+  function normalizeProjectListForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const normalized = [];
+    let changed = !Array.isArray(list);
+
+    source.forEach((project) => {
+      if (!project || typeof project !== "object") {
+        changed = true;
+        return;
+      }
+
+      const rawProjectCompanyId = project.companyId;
+      const projectCompanyId = rawProjectCompanyId === undefined || rawProjectCompanyId === null
+        ? ""
+        : String(rawProjectCompanyId).trim();
+
+      if (projectCompanyId === "") {
+        if (!isLegacyCompanyScope()) {
+          changed = true;
+          return;
+        }
+      } else if (projectCompanyId !== companyId) {
+        changed = true;
+        return;
+      }
+
+      normalized.push({
+        ...project,
+        companyId
+      });
+
+      if (projectCompanyId !== companyId) {
+        changed = true;
+      }
+    });
+
+    return { normalized, changed };
+  }
+
+  let projectsCache = null;
+  let projectsHydratePromise = null;
+  let projectsSaveChain = Promise.resolve();
+
+  function cloneProjectsList(list){
+    try {
+      return JSON.parse(JSON.stringify(Array.isArray(list) ? list : []));
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function scopedProjectsForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    return source
+      .filter((project) => project && typeof project === "object")
+      .map((project) => ({
+        ...project,
+        companyId
+      }));
+  }
+
+  function readLocalProjectsFallback(){
+    const key = projectsStorageKey();
+    migrateScopedArrayStore(key, STORAGE.projects);
+    const parsed = readJson(key, []);
+    const normalizedResult = normalizeProjectListForCompany(parsed);
+    return normalizedResult.normalized;
+  }
+
+  async function hydrateProjectsFromServer(){
+    if (projectsHydratePromise) return projectsHydratePromise;
+
+    projectsHydratePromise = (async () => {
+      const data = await requestApi("projects.php", { method: "GET" });
+      const remoteList = Array.isArray(data && data.projects) ? data.projects : [];
+      const normalizedRemote = normalizeProjectListForCompany(remoteList).normalized;
+
+      if (normalizedRemote.length > 0) {
+        projectsCache = cloneProjectsList(normalizedRemote);
+        return getProjects();
+      }
+
+      const localFallback = readLocalProjectsFallback();
+      if (localFallback.length > 0) {
+        const bootstrap = scopedProjectsForCompany(localFallback);
+        projectsCache = cloneProjectsList(bootstrap);
+        await requestApi("projects.php", {
+          method: "POST",
+          body: JSON.stringify({ projects: bootstrap })
+        });
+        return getProjects();
+      }
+
+      projectsCache = [];
+      return [];
+    })().finally(() => {
+      projectsHydratePromise = null;
+    });
+
+    return projectsHydratePromise;
+  }
+
+  function getProjects(){
+    if (!Array.isArray(projectsCache)) {
+      projectsCache = [];
+    }
+    return cloneProjectsList(projectsCache);
+  }
+
+  function saveProjects(list){
+    const scopedProjects = scopedProjectsForCompany(list);
+    projectsCache = cloneProjectsList(scopedProjects);
+    const snapshot = cloneProjectsList(scopedProjects);
+
+    projectsSaveChain = projectsSaveChain
+      .catch(() => {})
+      .then(() => requestApi("projects.php", {
+        method: "POST",
+        body: JSON.stringify({ projects: snapshot })
+      }));
+
+    projectsSaveChain.catch((err) => {
+      try { console.error("projects sync failed (prosjektstyring)", err); } catch (e) {}
+    });
+
+    return projectsSaveChain;
+  }
+
+  async function flushProjectsSave(){
+    await projectsSaveChain;
+  }
+
+  function getJacks(){
+    const key = jacksStorageKey();
+    migrateScopedArrayStore(key, STORAGE.jacks);
+    const v = readJson(key, []);
+    return Array.isArray(v) ? v : [];
+  }
+
+  function uid(prefix){
+    return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function fmtDate(iso){
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+  }
+
+  function reportNum(value){
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function reportClampMin(value, min){
+    return value < min ? min : value;
+  }
+
+  function reportFmt(value, decimals){
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "-";
+    const dec = Number.isFinite(Number(decimals)) ? Math.max(0, Number(decimals)) : 1;
+    return n.toLocaleString("no-NO", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+
+  function reportCeilInt(value){
+    return Number.isFinite(Number(value)) ? Math.ceil(Number(value)) : 0;
+  }
+
+  function reportAreaFromDiameter_m2(d_mm){
+    const d = reportClampMin(reportNum(d_mm), 0) / 1000;
+    return Math.PI * (d * d) / 4;
+  }
+
+  function reportAreaFromDiameter_mm2(d_mm){
+    const d = reportClampMin(reportNum(d_mm), 0);
+    return Math.PI * (d * d) / 4;
+  }
+
+  function reportNormalizeAnchorNo(value, idx){
+    const raw = (value || "").toString().trim();
+    return raw || ("A" + ((Number.isFinite(Number(idx)) ? Number(idx) : 0) + 1));
+  }
+
+  function reportNormalizedLength(value){
+    return reportClampMin(reportNum(value), 0).toFixed(3);
+  }
+
+  function reportAnchorSourceKeyFromData(anchorLike, idx){
+    const src = anchorLike || {};
+    return [
+      reportNormalizeAnchorNo(src.anchorNo, idx),
+      reportNormalizedLength(src.lCasing),
+      reportNormalizedLength(src.lBore),
+      reportNormalizedLength(src.lFree),
+      reportNormalizedLength(src.lBond)
+    ].join("|");
+  }
+
+  function reportAnchorStatusLabel(status){
+    if (status === "approved") return "Godkjent";
+    if (status === "sent_for_approval") return "Til godkjenning";
+    if (status === "pending") return "Venter felt";
+    return "Utkast";
+  }
+
+  function parseDateInput(v){
+    if (!v) return null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+      const d0 = new Date(v + "T00:00:00");
+      return Number.isNaN(d0.getTime()) ? null : d0;
+    }
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function addMonthsIso(isoDate, months){
+    const base = parseDateInput(isoDate);
+    if (!base || !Number.isFinite(months) || months < 1) return null;
+    const y = base.getFullYear();
+    const m = base.getMonth();
+    const d = base.getDate();
+    const target = new Date(y, m + months, d);
+    const yy = target.getFullYear();
+    const mm = String(target.getMonth() + 1).padStart(2, "0");
+    const dd = String(target.getDate()).padStart(2, "0");
+    return yy + "-" + mm + "-" + dd;
+  }
+
+  function fmtDateOnly(iso){
+    const d = parseDateInput(iso);
+    if (!d) return "-";
+    return d.toLocaleDateString("no-NO");
+  }
+
+  function jackNextCalibration(jack){
+    if (!jack || typeof jack !== "object") return null;
+    const fromCalibratedAt = addMonthsIso(jack.calibratedAt, CALIBRATION_INTERVAL_MONTHS);
+    if (fromCalibratedAt) return fromCalibratedAt;
+    const normalizedNext = (jack.nextCalibration || "").toString().trim();
+    return normalizedNext || null;
+  }
+
+  function jackCalibrationState(jack){
+    if (!jack || jack.status === "inactive") {
+      return { state: "inactive", days: null, nextCalibration: jackNextCalibration(jack) };
+    }
+
+    const nextCalibration = jackNextCalibration(jack);
+    if (!nextCalibration) return { state: "unknown", days: null, nextCalibration: null };
+    const target = parseDateInput(nextCalibration);
+    if (!target) return { state: "unknown", days: null, nextCalibration };
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.ceil((target - today) / 86400000);
+    if (days < 0) return { state: "overdue", days, nextCalibration };
+    if (days <= CALIBRATION_WARNING_DAYS) return { state: "due", days, nextCalibration };
+    return { state: "valid", days, nextCalibration };
+  }
+
+  function jackCalibrationWarning(calibration){
+    if (!calibration) return null;
+    if (calibration.state === "overdue") {
+      const datePart = calibration.nextCalibration ? (" Forfalt: " + fmtDateOnly(calibration.nextCalibration) + ".") : "";
+      return {
+        className: "jackWarn overdue",
+        text: "Ikke innen kalibrering. Maa sendes til kalibrering." + datePart
+      };
+    }
+    if (calibration.state === "due") {
+      const datePart = calibration.nextCalibration ? (" Forfaller: " + fmtDateOnly(calibration.nextCalibration) + ".") : "";
+      return {
+        className: "jackWarn due",
+        text: "Forfaller innen " + CALIBRATION_WARNING_DAYS + " dager. Send til kalibrering snart (for forfallsdato)." + datePart
+      };
+    }
+    return null;
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function isValidEmail(value){
+    const email = (value || "").toString().trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function normalizeEmailValue(value){
+    return (value || "").toString().trim().toLowerCase();
+  }
+
+  function tm1FieldShareUrl(projectId){
+    const rawId = (projectId || "").toString().trim();
+    if (!rawId) return "";
+    return new URL("software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(rawId), window.location.href).toString();
+  }
+
+  function persistStressingAssignment(projectId, assignedEmail, assignedAt){
+    const rawId = (projectId || "").toString().trim();
+    const email = normalizeEmailValue(assignedEmail);
+    if (!rawId || !email) return;
+
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === rawId);
+    if (idx < 0) return;
+
+    list[idx] = {
+      ...list[idx],
+      stressingAssignedEmail: email,
+      stressingAssignedAt: assignedAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    saveProjects(list);
+  }
+
+  function persistGroutingAssignment(projectId, assignedEmail, assignedAt){
+    const rawId = (projectId || "").toString().trim();
+    const email = normalizeEmailValue(assignedEmail);
+    if (!rawId || !email) return;
+
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === rawId);
+    if (idx < 0) return;
+
+    list[idx] = {
+      ...list[idx],
+      siteEmail: email,
+      groutingAssignedEmail: email,
+      groutingAssignedAt: assignedAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    saveProjects(list);
+  }
+
+  async function assignGroutingField(projectId){
+    const rawId = (projectId || "").toString().trim();
+    if (!rawId) {
+      setMsg(actionMsgBox(), "Mangler prosjekt-ID for tildeling.", "error");
+      return;
+    }
+
+    const project = getProjects().find((p) => p.id === rawId);
+    if (!project) {
+      setMsg(actionMsgBox(), "Fant ikke prosjektet for tildeling.", "error");
+      return;
+    }
+
+    const current = normalizeEmailValue(project.groutingAssignedEmail || project.siteEmail || "");
+    const typed = window.prompt("E-post til onsite-personell for injisering felt:", current);
+    if (typed === null) return;
+    const recipient = normalizeEmailValue(typed);
+    if (!isValidEmail(recipient)) {
+      setMsg(actionMsgBox(), "Ugyldig e-postadresse for onsite-personell.", "error");
+      return;
+    }
+
+    persistGroutingAssignment(rawId, recipient, new Date().toISOString());
+    renderProjects();
+    setMsg(actionMsgBox(), "Injisering felt tildelt til " + recipient + ".", "ok");
+  }
+
+  async function shareTm1Field(projectId){
+    const rawId = (projectId || "").toString().trim();
+    if (!rawId) {
+      setMsg(actionMsgBox(), "Mangler prosjekt-ID for deling.", "error");
+      return;
+    }
+
+    const project = getProjects().find((p) => p.id === rawId);
+    if (!project) {
+      setMsg(actionMsgBox(), "Fant ikke prosjektet for deling.", "error");
+      return;
+    }
+
+    const shareUrl = tm1FieldShareUrl(rawId);
+    const projectName = (project.name || "Prosjekt").toString();
+    let recipient = normalizeEmailValue(project.stressingAssignedEmail || project.siteEmail || "");
+    if (!recipient) {
+      const typed = window.prompt("E-post til ansvarlig pa site:", "");
+      if (typed === null) return;
+      recipient = normalizeEmailValue(typed);
+    }
+    if (!isValidEmail(recipient)) {
+      setMsg(actionMsgBox(), "Ugyldig e-postadresse for ansvarlig pa site.", "error");
+      return;
+    }
+
+    const sender = ((activeSession && (activeSession.fullName || activeSession.email)) || "Prosjektleder").toString();
+    const subject = "Spennliste - " + projectName;
+    const body = [
+      "Hei,",
+      "",
+      "Du er satt som ansvarlig for stressing pa site for prosjekt '" + projectName + "'.",
+      "",
+      "Aapne spennlisten her:",
+      shareUrl,
+      "",
+      "Logg inn med firma-konto for tilgang.",
+      "",
+      "Hilsen",
+      sender
+    ].join("\n");
+
+    try {
+      const notify = await requestApi("notify-spennliste.php", {
+        method: "POST",
+        body: JSON.stringify({
+          projectId: rawId,
+          projectName,
+          recipientEmail: recipient,
+          shareUrl
+        })
+      });
+      const sentAt = (notify && notify.sentAt) ? notify.sentAt : new Date().toISOString();
+      persistStressingAssignment(rawId, recipient, sentAt);
+      renderProjects();
+      setMsg(actionMsgBox(), "Spennliste sendt til " + recipient + ".", "ok");
+      return;
+    } catch (err) {}
+
+    const mailtoUrl = "mailto:" + encodeURIComponent(recipient) +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+
+    let copied = false;
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        copied = true;
+      } catch (err) {}
+    }
+    setMsg(
+      actionMsgBox(),
+      copied
+        ? ("Automatisk sending feilet. E-postutkast apnet til " + recipient + ". Lenke er kopiert.")
+        : ("Automatisk sending feilet. E-postutkast apnet til " + recipient + "."),
+      "ok"
+    );
+    window.location.href = mailtoUrl;
+  }
+
+  async function logout(){
+    try {
+      await requestApi("logout.php", { method: "POST", body: "{}" });
+    } catch (e) {}
+    clearSession();
+    location.reload();
+  }
+
+  let activeSession = getSession();
+  let currentProjectView = "manage";
+  let pdfReportModalState = null;
+
+  function setMsg(el, text, type){
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("hidden", "error", "ok");
+    if (type) el.classList.add(type);
+  }
+
+  function clearMsg(el){
+    if (!el) return;
+    el.textContent = "";
+    el.classList.add("hidden");
+    el.classList.remove("error", "ok");
+  }
+
+  function normalizeProjectView(view){
+    return view === "new" ? "new" : "manage";
+  }
+
+  function projectViewFromUrl(){
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return normalizeProjectView((params.get("view") || "").trim().toLowerCase());
+    } catch (e) {
+      return "manage";
+    }
+  }
+
+  function setProjectView(view, options){
+    const opts = options || {};
+    const next = normalizeProjectView(view);
+    currentProjectView = next;
+
+    const grid = $("projectMainGrid");
+    const formCard = $("projectFormCard");
+    const listCard = $("projectListCard");
+    const title = $("projectHeroTitle");
+    const text = $("projectHeroText");
+    const note = $("projectViewNote");
+    const newLink = $("projectViewNewLink");
+    const manageLink = $("projectViewManageLink");
+
+    if (grid) grid.classList.add("singlePane");
+    if (formCard) formCard.hidden = next !== "new";
+    if (listCard) listCard.hidden = next !== "manage";
+
+    if (title) {
+      title.textContent = next === "new"
+        ? "Prosjektstyring - Nytt prosjekt"
+        : "Prosjektstyring - Eksisterende prosjekter";
+    }
+    if (text) {
+      text.textContent = next === "new"
+        ? "Opprett nytt prosjekt eller rediger prosjektdata i ett fokusert skjema uten prosjektlisten ved siden av."
+        : "Filtrer, finn og handter eksisterende prosjekter uten at oppstarts-skjemaet tar plass.";
+    }
+    if (note) {
+      note.textContent = next === "new"
+        ? "Skjema-visning for oppstart og redigering av prosjekt."
+        : "Oversikts-visning for sok, filter, ferdigstill, apne og slett.";
+    }
+
+    if (newLink) {
+      newLink.classList.toggle("active", next === "new");
+      newLink.setAttribute("aria-current", next === "new" ? "page" : "false");
+    }
+    if (manageLink) {
+      manageLink.classList.toggle("active", next === "manage");
+      manageLink.setAttribute("aria-current", next === "manage" ? "page" : "false");
+    }
+
+    if (!opts.skipUrl && window.history && typeof window.history.replaceState === "function") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("view", next);
+      window.history.replaceState({}, "", url.toString());
+    }
+  }
+
+  function actionMsgBox(){
+    return currentProjectView === "manage" ? $("listMsg") : $("formMsg");
+  }
+
+  function initProjectViewSwitch(){
+    const newLink = $("projectViewNewLink");
+    const manageLink = $("projectViewManageLink");
+    if (newLink) {
+      newLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        setProjectView("new");
+      });
+    }
+    if (manageLink) {
+      manageLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        setProjectView("manage");
+      });
+    }
+    window.addEventListener("popstate", () => {
+      setProjectView(projectViewFromUrl(), { skipUrl: true });
+    });
+  }
+
+  function applyAccessUi(){
+    activeSession = getSession();
+    const stressAllowed = hasStressingAccess();
+    const jackAllowed = hasJackAccess();
+
+    const info = $("accessInfo");
+    if (info && activeSession){
+      const userLabel = (activeSession.fullName || activeSession.email || "-").toString();
+      info.textContent = "Innlogget: " + userLabel + " • Firma: " + (activeSession.companyName || "-");
+    }
+
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: activeSession });
+    }
+
+    const jackLink = $("jackPageLink");
+    if (jackLink) jackLink.classList.toggle("hidden", !jackAllowed);
+
+    const stressingCheckbox = $("modStressing");
+    const liftOffCheckbox = $("modLiftOff");
+    const diffBondCheckbox = $("modDiffBond");
+    const stressingLabel = stressingCheckbox ? stressingCheckbox.closest("label") : null;
+    const stressingText = stressingLabel ? stressingLabel.querySelector("span") : null;
+    const specialWrap = $("specialStressingWrap");
+    const stressWrap = $("stressingOptionsWrap");
+    const jackSection = $("jackSection");
+
+    if (stressingCheckbox) stressingCheckbox.disabled = !stressAllowed;
+    if (liftOffCheckbox) liftOffCheckbox.disabled = !stressAllowed;
+    if (diffBondCheckbox) diffBondCheckbox.disabled = !stressAllowed;
+
+    if (!stressAllowed){
+      if (stressingText) {
+        stressingText.textContent = FEATURE_FLAGS.stressingProjectModule
+          ? "Stressing (oppspenning) - krever Level 2"
+          : "Stressing (oppspenning) - midlertidig utilgjengelig";
+      }
+      if (stressingCheckbox) stressingCheckbox.checked = false;
+      if (liftOffCheckbox) liftOffCheckbox.checked = false;
+      if (diffBondCheckbox) diffBondCheckbox.checked = false;
+      document.querySelectorAll(".stressOpt").forEach((el) => { el.checked = false; });
+      if (stressWrap) stressWrap.classList.add("hidden");
+      if (specialWrap) specialWrap.classList.add("hidden");
+    } else {
+      if (stressingText) stressingText.textContent = "Stressing (oppspenning)";
+      if (specialWrap) specialWrap.classList.remove("hidden");
+      syncStressingRuleUi();
+    }
+
+    if (jackSection) jackSection.classList.toggle("hidden", !jackAllowed);
+  }
+
+  function moduleSummary(p){
+    const parts = [];
+    const stressAllowed = hasStressingAccess();
+    if (p.modules?.grouting) parts.push("Injisering");
+    if (p.modules?.stressing && stressAllowed) {
+      const enabledCount = STRESS_OPTIONS.filter((opt) => opt.enabled !== false).length;
+      const count = Array.isArray(p.modules.stressingOptions)
+        ? p.modules.stressingOptions.filter((id) => isStressOptionEnabled(id)).length
+        : 0;
+      parts.push("Oppspenning (" + count + "/" + enabledCount + ")");
+    } else if (p.modules?.stressing && !stressAllowed) {
+      parts.push(FEATURE_FLAGS.stressingProjectModule ? "Oppspenning (Level 2)" : "Oppspenning (utilgjengelig)");
+    }
+    if (p.modules?.liftOff && stressAllowed) parts.push("Lift-off");
+    if (p.modules?.diffBondlength && stressAllowed) parts.push("Differensiert bondlength");
+    return parts.length ? parts.join(", ") : "Ingen valgt";
+  }
+
+  function projectDisplayLabel(project){
+    if (!project || typeof project !== "object") return "Prosjekt";
+    const name = (project.name || "Prosjekt").toString();
+    const number = (project.number || "").toString().trim();
+    return number ? (name + " (" + number + ")") : name;
+  }
+
+  function projectTm1Block(project){
+    const dev = (project && project.stressingDev && typeof project.stressingDev === "object")
+      ? project.stressingDev
+      : {};
+    const tm1 = (dev.tm1Acceptance && typeof dev.tm1Acceptance === "object")
+      ? dev.tm1Acceptance
+      : {};
+    const plans = Array.isArray(tm1.plans) ? tm1.plans : [];
+    const records = Array.isArray(tm1.records) ? tm1.records : [];
+    return { dev, tm1, plans, records };
+  }
+
+  function reportGroutingConfig(project){
+    const src = project && project.groutingData && typeof project.groutingData === "object"
+      ? project.groutingData
+      : null;
+    if (!src) return null;
+    return {
+      anchorType: src.anchorType === "bar" ? "bar" : "strand",
+      strandCount: reportClampMin(reportNum(src.strandCount), 0),
+      strandArea: reportClampMin(reportNum(src.strandArea), 0),
+      barDia: reportClampMin(reportNum(src.barDia), 0),
+      dCasing: reportClampMin(reportNum(src.dCasing), 0),
+      dBore: reportClampMin(reportNum(src.dBore), 0),
+      wastePct: reportClampMin(reportNum(src.wastePct), 0),
+      waterPerBag: reportClampMin(reportNum(src.waterPerBag), 0),
+      yieldPerBag: reportClampMin(reportNum(src.yieldPerBag), 0),
+      comment: (src.comment || "").toString(),
+      updatedAt: src.updatedAt || null
+    };
+  }
+
+  function reportSteelArea_m2(config){
+    if (!config) return 0;
+    if (config.anchorType === "bar") {
+      return reportAreaFromDiameter_mm2(config.barDia) / 1e6;
+    }
+    return (reportClampMin(reportNum(config.strandCount), 0) * reportClampMin(reportNum(config.strandArea), 0)) / 1e6;
+  }
+
+  function buildProjectReportAnchorItems(project){
+    const workflowAnchors = (project && project.groutingWorkflow && Array.isArray(project.groutingWorkflow.anchors))
+      ? project.groutingWorkflow.anchors
+      : [];
+    const planRows = (project && project.groutingData && Array.isArray(project.groutingData.rows))
+      ? project.groutingData.rows
+      : [];
+
+    const rowByKey = new Map();
+    planRows.forEach((row, idx) => {
+      const normalized = {
+        anchorNo: reportNormalizeAnchorNo(row && row.anchorNo, idx),
+        lCasing: reportClampMin(reportNum(row && row.lCasing), 0),
+        lBore: reportClampMin(reportNum(row && row.lBore), 0),
+        lFree: reportClampMin(reportNum(row && row.lFree), 0),
+        lBond: reportClampMin(reportNum(row && row.lBond), 0)
+      };
+      const key = reportAnchorSourceKeyFromData(normalized, idx);
+      if (!rowByKey.has(key)) rowByKey.set(key, normalized);
+    });
+
+    const items = [];
+    const usedKeys = new Set();
+
+    workflowAnchors.forEach((anchor, idx) => {
+      const key = (anchor && anchor.sourceKey) ? String(anchor.sourceKey) : reportAnchorSourceKeyFromData(anchor, idx);
+      usedKeys.add(key);
+      const plan = rowByKey.get(key);
+      const siteData = (anchor && anchor.siteData && typeof anchor.siteData === "object") ? anchor.siteData : null;
+      items.push({
+        key,
+        anchorId: (anchor && anchor.id) ? String(anchor.id) : "",
+        anchorNo: reportNormalizeAnchorNo(plan ? plan.anchorNo : (anchor && anchor.anchorNo), idx),
+        lCasing: reportClampMin(reportNum(plan ? plan.lCasing : (anchor && anchor.lCasing)), 0),
+        lBore: reportClampMin(reportNum(plan ? plan.lBore : (anchor && anchor.lBore)), 0),
+        lFree: reportClampMin(reportNum(plan ? plan.lFree : (anchor && anchor.lFree)), 0),
+        lBond: reportClampMin(reportNum(plan ? plan.lBond : (anchor && anchor.lBond)), 0),
+        status: (anchor && anchor.status) ? String(anchor.status) : "pending",
+        siteData,
+        sentAt: siteData && siteData.sentAt ? siteData.sentAt : null,
+        sentBy: siteData && siteData.sentBy ? siteData.sentBy : null,
+        approvedAt: (anchor && anchor.approvedAt) ? anchor.approvedAt : null,
+        approvedBy: (anchor && anchor.approvedBy) ? anchor.approvedBy : null,
+        source: "workflow"
+      });
+    });
+
+    rowByKey.forEach((row, key) => {
+      if (usedKeys.has(key)) return;
+      items.push({
+        key,
+        anchorId: "",
+        anchorNo: row.anchorNo,
+        lCasing: row.lCasing,
+        lBore: row.lBore,
+        lFree: row.lFree,
+        lBond: row.lBond,
+        status: "draft",
+        siteData: null,
+        sentAt: null,
+        sentBy: null,
+        approvedAt: null,
+        approvedBy: null,
+        source: "plan"
+      });
+    });
+
+    items.sort((a, b) => (a.anchorNo || "").localeCompare((b.anchorNo || ""), "no", { numeric: true, sensitivity: "base" }));
+    return items;
+  }
+
+  function calculateGroutingMetricsForReportAnchor(item, config){
+    const lCasing = reportClampMin(reportNum(item && item.lCasing), 0);
+    const lBore = reportClampMin(reportNum(item && item.lBore), 0);
+    const lFree = reportClampMin(reportNum(item && item.lFree), 0);
+    const lBond = reportClampMin(reportNum(item && item.lBond), 0);
+    const totalLength = lCasing + lBore;
+    const anchorLength = lFree + lBond;
+
+    const siteData = item && item.siteData && typeof item.siteData === "object" ? item.siteData : null;
+    const usedLRaw = reportNum(siteData && siteData.groutUsedL);
+    const usedL = usedLRaw > 0 ? usedLRaw : 0;
+    const timeUsedMin = reportNum(siteData && siteData.timeUsedMin);
+    const groutTempC = Number.isFinite(Number(siteData && siteData.groutTempC)) ? Number(siteData.groutTempC) : null;
+
+    if (!config) {
+      return {
+        lCasing, lBore, lFree, lBond, totalLength, anchorLength,
+        calcAvailable: false,
+        calcNetL: 0,
+        calcRecL: 0,
+        calcBags: null,
+        usedL,
+        usedBags: null,
+        timeUsedMin: timeUsedMin > 0 ? timeUsedMin : null,
+        groutTempC
+      };
+    }
+
+    const areaBore = reportAreaFromDiameter_m2(config.dBore);
+    const areaCasing = reportAreaFromDiameter_m2(config.dCasing);
+    const steelArea = reportSteelArea_m2(config);
+    const wasteFactor = 1 + (reportClampMin(reportNum(config.wastePct), 0) / 100);
+
+    const vBore_m3 = areaBore * totalLength;
+    const vDiff_m3 = Math.max(0, (areaCasing - areaBore)) * lCasing;
+    const lSteel = Math.min(anchorLength, totalLength);
+    const vSteel_m3 = steelArea * lSteel;
+    const calcNetL = Math.max(0, ((vBore_m3 + vDiff_m3) - vSteel_m3) * 1000);
+    const calcRecL = calcNetL * wasteFactor;
+
+    const yieldPerBag = reportClampMin(reportNum(config.yieldPerBag), 0);
+    const calcBags = yieldPerBag > 0 && calcRecL > 0 ? reportCeilInt(calcRecL / yieldPerBag) : null;
+    const usedBags = yieldPerBag > 0 && usedL > 0 ? reportCeilInt(usedL / yieldPerBag) : null;
+
+    return {
+      lCasing, lBore, lFree, lBond, totalLength, anchorLength,
+      calcAvailable: true,
+      calcNetL,
+      calcRecL,
+      calcBags,
+      usedL,
+      usedBags,
+      timeUsedMin: timeUsedMin > 0 ? timeUsedMin : null,
+      groutTempC
+    };
+  }
+
+  function buildProjectPdfReportModel(project, selectedKeys){
+    if (!project || typeof project !== "object") return null;
+    const allAnchors = buildProjectReportAnchorItems(project);
+    if (allAnchors.length === 0) return null;
+
+    const selectedSet = new Set(Array.isArray(selectedKeys) ? selectedKeys.map((k) => String(k)) : []);
+    const filtered = selectedSet.size > 0
+      ? allAnchors.filter((item) => selectedSet.has(String(item.key)))
+      : allAnchors.slice();
+    if (filtered.length === 0) return null;
+
+    const config = reportGroutingConfig(project);
+    const yieldPerBag = config ? reportClampMin(reportNum(config.yieldPerBag), 0) : 0;
+
+    const rows = filtered.map((item) => {
+      const metrics = calculateGroutingMetricsForReportAnchor(item, config);
+      return { ...item, ...metrics };
+    });
+
+    const totals = rows.reduce((acc, row) => {
+      acc.calcNetL += row.calcNetL || 0;
+      acc.calcRecL += row.calcRecL || 0;
+      acc.usedL += row.usedL || 0;
+      acc.usedAnchorCount += (row.usedL || 0) > 0 ? 1 : 0;
+      if (row.calcBags !== null && row.calcBags !== undefined) acc.calcBagsPerAnchor += row.calcBags;
+      if (row.usedBags !== null && row.usedBags !== undefined) acc.usedBagsPerAnchor += row.usedBags;
+
+      if (row.status === "approved") acc.approved += 1;
+      else if (row.status === "sent_for_approval") acc.forApproval += 1;
+      else if (row.status === "pending") acc.pending += 1;
+      else acc.draft += 1;
+      return acc;
+    }, {
+      calcNetL: 0,
+      calcRecL: 0,
+      usedL: 0,
+      usedAnchorCount: 0,
+      calcBagsPerAnchor: 0,
+      usedBagsPerAnchor: 0,
+      pending: 0,
+      forApproval: 0,
+      approved: 0,
+      draft: 0
+    });
+
+    totals.calcBagsTotal = yieldPerBag > 0 && totals.calcRecL > 0 ? reportCeilInt(totals.calcRecL / yieldPerBag) : null;
+    totals.usedBagsTotal = yieldPerBag > 0 && totals.usedL > 0 ? reportCeilInt(totals.usedL / yieldPerBag) : null;
+
+    return {
+      generatedAt: new Date().toISOString(),
+      project,
+      config,
+      rows,
+      totals,
+      allAnchorCount: allAnchors.length,
+      selectedAnchorCount: rows.length,
+      selectedAll: rows.length === allAnchors.length,
+      workflow: project.groutingWorkflow && typeof project.groutingWorkflow === "object" ? project.groutingWorkflow : null
+    };
+  }
+
+  function buildProjectPdfReportHtml(model){
+    const project = model.project || {};
+    const config = model.config;
+    const totals = model.totals || {};
+    const workflow = model.workflow || {};
+    const siteDayReport = workflow.siteDayReport && typeof workflow.siteDayReport === "object" ? workflow.siteDayReport : null;
+    const bagYieldText = config && config.yieldPerBag > 0 ? (reportFmt(config.yieldPerBag, 1) + " L/sekk") : "-";
+    const waterPerBagText = config ? (reportFmt(config.waterPerBag, 1) + " L/sekk") : "-";
+    const calcBagsTotalText = totals.calcBagsTotal === null ? "-" : Number(totals.calcBagsTotal).toLocaleString("no-NO");
+    const usedBagsTotalText = totals.usedBagsTotal === null ? "-" : Number(totals.usedBagsTotal).toLocaleString("no-NO");
+    const calcVsUsedDiffL = (totals.usedL || 0) - (totals.calcRecL || 0);
+    const selectionText = model.selectedAll
+      ? "Alle anker"
+      : ("Valgte anker: " + model.selectedAnchorCount.toLocaleString("no-NO") + " av " + model.allAnchorCount.toLocaleString("no-NO"));
+    const projectStatusText = project.status === "finished" ? "Ferdig" : "Aktiv";
+    const siteDayComment = siteDayReport && siteDayReport.comment ? String(siteDayReport.comment).trim() : "";
+
+    const anchorRowsHtml = model.rows.map((row) => {
+      const calcBagsText = row.calcBags === null ? "-" : Number(row.calcBags).toLocaleString("no-NO");
+      const usedBagsText = row.usedBags === null ? "-" : Number(row.usedBags).toLocaleString("no-NO");
+      const usedLText = (row.usedL || 0) > 0 ? reportFmt(row.usedL, 1) : "-";
+      const timeText = row.timeUsedMin !== null && row.timeUsedMin !== undefined ? reportFmt(row.timeUsedMin, 0) : "-";
+      const tempText = row.groutTempC !== null && row.groutTempC !== undefined ? reportFmt(row.groutTempC, 1) : "-";
+      const sentAtText = row.sentAt ? fmtDate(row.sentAt) : "-";
+      const approvedAtText = row.approvedAt ? fmtDate(row.approvedAt) : "-";
+      const calcNetText = row.calcAvailable ? reportFmt(row.calcNetL, 1) : "-";
+      const calcRecText = row.calcAvailable ? reportFmt(row.calcRecL, 1) : "-";
+
+      return '' +
+        '<tr>' +
+          '<td><strong>' + escapeHtml(row.anchorNo || "-") + '</strong></td>' +
+          '<td>' + escapeHtml(reportAnchorStatusLabel(row.status)) + '</td>' +
+          '<td>' + reportFmt(row.totalLength, 2) + '</td>' +
+          '<td>' + reportFmt(row.lCasing, 2) + ' / ' + reportFmt(row.lBore, 2) + ' / ' + reportFmt(row.lFree, 2) + ' / ' + reportFmt(row.lBond, 2) + '</td>' +
+          '<td>' + calcNetText + '</td>' +
+          '<td>' + calcRecText + '</td>' +
+          '<td>' + calcBagsText + '</td>' +
+          '<td>' + usedLText + '</td>' +
+          '<td>' + usedBagsText + '</td>' +
+          '<td>' + timeText + '</td>' +
+          '<td>' + tempText + '</td>' +
+          '<td>' + escapeHtml(sentAtText) + '</td>' +
+          '<td>' + escapeHtml(approvedAtText) + '</td>' +
+        '</tr>';
+    }).join("");
+
+    const reportHtml = `
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF rapport - ${escapeHtml(projectDisplayLabel(project))}</title>
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+    body{font-family:Arial,sans-serif;color:#111;margin:0;font-size:12px;line-height:1.35}
+    .wrap{padding:12px 14px}
+    h1{margin:0 0 6px;font-size:22px}
+    h2{margin:16px 0 8px;font-size:14px}
+    .muted{color:#555}
+    .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin-top:8px}
+    .box{border:1px solid #d6dbe3;border-radius:8px;padding:8px 10px;background:#f8fafc}
+    .label{font-size:11px;color:#5b6472}
+    .value{font-weight:700;margin-top:2px}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{border:1px solid #d9dee7;padding:6px 6px;vertical-align:top}
+    th{background:#eef2f7;text-align:left;font-size:11px}
+    td{font-size:11px}
+    .note{margin-top:8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fafafa}
+    .small{font-size:10px;color:#666}
+    .right{text-align:right}
+    .mono{font-family:ui-monospace,Consolas,monospace}
+    @media print { .noprint { display:none !important; } .wrap{padding:0} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="noprint" style="margin-bottom:8px;">
+      <button onclick="window.print()">Skriv ut / Lagre som PDF</button>
+    </div>
+    <h1>Prosjektrapport - Injisering</h1>
+    <div class="muted">${escapeHtml(projectDisplayLabel(project))}</div>
+
+    <div class="meta">
+      <div class="box"><div class="label">Prosjektnavn</div><div class="value">${escapeHtml((project.name || "-").toString())}</div></div>
+      <div class="box"><div class="label">Prosjektnummer</div><div class="value">${escapeHtml((project.number || "-").toString())}</div></div>
+      <div class="box"><div class="label">Kunde / byggherre</div><div class="value">${escapeHtml((project.client || "-").toString())}</div></div>
+      <div class="box"><div class="label">Lokasjon</div><div class="value">${escapeHtml((project.location || "-").toString())}</div></div>
+      <div class="box"><div class="label">Prosjektstatus</div><div class="value">${escapeHtml(projectStatusText)}</div></div>
+      <div class="box"><div class="label">Startet</div><div class="value">${escapeHtml(fmtDate(project.startedAt || project.createdAt))}</div></div>
+      <div class="box"><div class="label">Rapport generert</div><div class="value">${escapeHtml(fmtDate(model.generatedAt))}</div></div>
+      <div class="box"><div class="label">Ankerutvalg</div><div class="value">${escapeHtml(selectionText)}</div></div>
+    </div>
+
+    <h2>Oppsummering (valgte anker)</h2>
+    <div class="summary">
+      <div class="box"><div class="label">Beregnet netto volum (L)</div><div class="value">${reportFmt(totals.calcNetL || 0, 1)}</div></div>
+      <div class="box"><div class="label">Beregnet volum inkl. tillegg (L)</div><div class="value">${reportFmt(totals.calcRecL || 0, 1)}</div></div>
+      <div class="box"><div class="label">Beregnet sekker</div><div class="value">${escapeHtml(calcBagsTotalText)}</div></div>
+      <div class="box"><div class="label">Registrert brukt grout (L)</div><div class="value">${reportFmt(totals.usedL || 0, 1)}</div></div>
+      <div class="box"><div class="label">Estimert brukte sekker</div><div class="value">${escapeHtml(usedBagsTotalText)}</div></div>
+      <div class="box"><div class="label">Diff brukt - beregnet (L)</div><div class="value">${reportFmt(calcVsUsedDiffL, 1)}</div></div>
+      <div class="box"><div class="label">Utbytte per sekk</div><div class="value">${escapeHtml(bagYieldText)}</div></div>
+      <div class="box"><div class="label">Vann per sekk</div><div class="value">${escapeHtml(waterPerBagText)}</div></div>
+    </div>
+
+    <div class="note">
+      <div><strong>Status i utvalg:</strong> Godkjent ${Number(totals.approved || 0).toLocaleString("no-NO")} | Til godkjenning ${Number(totals.forApproval || 0).toLocaleString("no-NO")} | Venter felt ${Number(totals.pending || 0).toLocaleString("no-NO")} | Utkast ${Number(totals.draft || 0).toLocaleString("no-NO")}</div>
+      <div><strong>Moduler:</strong> ${escapeHtml(moduleSummary(project))}</div>
+      <div><strong>Kommentar (injiseringsplan):</strong> ${escapeHtml(config ? (config.comment || "-") : "-")}</div>
+      ${siteDayComment ? ('<div><strong>Ferdig-for-dagen kommentar:</strong> ' + escapeHtml(siteDayComment) + '</div>') : ""}
+      <div class="small">Brukte sekker er estimert fra registrert liter / utbytte pr. sekk. Beregnet sekker er beregnet på summert anbefalt volum (inkl. tillegg) for valgte anker.</div>
+    </div>
+
+    <h2>Ankerdetaljer</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Anker</th>
+          <th>Status</th>
+          <th>Total lengde (m)</th>
+          <th>Lc/Lb/Lf/Lbond (m)</th>
+          <th>Beregnet netto (L)</th>
+          <th>Beregnet inkl. tillegg (L)</th>
+          <th>Beregnet sekker</th>
+          <th>Brukt (L)</th>
+          <th>Brukte sekker</th>
+          <th>Tid (min)</th>
+          <th>Temp (C)</th>
+          <th>Sendt</th>
+          <th>Godkjent</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${anchorRowsHtml}
+      </tbody>
+    </table>
+  </div>
+  <script>
+    window.addEventListener('load', function(){
+      setTimeout(function(){ try { window.print(); } catch (e) {} }, 250);
+    });
+  <\/script>
+</body>
+</html>`;
+
+    return reportHtml;
+  }
+
+  function openProjectPdfReportWindow(model){
+    const popup = window.open("", "_blank");
+    if (!popup) return false;
+    popup.document.open();
+    popup.document.write(buildProjectPdfReportHtml(model));
+    popup.document.close();
+    return true;
+  }
+
+  const TM1_REPORT_STEEL_E_KN_PER_MM2 = 195;
+  const TM1_REPORT_LAPP_LOWER_FACTOR = 0.80;
+  const TM1_REPORT_LAPP_UPPER_FACTOR = 1.20;
+
+  function tm1RecordSortDesc(a, b){
+    const at = new Date((a && (a.updatedAt || a.createdAt)) || 0).getTime();
+    const bt = new Date((b && (b.updatedAt || b.createdAt)) || 0).getTime();
+    return bt - at;
+  }
+
+  function tm1RecordTimestampIso(record){
+    if (!record || typeof record !== "object") return "";
+    const raw = (record.updatedAt || record.createdAt || "").toString().trim();
+    if (!raw) return "";
+    const d = new Date(raw);
+    return Number.isNaN(d.getTime()) ? "" : d.toISOString();
+  }
+
+  function tm1LatestLappStatus(record){
+    const checks = (record && record.checks && typeof record.checks === "object") ? record.checks : {};
+    if (checks.lappPass === true) return "OK";
+    if (checks.lappPass === false) return "Ikke OK";
+    return "Ufullstendig";
+  }
+
+  function tm1ResultLabel(record){
+    if (!record || typeof record !== "object") return "-";
+    if (!record.completed) return "Utkast";
+    const lapp = tm1LatestLappStatus(record);
+    if (lapp === "OK") return "Akseptert";
+    if (lapp === "Ikke OK") return "Ikke akseptert";
+    return "Fullfort (mangler sjekkgrunnlag)";
+  }
+
+  function tm1StressStandards(project){
+    const ids = (project && project.modules && Array.isArray(project.modules.stressingOptions))
+      ? project.modules.stressingOptions
+      : [];
+    const labels = ids
+      .map((id) => {
+        const opt = STRESS_OPTIONS.find((entry) => entry.id === id);
+        return opt ? opt.label : "";
+      })
+      .filter((label) => !!label);
+    if (labels.length > 0) return labels;
+    if (project && project.modules && project.modules.stressing) {
+      return ["Test Method 1 - Acceptance test"];
+    }
+    return [];
+  }
+
+  function tm1NormalizeAnchorKey(value, idx){
+    return reportNormalizeAnchorNo(value, idx).toString().trim().toLowerCase();
+  }
+
+  function tm1GroutingMapByAnchor(project){
+    const map = new Map();
+    const anchors = (project && project.groutingWorkflow && Array.isArray(project.groutingWorkflow.anchors))
+      ? project.groutingWorkflow.anchors
+      : [];
+    anchors.forEach((anchor, idx) => {
+      const key = tm1NormalizeAnchorKey(anchor && anchor.anchorNo, idx);
+      if (!key) return;
+      map.set(key, {
+        siteData: (anchor && anchor.siteData && typeof anchor.siteData === "object") ? anchor.siteData : null,
+        approvedAt: (anchor && anchor.approvedAt) ? anchor.approvedAt : null
+      });
+    });
+    return map;
+  }
+
+  function tm1AnchorGroutedAt(item, groutingMap){
+    if (!item) return "";
+    const key = tm1NormalizeAnchorKey(item.anchorNo, 0);
+    const row = groutingMap.get(key);
+    if (!row) return "";
+    const site = row.siteData || {};
+    const candidates = [
+      site.groutingStopAt,
+      site.groutingStartAt,
+      row.approvedAt,
+      site.sentAt
+    ];
+    for (const value of candidates) {
+      if (!value) continue;
+      const d = new Date(value);
+      if (!Number.isNaN(d.getTime())) return d.toISOString();
+    }
+    return "";
+  }
+
+  function tm1RecordSteps(record){
+    return (record && Array.isArray(record.steps)) ? record.steps : [];
+  }
+
+  function tm1ProofLoadFromSteps(steps){
+    const step5 = (Array.isArray(steps) ? steps : []).find((s) => Number(s && s.step) === 5);
+    const pp = Number(step5 && step5.targetLoadkN);
+    return Number.isFinite(pp) && pp > 0 ? pp : null;
+  }
+
+  function tm1StepPercent(step, proofLoad){
+    const load = Number(step && step.targetLoadkN);
+    if (!Number.isFinite(load) || !Number.isFinite(proofLoad) || proofLoad <= 0) return null;
+    return (load / proofLoad) * 100;
+  }
+
+  function tm1IsLockStep(step, proofLoad){
+    const stepNo = Number(step && step.step);
+    const label = ((step && step.label) || "").toString().trim().toLowerCase();
+    const load = Number(step && step.targetLoadkN);
+    if (Number.isFinite(stepNo) && stepNo >= 6) return true;
+    if (label.indexOf("p0") >= 0) return true;
+    if (label.indexOf("lock") >= 0) return true;
+    if (Number.isFinite(proofLoad) && proofLoad > 0 && Number.isFinite(load) && load > proofLoad) return true;
+    return false;
+  }
+
+  function tm1StepsWithoutLock(steps){
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = tm1ProofLoadFromSteps(list);
+    return list.filter((step) => !tm1IsLockStep(step, proofLoad));
+  }
+
+  function tm1ChartMeasuredPoints(steps){
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = tm1ProofLoadFromSteps(list);
+    if (!proofLoad) return [];
+    const out = [];
+    list.forEach((step) => {
+      if (tm1IsLockStep(step, proofLoad)) return;
+      const stepNo = Number(step && step.step);
+      const x = tm1StepPercent(step, proofLoad);
+      if (!Number.isFinite(x)) return;
+      if (stepNo === 5) {
+        const d1 = Number(step.endDispAt1MinMm);
+        const d2 = Number(step.endDispAt2MinMm);
+        const d5 = Number(step.endDispAt5MinMm);
+        const d15 = Number(step.endDispAt15MinMm);
+        if (Number.isFinite(d1)) out.push({ x, y: d1, label: "5@1" });
+        if (Number.isFinite(d2)) out.push({ x, y: d2, label: "5@2" });
+        if (Number.isFinite(d5)) out.push({ x, y: d5, label: "5@5" });
+        if (Number.isFinite(d15)) out.push({ x, y: d15, label: "5@15" });
+        return;
+      }
+      const disp = Number(step && step.endDispMm);
+      if (Number.isFinite(disp)) {
+        out.push({ x, y: disp, label: String(stepNo) });
+      }
+    });
+    return out;
+  }
+
+  function tm1ChartCalculatedPoints(steps){
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = tm1ProofLoadFromSteps(list);
+    if (!proofLoad) return [];
+    const out = [];
+    list.forEach((step) => {
+      if (tm1IsLockStep(step, proofLoad)) return;
+      const y = Number(step && step.calcElongMm);
+      const x = tm1StepPercent(step, proofLoad);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+      out.push({ x, y, label: String(Number(step && step.step)) + "c" });
+    });
+    return out;
+  }
+
+  function tm1ChartLimitPoints(steps, lappLengthM, labelSuffix){
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = tm1ProofLoadFromSteps(list);
+    if (!proofLoad) return [];
+    const out = [];
+    const lappM = Number(lappLengthM);
+    if (!Number.isFinite(lappM) || lappM <= 0) return out;
+    list.forEach((step) => {
+      if (tm1IsLockStep(step, proofLoad)) return;
+      const loadkN = Number(step && step.targetLoadkN);
+      const steelArea = Number(step && step.steelAreaMm2);
+      const x = tm1StepPercent(step, proofLoad);
+      if (!Number.isFinite(loadkN) || !Number.isFinite(steelArea) || steelArea <= 0 || !Number.isFinite(x)) return;
+      const y = (loadkN * lappM * 1000) / (TM1_REPORT_STEEL_E_KN_PER_MM2 * steelArea);
+      if (!Number.isFinite(y)) return;
+      out.push({ x, y, label: String(Number(step && step.step)) + labelSuffix });
+    });
+    return out;
+  }
+
+  function tm1AttachPlanDataToSteps(steps, plan){
+    const steelAreaMm2 = Number(plan && plan.steelAreaMm2);
+    return (Array.isArray(steps) ? steps : []).map((step) => ({
+      ...step,
+      steelAreaMm2: Number.isFinite(steelAreaMm2) ? steelAreaMm2 : null
+    }));
+  }
+
+  function tm1GraphDataForItem(item){
+    const plan = item && item.plan ? item.plan : {};
+    const record = item && item.graphRecord ? item.graphRecord : null;
+    const stepsWithPlan = tm1AttachPlanDataToSteps(tm1RecordSteps(record), plan);
+    const chartSteps = tm1StepsWithoutLock(stepsWithPlan);
+    const checks = (record && record.checks && typeof record.checks === "object") ? record.checks : {};
+    const lappRefM = Number.isFinite(Number(checks.lappRefM))
+      ? Number(checks.lappRefM)
+      : (
+          Number.isFinite(Number(plan.freeLengthM)) && Number.isFinite(Number(plan.jackAnchorPointMm))
+            ? (Number(plan.freeLengthM) + (Number(plan.jackAnchorPointMm) / 1000))
+            : null
+        );
+    const lappLowerM = Number.isFinite(Number(checks.lappLowerM))
+      ? Number(checks.lappLowerM)
+      : (Number.isFinite(Number(lappRefM)) ? Number(lappRefM) * TM1_REPORT_LAPP_LOWER_FACTOR : null);
+    const lappUpperM = Number.isFinite(Number(checks.lappUpperM))
+      ? Number(checks.lappUpperM)
+      : (Number.isFinite(Number(lappRefM)) ? Number(lappRefM) * TM1_REPORT_LAPP_UPPER_FACTOR : null);
+    return {
+      measured: tm1ChartMeasuredPoints(chartSteps),
+      calculated: tm1ChartCalculatedPoints(chartSteps),
+      lower: tm1ChartLimitPoints(chartSteps, lappLowerM, "L"),
+      upper: tm1ChartLimitPoints(chartSteps, lappUpperM, "U")
+    };
+  }
+
+  function tm1SvgPathData(points, xToPx, yToPx){
+    const sorted = (Array.isArray(points) ? points : []).slice().sort((a, b) => Number(a.x) - Number(b.x));
+    if (sorted.length === 0) return "";
+    return sorted.map((point, idx) => {
+      const px = xToPx(Number(point.x)).toFixed(2);
+      const py = yToPx(Number(point.y)).toFixed(2);
+      return (idx === 0 ? "M" : "L") + px + " " + py;
+    }).join(" ");
+  }
+
+  function tm1GraphSvgFromData(data){
+    const measured = (data && Array.isArray(data.measured)) ? data.measured.filter((p) => Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))) : [];
+    const calculated = (data && Array.isArray(data.calculated)) ? data.calculated.filter((p) => Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))) : [];
+    const lower = (data && Array.isArray(data.lower)) ? data.lower.filter((p) => Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))) : [];
+    const upper = (data && Array.isArray(data.upper)) ? data.upper.filter((p) => Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))) : [];
+    const all = measured.concat(calculated, lower, upper);
+    if (all.length === 0) {
+      return '<div class="note">Ingen grafdata i valgt feltark.</div>';
+    }
+
+    const width = 980;
+    const height = 330;
+    const left = 70;
+    const right = 72;
+    const top = 20;
+    const bottom = 66;
+    const plotW = width - left - right;
+    const plotH = height - top - bottom;
+
+    const xVals = all.map((p) => Number(p.x));
+    const yVals = all.map((p) => Number(p.y));
+    const xMin = 0;
+    const xMax = Math.max(100, ...xVals);
+    const yMinBase = Math.min(0, ...yVals);
+    const yMaxBase = Math.max(...yVals);
+    const yPad = Math.max(0.1, (yMaxBase - yMinBase) * 0.08);
+    const yMin = yMinBase - yPad;
+    const yMax = yMaxBase + yPad;
+
+    const xSpan = Math.max(0.001, xMax - xMin);
+    const ySpan = Math.max(0.001, yMax - yMin);
+
+    const xToPx = (x) => left + ((x - xMin) / xSpan) * plotW;
+    const yToPx = (y) => top + plotH - ((y - yMin) / ySpan) * plotH;
+
+    const ticks = 5;
+    const gridLinesY = Array.from({ length: ticks + 1 }, (_, i) => {
+      const py = top + (i * plotH) / ticks;
+      const yVal = yMax - (i * ySpan) / ticks;
+      return '' +
+        '<line x1="' + left + '" y1="' + py.toFixed(2) + '" x2="' + (left + plotW).toFixed(2) + '" y2="' + py.toFixed(2) + '" class="grid"/>' +
+        '<text x="' + (left + plotW + 8) + '" y="' + (py + 4).toFixed(2) + '" class="axisLabel">' + escapeHtml(reportFmt(yVal, 2)) + '</text>';
+    }).join("");
+    const gridLinesX = Array.from({ length: ticks + 1 }, (_, i) => {
+      const px = left + (i * plotW) / ticks;
+      const xVal = xMin + (i * xSpan) / ticks;
+      return '' +
+        '<line x1="' + px.toFixed(2) + '" y1="' + top + '" x2="' + px.toFixed(2) + '" y2="' + (top + plotH).toFixed(2) + '" class="grid"/>' +
+        '<text x="' + px.toFixed(2) + '" y="' + (top + plotH + 18).toFixed(2) + '" text-anchor="middle" class="axisLabel">' + escapeHtml(reportFmt(xVal, 0)) + '%</text>';
+    }).join("");
+
+    const calcPath = tm1SvgPathData(calculated, xToPx, yToPx);
+    const lowerPath = tm1SvgPathData(lower, xToPx, yToPx);
+    const upperPath = tm1SvgPathData(upper, xToPx, yToPx);
+    const measuredPath = tm1SvgPathData(measured, xToPx, yToPx);
+
+    const measuredPoints = measured.map((point) => {
+      const px = xToPx(Number(point.x)).toFixed(2);
+      const py = yToPx(Number(point.y)).toFixed(2);
+      return '<circle cx="' + px + '" cy="' + py + '" r="2.7" class="mDot"/>';
+    }).join("");
+
+    return '' +
+      '<svg viewBox="0 0 ' + width + " " + height + '" role="img" aria-label="TM1 graf">' +
+      "<defs>" +
+        '<style>' +
+          '.bg{fill:#ffffff}.plot{fill:#f8fafc;stroke:#cfd8e3;stroke-width:1}' +
+          '.grid{stroke:#e4eaf2;stroke-width:1}.axisLabel{font:11px Arial, sans-serif;fill:#5b6472}' +
+          '.xTitle{font:12px Arial, sans-serif;fill:#1f2937}.yTitle{font:12px Arial, sans-serif;fill:#1f2937}' +
+          '.seriesCalc{fill:none;stroke:rgba(139,185,61,.95);stroke-width:2;stroke-dasharray:7 5}' +
+          '.seriesLower{fill:none;stroke:rgba(96,215,166,.95);stroke-width:1.6;stroke-dasharray:5 4}' +
+          '.seriesUpper{fill:none;stroke:rgba(255,99,132,.95);stroke-width:1.6;stroke-dasharray:2 5}' +
+          '.seriesMeasured{fill:none;stroke:rgba(244,122,32,.95);stroke-width:2}' +
+          '.mDot{fill:rgba(244,122,32,.95)}' +
+        '</style>' +
+      "</defs>" +
+      '<rect class="bg" x="0" y="0" width="' + width + '" height="' + height + '"/>' +
+      '<rect class="plot" x="' + left + '" y="' + top + '" width="' + plotW + '" height="' + plotH + '"/>' +
+      gridLinesY +
+      gridLinesX +
+      (calcPath ? '<path d="' + calcPath + '" class="seriesCalc"/>' : "") +
+      (lowerPath ? '<path d="' + lowerPath + '" class="seriesLower"/>' : "") +
+      (upperPath ? '<path d="' + upperPath + '" class="seriesUpper"/>' : "") +
+      (measuredPath ? '<path d="' + measuredPath + '" class="seriesMeasured"/>' : "") +
+      measuredPoints +
+      '<text x="' + (left + (plotW / 2)).toFixed(2) + '" y="' + (top + plotH + 40).toFixed(2) + '" text-anchor="middle" class="xTitle">Last (%)</text>' +
+      '<text x="' + (width - 12) + '" y="' + (top + (plotH / 2)).toFixed(2) + '" text-anchor="middle" class="yTitle" transform="rotate(90 ' + (width - 12) + " " + (top + (plotH / 2)).toFixed(2) + ')">Forlengelse (mm)</text>' +
+      "</svg>";
+  }
+
+  function buildProjectTm1ReportItems(project){
+    const block = projectTm1Block(project);
+    const plans = block.plans.slice();
+    const records = block.records.slice();
+    const recordsByPlan = new Map();
+
+    records.forEach((record) => {
+      const planId = (record && record.planId ? String(record.planId) : "").trim();
+      if (!planId) return;
+      if (!recordsByPlan.has(planId)) recordsByPlan.set(planId, []);
+      recordsByPlan.get(planId).push(record);
+    });
+
+    recordsByPlan.forEach((list) => list.sort(tm1RecordSortDesc));
+
+    return plans
+      .map((plan) => {
+        const planId = (plan && plan.id ? String(plan.id) : "").trim();
+        const planRecords = recordsByPlan.get(planId) || [];
+        const latestRecord = planRecords[0] || null;
+        const latestCompleted = planRecords.find((r) => !!(r && r.completed)) || null;
+        return {
+          key: planId,
+          planId,
+          anchorNo: (plan && plan.anchorId ? String(plan.anchorId) : "-"),
+          status: latestCompleted ? "completed" : (latestRecord ? "started" : "not_started"),
+          plan,
+          records: planRecords,
+          latestRecord,
+          latestCompleted,
+          graphRecord: latestCompleted || latestRecord || null,
+          recordCount: planRecords.length
+        };
+      })
+      .sort((a, b) => (a.anchorNo || "").localeCompare((b.anchorNo || ""), "no", { numeric: true, sensitivity: "base" }));
+  }
+
+  function buildProjectTm1PdfReportModel(project, selectedKeys){
+    if (!project || typeof project !== "object") return null;
+    const allItems = buildProjectTm1ReportItems(project);
+    if (allItems.length === 0) return null;
+
+    const selectedSet = new Set(Array.isArray(selectedKeys) ? selectedKeys.map((k) => String(k)) : []);
+    const selectedItems = selectedSet.size > 0
+      ? allItems.filter((item) => selectedSet.has(String(item.key)))
+      : allItems.slice();
+    if (selectedItems.length === 0) return null;
+
+    const groutingMap = tm1GroutingMapByAnchor(project);
+    const items = selectedItems.map((item) => ({
+      ...item,
+      groutedAt: tm1AnchorGroutedAt(item, groutingMap)
+    }));
+
+    const allRecords = items.flatMap((item) => Array.isArray(item.records) ? item.records.map((record) => ({
+      anchorNo: item.anchorNo,
+      planId: item.planId,
+      record
+    })) : []);
+
+    let firstStressAt = "";
+    let lastStressAt = "";
+    const operators = new Set();
+
+    allRecords.forEach((entry) => {
+      const record = entry.record;
+      const tsIso = tm1RecordTimestampIso(record);
+      if (tsIso) {
+        if (!firstStressAt || new Date(tsIso).getTime() < new Date(firstStressAt).getTime()) firstStressAt = tsIso;
+        if (!lastStressAt || new Date(tsIso).getTime() > new Date(lastStressAt).getTime()) lastStressAt = tsIso;
+      }
+      const operator = (record && record.operatorName ? String(record.operatorName).trim() : "");
+      if (operator) operators.add(operator);
+    });
+
+    const totals = {
+      plansSelected: items.length,
+      plansTotal: allItems.length,
+      plansWithRecords: items.filter((item) => item.recordCount > 0).length,
+      plansWithCompleted: items.filter((item) => !!item.latestCompleted).length,
+      totalRecords: allRecords.length,
+      completedRecords: allRecords.filter((entry) => !!(entry.record && entry.record.completed)).length,
+      draftRecords: allRecords.filter((entry) => !(entry.record && entry.record.completed)).length,
+      anchorsWithKnownGrouting: items.filter((item) => !!item.groutedAt).length,
+      lappOk: 0,
+      lappNotOk: 0,
+      lappIncomplete: 0
+    };
+
+    items.forEach((item) => {
+      const latest = item.latestCompleted || item.latestRecord;
+      if (!latest) return;
+      const checks = (latest.checks && typeof latest.checks === "object") ? latest.checks : {};
+      if (checks.lappPass === true) totals.lappOk += 1;
+      else if (checks.lappPass === false) totals.lappNotOk += 1;
+      else totals.lappIncomplete += 1;
+    });
+
+    return {
+      generatedAt: new Date().toISOString(),
+      project,
+      items,
+      totals,
+      selectedAll: items.length === allItems.length,
+      standards: tm1StressStandards(project),
+      operators: Array.from(operators).sort((a, b) => a.localeCompare(b, "no", { sensitivity: "base" })),
+      firstStressAt,
+      lastStressAt
+    };
+  }
+
+  function buildProjectTm1PdfReportHtml(model){
+    const project = model.project || {};
+    const totals = model.totals || {};
+    const selectionText = model.selectedAll
+      ? "Alle TM1-ankere"
+      : ("Valgte TM1-ankere: " + Number(totals.plansSelected || 0).toLocaleString("no-NO") + " av " + Number(totals.plansTotal || 0).toLocaleString("no-NO"));
+    const projectStatusText = project.status === "finished" ? "Ferdig" : "Aktiv";
+    const standardsText = Array.isArray(model.standards) && model.standards.length > 0
+      ? model.standards.join(", ")
+      : "-";
+    const operatorsText = Array.isArray(model.operators) && model.operators.length > 0
+      ? model.operators.join(", ")
+      : "-";
+    const stressingWhenText = model.firstStressAt && model.lastStressAt
+      ? (fmtDate(model.firstStressAt) + " - " + fmtDate(model.lastStressAt))
+      : "-";
+
+    const planRowsHtml = (model.items || []).map((item) => {
+      const plan = item.plan || {};
+      const latest = item.latestCompleted || item.latestRecord;
+      const latestRecord = item.latestRecord;
+      const latestStatus = item.latestCompleted ? "Fullfort" : (latestRecord ? "Utkast/paabegynt" : "Ingen feltark");
+      const latestLapp = latest ? tm1LatestLappStatus(latest) : "-";
+      const latestOperator = latest ? ((latest.operatorName || "-").toString()) : "-";
+      const latestRun = latest ? ((latest.runLabel || "-").toString()) : "-";
+      const latestDate = latest ? fmtDate(latest.updatedAt || latest.createdAt) : "-";
+      const recordCountText = Number(item.recordCount || 0).toLocaleString("no-NO");
+      const groutedAtText = item.groutedAt ? fmtDate(item.groutedAt) : "Ukjent";
+      return '' +
+        '<tr>' +
+          '<td><strong>' + escapeHtml(item.anchorNo || "-") + '</strong></td>' +
+          '<td>' + escapeHtml(plan.jackCode || "-") + '</td>' +
+          '<td>' + reportFmt(plan.freeLengthM, 2) + ' / ' + reportFmt(plan.bondLengthM, 2) + '</td>' +
+          '<td>' + reportFmt(plan.datumLoadPa, 1) + '</td>' +
+          '<td>' + reportFmt(plan.proofLoadPp, 1) + '</td>' +
+          '<td>' + (plan.lockOffLoadP0 === null || plan.lockOffLoadP0 === undefined ? "-" : reportFmt(plan.lockOffLoadP0, 1)) + '</td>' +
+          '<td>' + escapeHtml((plan.soilType || "-").toString()) + '</td>' +
+          '<td>' + escapeHtml(groutedAtText) + '</td>' +
+          '<td>' + recordCountText + '</td>' +
+          '<td>' + escapeHtml(latestStatus) + '</td>' +
+          '<td>' + escapeHtml(tm1ResultLabel(latest)) + '</td>' +
+          '<td>' + escapeHtml(latestLapp) + '</td>' +
+          '<td>' + escapeHtml(latestRun) + '</td>' +
+          '<td>' + escapeHtml(latestOperator) + '</td>' +
+          '<td>' + escapeHtml(latestDate) + '</td>' +
+        '</tr>';
+    }).join("");
+
+    const recordRowsHtml = (model.items || []).flatMap((item) => {
+      return (Array.isArray(item.records) ? item.records : []).slice().sort(tm1RecordSortDesc).map((r) => {
+        const checks = (r && r.checks && typeof r.checks === "object") ? r.checks : {};
+        const deltaTxt = Number.isFinite(Number(checks.delta)) ? (reportFmt(Number(checks.delta), 3) + " mm") : "-";
+        const lappTxt = tm1LatestLappStatus(r);
+        const completedTxt = r && r.completed ? "Fullfort" : "Utkast";
+        const lockOffTxt = Number.isFinite(Number(r && r.lockOffAppliedkN)) ? reportFmt(Number(r.lockOffAppliedkN), 1) : "-";
+        const tempTxt = Number.isFinite(Number(r && r.ambientTempC)) ? reportFmt(Number(r.ambientTempC), 1) : "-";
+        return '' +
+          '<tr>' +
+            '<td><strong>' + escapeHtml(item.anchorNo || "-") + '</strong></td>' +
+            '<td>' + escapeHtml((r && r.runLabel ? r.runLabel : "-").toString()) + '</td>' +
+            '<td>' + escapeHtml((r && r.operatorName ? r.operatorName : "-").toString()) + '</td>' +
+            '<td>' + escapeHtml(completedTxt) + '</td>' +
+            '<td>' + escapeHtml(tm1ResultLabel(r)) + '</td>' +
+            '<td>' + escapeHtml(lappTxt) + '</td>' +
+            '<td>' + escapeHtml(deltaTxt) + '</td>' +
+            '<td>' + escapeHtml(lockOffTxt) + '</td>' +
+            '<td>' + escapeHtml(tempTxt) + '</td>' +
+            '<td>' + escapeHtml(fmtDate((r && (r.updatedAt || r.createdAt)) || "")) + '</td>' +
+          '</tr>';
+      });
+    }).join("");
+
+    const anchorPagesHtml = (model.items || []).map((item) => {
+      const plan = item.plan || {};
+      const record = item.graphRecord;
+      const checks = (record && record.checks && typeof record.checks === "object") ? record.checks : {};
+      const rawSteps = tm1RecordSteps(record);
+      const graphHtml = tm1GraphSvgFromData(tm1GraphDataForItem(item));
+      const rawRowsHtml = rawSteps.length > 0
+        ? rawSteps.map((step) => {
+          const stepNo = Number(step && step.step);
+          const isStep5 = stepNo === 5;
+          const measuredMain = Number(step && step.endDispMm);
+          const d1 = Number(step && step.endDispAt1MinMm);
+          const d2 = Number(step && step.endDispAt2MinMm);
+          const d5 = Number(step && step.endDispAt5MinMm);
+          const d15 = Number(step && step.endDispAt15MinMm);
+          const measuredTxt = Number.isFinite(measuredMain) ? reportFmt(measuredMain, 3) : "-";
+          const d1Txt = isStep5 && Number.isFinite(d1) ? reportFmt(d1, 3) : "-";
+          const d2Txt = isStep5 && Number.isFinite(d2) ? reportFmt(d2, 3) : "-";
+          const d5Txt = isStep5 && Number.isFinite(d5) ? reportFmt(d5, 3) : "-";
+          const d15Txt = isStep5 && Number.isFinite(d15) ? reportFmt(d15, 3) : "-";
+          const pressureTxt = Number.isFinite(Number(step && step.targetPressureBar)) ? reportFmt(step.targetPressureBar, 1) : "-";
+          const calcTxt = Number.isFinite(Number(step && step.calcElongMm)) ? reportFmt(step.calcElongMm, 3) : "-";
+          const holdTxt = Number.isFinite(Number(step && step.minHoldMin)) ? reportFmt(step.minHoldMin, 0) : "-";
+          return '' +
+            '<tr>' +
+              '<td>' + escapeHtml(String(Number.isFinite(stepNo) ? stepNo : "-")) + '</td>' +
+              '<td>' + escapeHtml(((step && step.label) || "-").toString()) + '</td>' +
+              '<td>' + escapeHtml(reportFmt(step && step.targetLoadkN, 1)) + '</td>' +
+              '<td>' + escapeHtml(pressureTxt) + '</td>' +
+              '<td>' + escapeHtml(holdTxt) + '</td>' +
+              '<td>' + escapeHtml(calcTxt) + '</td>' +
+              '<td>' + escapeHtml(measuredTxt) + '</td>' +
+              '<td>' + escapeHtml(d1Txt) + '</td>' +
+              '<td>' + escapeHtml(d2Txt) + '</td>' +
+              '<td>' + escapeHtml(d5Txt) + '</td>' +
+              '<td>' + escapeHtml(d15Txt) + '</td>' +
+              '<td>' + escapeHtml(((step && step.stepNote) || "").toString() || "-") + '</td>' +
+            '</tr>';
+        }).join("")
+        : '<tr><td colspan="12">Ingen trinn-data i valgt feltark.</td></tr>';
+
+      const usedRecordLabel = record
+        ? (((record.runLabel || "-").toString()) + " - " + fmtDate(record.updatedAt || record.createdAt))
+        : "-";
+      const lappLowerTxt = Number.isFinite(Number(checks.lappLowerM)) ? (reportFmt(checks.lappLowerM, 3) + " m") : "-";
+      const lappUpperTxt = Number.isFinite(Number(checks.lappUpperM)) ? (reportFmt(checks.lappUpperM, 3) + " m") : "-";
+      const lappCalcTxt = Number.isFinite(Number(checks.lappM)) ? (reportFmt(checks.lappM, 3) + " m") : "-";
+
+      return '' +
+        '<section class="anchorPage">' +
+          '<h2>Anker/Test-ID: ' + escapeHtml(item.anchorNo || "-") + '</h2>' +
+          '<div class="meta miniMeta">' +
+            '<div class="box"><div class="label">Graf/raadata fra feltark</div><div class="value">' + escapeHtml(usedRecordLabel) + '</div></div>' +
+            '<div class="box"><div class="label">Jekk</div><div class="value">' + escapeHtml((plan.jackCode || "-").toString()) + '</div></div>' +
+            '<div class="box"><div class="label">Lf / Lb</div><div class="value">' + reportFmt(plan.freeLengthM, 2) + ' / ' + reportFmt(plan.bondLengthM, 2) + ' m</div></div>' +
+            '<div class="box"><div class="label">LAPP grenser (L/U)</div><div class="value">' + escapeHtml(lappLowerTxt + " / " + lappUpperTxt) + '</div></div>' +
+            '<div class="box"><div class="label">Beregnet LAPP</div><div class="value">' + escapeHtml(lappCalcTxt) + '</div></div>' +
+            '<div class="box"><div class="label">Resultat</div><div class="value">' + escapeHtml(tm1ResultLabel(record)) + '</div></div>' +
+          '</div>' +
+          '<div class="graphWrap">' + graphHtml + '</div>' +
+          '<div class="legendInline">' +
+            '<span><i class="sw calc"></i>Beregnet forlengelse</span>' +
+            '<span><i class="sw lower"></i>Nedre grense</span>' +
+            '<span><i class="sw upper"></i>Ovre grense</span>' +
+            '<span><i class="sw measured"></i>Malt forlengelse</span>' +
+          '</div>' +
+          '<h3>Radata trinn for trinn</h3>' +
+          '<table>' +
+            '<thead>' +
+              '<tr>' +
+                '<th>Trinn</th>' +
+                '<th>Label</th>' +
+                '<th>Last (kN)</th>' +
+                '<th>Trykk (bar)</th>' +
+                '<th>Min hold (min)</th>' +
+                '<th>Beregnet forlengelse (mm)</th>' +
+                '<th>Malt forlengelse (mm)</th>' +
+                '<th>1 min (mm)</th>' +
+                '<th>2 min (mm)</th>' +
+                '<th>5 min (mm)</th>' +
+                '<th>15 min (mm)</th>' +
+                '<th>Notat</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' + rawRowsHtml + '</tbody>' +
+          '</table>' +
+        '</section>';
+    }).join("");
+
+    return `
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF rapport TM1 - ${escapeHtml(projectDisplayLabel(project))}</title>
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+    body{font-family:Arial,sans-serif;color:#111;margin:0;font-size:12px;line-height:1.35}
+    .wrap{padding:12px 14px}
+    h1{margin:0 0 6px;font-size:22px}
+    h2{margin:16px 0 8px;font-size:14px}
+    h3{margin:14px 0 8px;font-size:13px}
+    .muted{color:#555}
+    .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin-top:8px}
+    .miniMeta{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .box{border:1px solid #d6dbe3;border-radius:8px;padding:8px 10px;background:#f8fafc}
+    .label{font-size:11px;color:#5b6472}
+    .value{font-weight:700;margin-top:2px}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{border:1px solid #d9dee7;padding:6px 6px;vertical-align:top}
+    th{background:#eef2f7;text-align:left;font-size:11px}
+    td{font-size:11px}
+    .note{margin-top:8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fafafa}
+    .anchorPage{break-before:page;page-break-before:always;margin-top:8px}
+    .graphWrap{margin-top:10px;border:1px solid #dde5ef;border-radius:8px;padding:8px;background:#fff}
+    .legendInline{margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:#354052}
+    .legendInline .sw{display:inline-block;width:18px;height:0;border-top:2px solid;margin-right:6px;vertical-align:middle}
+    .legendInline .calc{border-color:rgba(139,185,61,.95);border-top-style:dashed}
+    .legendInline .lower{border-color:rgba(96,215,166,.95);border-top-style:dashed}
+    .legendInline .upper{border-color:rgba(255,99,132,.95);border-top-style:dashed}
+    .legendInline .measured{border-color:rgba(244,122,32,.95)}
+    @media print { .noprint { display:none !important; } .wrap{padding:0} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="noprint" style="margin-bottom:8px;"><button onclick="window.print()">Skriv ut / Lagre som PDF</button></div>
+    <h1>Prosjektrapport - TM1 Acceptance</h1>
+    <div class="muted">${escapeHtml(projectDisplayLabel(project))}</div>
+
+    <div class="meta">
+      <div class="box"><div class="label">Prosjektnavn</div><div class="value">${escapeHtml((project.name || "-").toString())}</div></div>
+      <div class="box"><div class="label">Prosjektnummer</div><div class="value">${escapeHtml((project.number || "-").toString())}</div></div>
+      <div class="box"><div class="label">Kunde / byggherre</div><div class="value">${escapeHtml((project.client || "-").toString())}</div></div>
+      <div class="box"><div class="label">Standard / testmetode</div><div class="value">${escapeHtml(standardsText)}</div></div>
+      <div class="box"><div class="label">Prosjektstatus</div><div class="value">${escapeHtml(projectStatusText)}</div></div>
+      <div class="box"><div class="label">Rapport generert</div><div class="value">${escapeHtml(fmtDate(model.generatedAt))}</div></div>
+      <div class="box"><div class="label">Hvem har stresset</div><div class="value">${escapeHtml(operatorsText)}</div></div>
+      <div class="box"><div class="label">Nar stressinger er gjort</div><div class="value">${escapeHtml(stressingWhenText)}</div></div>
+      <div class="box"><div class="label">Ankerutvalg</div><div class="value">${escapeHtml(selectionText)}</div></div>
+      <div class="box"><div class="label">Moduler</div><div class="value">${escapeHtml(moduleSummary(project))}</div></div>
+    </div>
+
+    <h2>TM1 Oppsummering</h2>
+    <div class="summary">
+      <div class="box"><div class="label">Valgte TM1-ankere</div><div class="value">${Number(totals.plansSelected || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">Planer med feltark</div><div class="value">${Number(totals.plansWithRecords || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">Planer med fullfort feltark</div><div class="value">${Number(totals.plansWithCompleted || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">Totale feltark</div><div class="value">${Number(totals.totalRecords || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">Fullforte feltark</div><div class="value">${Number(totals.completedRecords || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">Utkast feltark</div><div class="value">${Number(totals.draftRecords || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">Ankere med kjent injiseringsdato</div><div class="value">${Number(totals.anchorsWithKnownGrouting || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">LAPP OK (siste registrering)</div><div class="value">${Number(totals.lappOk || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">LAPP ikke OK</div><div class="value">${Number(totals.lappNotOk || 0).toLocaleString("no-NO")}</div></div>
+      <div class="box"><div class="label">LAPP ufullstendig</div><div class="value">${Number(totals.lappIncomplete || 0).toLocaleString("no-NO")}</div></div>
+    </div>
+
+    <div class="note">Rapporten viser resultat for hver stressingregistrering. Siste del av rapporten inneholder en side per anker med graf og radata.</div>
+
+    <h2>TM1 Planer (valgte ankere)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Anker/Test-ID</th>
+          <th>Jekk</th>
+          <th>Lf/Lb (m)</th>
+          <th>Pa (kN)</th>
+          <th>Pp (kN)</th>
+          <th>P0 (kN)</th>
+          <th>Jordtype</th>
+          <th>Injisert (hvis kjent)</th>
+          <th>Feltark</th>
+          <th>Siste status</th>
+          <th>Siste resultat</th>
+          <th>Lapp</th>
+          <th>Siste run</th>
+          <th>Operator</th>
+          <th>Sist oppdatert</th>
+        </tr>
+      </thead>
+      <tbody>${planRowsHtml}</tbody>
+    </table>
+
+    <h2>Resultat av hver stressing</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Anker/Test-ID</th>
+          <th>Run</th>
+          <th>Operator</th>
+          <th>Status</th>
+          <th>Resultat</th>
+          <th>Lapp</th>
+          <th>Delta (mm)</th>
+          <th>Lock-off brukt (kN)</th>
+          <th>Temp (C)</th>
+          <th>Oppdatert</th>
+        </tr>
+      </thead>
+      <tbody>${recordRowsHtml || '<tr><td colspan="10">Ingen TM1 feltark for valgt utvalg.</td></tr>'}</tbody>
+    </table>
+
+    ${anchorPagesHtml}
+  </div>
+  <script>
+    window.addEventListener('load', function(){
+      setTimeout(function(){ try { window.print(); } catch (e) {} }, 250);
+    });
+  <\/script>
+</body>
+</html>`;
+  }
+
+  function openProjectTm1PdfReportWindow(model){
+    const popup = window.open("", "_blank");
+    if (!popup) return false;
+    popup.document.open();
+    popup.document.write(buildProjectTm1PdfReportHtml(model));
+    popup.document.close();
+    return true;
+  }
+
+  function closePdfReportModal(){
+    const modal = $("pdfReportModal");
+    if (!modal) return;
+    modal.classList.add("hidden");
+    pdfReportModalState = null;
+    clearMsg($("pdfReportMsg"));
+    document.body.style.overflow = "";
+  }
+
+  function updatePdfReportSelectionCount(){
+    const countEl = $("pdfReportSelectionCount");
+    const selector = $("pdfAnchorSelector");
+    if (!countEl || !selector) return;
+    const checked = selector.querySelectorAll('input[type="checkbox"][data-pdf-anchor]:checked').length;
+    const total = selector.querySelectorAll('input[type="checkbox"][data-pdf-anchor]').length;
+    countEl.textContent = checked.toLocaleString("no-NO") + " valgt av " + total.toLocaleString("no-NO");
+  }
+
+  function renderPdfReportAnchorSelector(){
+    const container = $("pdfAnchorSelector");
+    if (!container) return;
+    const items = (pdfReportModalState && Array.isArray(pdfReportModalState.items)) ? pdfReportModalState.items : [];
+    const type = (pdfReportModalState && pdfReportModalState.type) ? String(pdfReportModalState.type) : "injisering";
+    if (items.length === 0) {
+      container.innerHTML = '<div class="hint">Ingen anker tilgjengelig for rapport.</div>';
+      updatePdfReportSelectionCount();
+      return;
+    }
+
+    if (type === "tm1") {
+      container.innerHTML = items.map((item) => {
+        const latest = item.latestCompleted || item.latestRecord;
+        const latestTxt = latest
+          ? ("Siste: " + ((latest.runLabel || "-").toString()) + " / " + tm1LatestLappStatus(latest))
+          : "Ingen feltark";
+        const meta = "Feltark: " + Number(item.recordCount || 0).toLocaleString("no-NO") + " | " + latestTxt;
+        return '' +
+          '<label class="reportAnchorCheck">' +
+            '<input type="checkbox" data-pdf-anchor="' + escapeHtml(String(item.key)) + '" checked>' +
+            '<span>' +
+              '<strong>' + escapeHtml(item.anchorNo || "-") + '</strong> - TM1 plan' +
+              '<span class="reportAnchorMeta">' + escapeHtml(meta) + '</span>' +
+            '</span>' +
+          '</label>';
+      }).join("");
+    } else {
+      container.innerHTML = items.map((item) => {
+        const usedL = item && item.siteData ? reportNum(item.siteData.groutUsedL) : 0;
+        const usedText = usedL > 0 ? ("Brukt: " + reportFmt(usedL, 1) + " L") : "Ingen feltdata";
+        const totalLen = reportClampMin(reportNum(item.lCasing), 0) + reportClampMin(reportNum(item.lBore), 0);
+        return '' +
+          '<label class="reportAnchorCheck">' +
+            '<input type="checkbox" data-pdf-anchor="' + escapeHtml(String(item.key)) + '" checked>' +
+            '<span>' +
+              '<strong>' + escapeHtml(item.anchorNo || "-") + '</strong> - ' + escapeHtml(reportAnchorStatusLabel(item.status)) +
+              '<span class="reportAnchorMeta">Total lengde: ' + reportFmt(totalLen, 2) + ' m | ' + escapeHtml(usedText) + '</span>' +
+            '</span>' +
+          '</label>';
+      }).join("");
+    }
+
+    container.querySelectorAll('input[type="checkbox"][data-pdf-anchor]').forEach((el) => {
+      el.addEventListener("change", updatePdfReportSelectionCount);
+    });
+    updatePdfReportSelectionCount();
+  }
+
+  function openPdfReportModal(projectId){
+    const id = (projectId || "").toString().trim();
+    const project = getProjects().find((p) => p.id === id);
+    if (!project) {
+      setMsg(actionMsgBox(), "Fant ikke prosjekt for PDF-rapport.", "error");
+      return;
+    }
+
+    const items = buildProjectReportAnchorItems(project);
+    if (items.length === 0) {
+      setMsg(actionMsgBox(), "Prosjektet har ingen ankerdata for rapport.", "error");
+      return;
+    }
+
+    pdfReportModalState = {
+      type: "injisering",
+      projectId: id,
+      items
+    };
+
+    const modal = $("pdfReportModal");
+    const info = $("pdfReportProjectInfo");
+    const title = $("pdfReportTitle");
+    const subtitle = $("pdfReportSubtitle");
+    if (!modal || !info) return;
+
+    const config = reportGroutingConfig(project);
+    if (title) title.textContent = "Make PDF report - Injisering";
+    if (subtitle) subtitle.textContent = "Velg alle eller noen anker som skal inkluderes";
+    info.textContent =
+      projectDisplayLabel(project) +
+      " | Totalt anker: " + items.length.toLocaleString("no-NO") +
+      (config && config.yieldPerBag > 0 ? (" | Utbytte: " + reportFmt(config.yieldPerBag, 1) + " L/sekk") : " | Utbytte: ikke satt");
+
+    clearMsg($("pdfReportMsg"));
+    renderPdfReportAnchorSelector();
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function openTm1PdfReportModal(projectId){
+    const id = (projectId || "").toString().trim();
+    const project = getProjects().find((p) => p.id === id);
+    if (!project) {
+      setMsg(actionMsgBox(), "Fant ikke prosjekt for TM1 PDF-rapport.", "error");
+      return;
+    }
+
+    const items = buildProjectTm1ReportItems(project);
+    if (items.length === 0) {
+      setMsg(actionMsgBox(), "Prosjektet har ingen TM1-planer for rapport.", "error");
+      return;
+    }
+
+    pdfReportModalState = {
+      type: "tm1",
+      projectId: id,
+      items
+    };
+
+    const modal = $("pdfReportModal");
+    const info = $("pdfReportProjectInfo");
+    const title = $("pdfReportTitle");
+    const subtitle = $("pdfReportSubtitle");
+    if (!modal || !info) return;
+
+    if (title) title.textContent = "Make PDF report - TM1";
+    if (subtitle) subtitle.textContent = "Velg alle eller noen TM1-ankere som skal inkluderes";
+
+    const block = projectTm1Block(project);
+    info.textContent =
+      projectDisplayLabel(project) +
+      " | TM1-planer: " + items.length.toLocaleString("no-NO") +
+      " | TM1 feltark: " + block.records.length.toLocaleString("no-NO");
+
+    clearMsg($("pdfReportMsg"));
+    renderPdfReportAnchorSelector();
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function setPdfReportSelection(checked){
+    const selector = $("pdfAnchorSelector");
+    if (!selector) return;
+    selector.querySelectorAll('input[type="checkbox"][data-pdf-anchor]').forEach((el) => {
+      el.checked = !!checked;
+    });
+    updatePdfReportSelectionCount();
+  }
+
+  function selectedPdfReportAnchorKeys(){
+    const selector = $("pdfAnchorSelector");
+    if (!selector) return [];
+    return Array.from(selector.querySelectorAll('input[type="checkbox"][data-pdf-anchor]:checked'))
+      .map((el) => (el.getAttribute("data-pdf-anchor") || "").trim())
+      .filter(Boolean);
+  }
+
+  function generatePdfReportFromModal(){
+    if (!pdfReportModalState || !pdfReportModalState.projectId) return;
+    const type = (pdfReportModalState.type || "injisering").toString();
+    const selectedKeys = selectedPdfReportAnchorKeys();
+    if (selectedKeys.length === 0) {
+      setMsg($("pdfReportMsg"), "Velg minst ett anker for rapport.", "error");
+      return;
+    }
+
+    const project = getProjects().find((p) => p.id === pdfReportModalState.projectId);
+    if (!project) {
+      setMsg($("pdfReportMsg"), "Prosjektet finnes ikke lenger.", "error");
+      return;
+    }
+
+    const model = type === "tm1"
+      ? buildProjectTm1PdfReportModel(project, selectedKeys)
+      : buildProjectPdfReportModel(project, selectedKeys);
+    if (!model) {
+      setMsg($("pdfReportMsg"), "Kunne ikke bygge rapportdata.", "error");
+      return;
+    }
+
+    const opened = type === "tm1"
+      ? openProjectTm1PdfReportWindow(model)
+      : openProjectPdfReportWindow(model);
+    if (!opened) {
+      setMsg($("pdfReportMsg"), "Popup ble blokkert. Tillat popup-vindu og prøv igjen.", "error");
+      return;
+    }
+
+    closePdfReportModal();
+    setMsg(
+      actionMsgBox(),
+      (type === "tm1" ? "TM1 PDF-rapport" : "Injisering PDF-rapport") +
+        " åpnet for " + selectedKeys.length.toLocaleString("no-NO") + " anker.",
+      "ok"
+    );
+  }
+
+  function initPdfReportModal(){
+    const modal = $("pdfReportModal");
+    if (!modal || modal.dataset.bound === "1") return;
+    modal.dataset.bound = "1";
+
+    $("pdfReportCloseBtn").addEventListener("click", closePdfReportModal);
+    $("pdfCancelBtn").addEventListener("click", closePdfReportModal);
+    $("pdfSelectAllBtn").addEventListener("click", () => setPdfReportSelection(true));
+    $("pdfSelectNoneBtn").addEventListener("click", () => setPdfReportSelection(false));
+    $("pdfGenerateBtn").addEventListener("click", generatePdfReportFromModal);
+
+    modal.addEventListener("click", (ev) => {
+      if (ev.target === modal) closePdfReportModal();
+    });
+
+    window.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape" && pdfReportModalState) {
+        closePdfReportModal();
+      }
+    });
+  }
+
+  function renderStressOptionChecks(selectedIds){
+    const container = $("stressingOptions");
+    if (!container) return;
+    const selected = new Set(Array.isArray(selectedIds) ? selectedIds : []);
+
+    container.innerHTML = STRESS_OPTIONS.map((opt) => {
+      const optionEnabled = isStressOptionEnabled(opt.id);
+      const checked = optionEnabled && selected.has(opt.id) ? "checked" : "";
+      const disabled = optionEnabled ? "" : "disabled";
+      const optionClass = optionEnabled ? "" : " option-disabled";
+      return '<label class="check' + optionClass + '"><input type="checkbox" class="stressOpt" value="' + opt.id + '" ' + checked + ' ' + disabled + '> <span>' + opt.label + '</span></label>';
+    }).join("");
+
+    container.querySelectorAll(".stressOpt").forEach((el) => {
+      el.addEventListener("change", () => {
+        if (!isStressOptionEnabled(el.value)) {
+          el.checked = false;
+          return;
+        }
+        if (!hasStressingAccess()) {
+          el.checked = false;
+          return;
+        }
+        if (!$("modStressing").checked) {
+          el.checked = false;
+          return;
+        }
+        if (el.checked) {
+          enforceStressCategoryLimits(el.value);
+        }
+        syncStressingRuleUi();
+      });
+    });
+
+    syncStressingRuleUi();
+  }
+
+  function renderJackPool(selectedIds){
+    const container = $("jackPool");
+    if (!container) return;
+
+    const selected = new Set(Array.isArray(selectedIds) ? selectedIds : []);
+    const jacks = getJacks();
+
+    if (jacks.length === 0) {
+      container.innerHTML = '<div class="hint">Ingen jacks registrert ennå. Legg til i <a href="software-jekk.html">Jekk data</a>.</div>';
+      return;
+    }
+
+    container.innerHTML = '<div class="checkgrid">' + jacks.map((jack) => {
+      const label = escapeHtml(jack.code || jack.serial || jack.name || "Uten navn");
+      const model = escapeHtml(jack.model || "-");
+      const cap = Number.isFinite(Number(jack.capacitykN)) && Number(jack.capacitykN) > 0
+        ? Number(jack.capacitykN).toLocaleString("no-NO") + ' kN'
+        : '-';
+      const checked = selected.has(jack.id) ? "checked" : "";
+      const calibration = jackCalibrationState(jack);
+      const warning = jackCalibrationWarning(calibration);
+      const warningHtml = warning
+        ? '<span class="' + warning.className + '">' + escapeHtml(warning.text) + '</span>'
+        : "";
+      return '<label class="check"><input type="checkbox" class="jackCheck" value="' + escapeHtml(jack.id) + '" ' + checked + '> <span><strong>' + label + '</strong><br><span class="muted">Model: ' + model + ' | Kapasitet: ' + cap + '</span>' + warningHtml + '</span></label>';
+    }).join("") + '</div>';
+  }
+
+  function updateFormMode(isEdit){
+    $("formMode").textContent = isEdit ? "Rediger prosjekt" : "Nytt prosjekt";
+    $("saveProjectBtn").textContent = isEdit ? "Lagre endringer" : "Start prosjekt";
+    $("cancelEditBtn").classList.toggle("hidden", !isEdit);
+  }
+
+  function resetForm(){
+    $("projectForm").reset();
+    $("editingId").value = "";
+    renderStressOptionChecks([]);
+    if (hasJackAccess()) renderJackPool([]);
+    $("stressingOptionsWrap").classList.add("hidden");
+    applyAccessUi();
+    updateFormMode(false);
+    clearMsg($("formMsg"));
+  }
+
+  function collectFormData(){
+    const name = $("projectName").value.trim();
+    if (!name) {
+      return { error: "Prosjektnavn er obligatorisk." };
+    }
+
+    const stressAllowed = hasStressingAccess();
+    const jackAllowed = hasJackAccess();
+
+    const stressingChecked = stressAllowed && $("modStressing").checked;
+
+    const stressOptIds = stressAllowed ? checkedStressOptionIds() : [];
+    const jackIds = jackAllowed
+      ? Array.from(document.querySelectorAll(".jackCheck:checked")).map((el) => el.value)
+      : [];
+
+    const selectedByCategory = {
+      investigation: 0,
+      suitability: 0,
+      acceptance: 0
+    };
+    stressOptIds.forEach((id) => {
+      const category = stressOptionCategory(id);
+      if (Object.prototype.hasOwnProperty.call(selectedByCategory, category)) {
+        selectedByCategory[category] += 1;
+      }
+    });
+
+    if (
+      selectedByCategory.investigation > 1 ||
+      selectedByCategory.suitability > 1 ||
+      selectedByCategory.acceptance > 1
+    ) {
+      return { error: "Velg maks ett Investigation, ett Suitability og ett Acceptance test." };
+    }
+
+    const specialSelected = stressAllowed && ($("modLiftOff").checked || $("modDiffBond").checked);
+    if (stressingChecked && stressOptIds.length > 0 && specialSelected) {
+      return { error: "Lift-off og Differensiert bondlength kan ikke kombineres med valgte tester." };
+    }
+
+    const payload = {
+      name,
+      number: $("projectNo").value.trim(),
+      client: $("projectClient").value.trim(),
+      location: $("projectLocation").value.trim(),
+      note: $("projectNote").value.trim(),
+      checklists: {
+        a1BeforeInjection: $("checklistA1").value.trim(),
+        a2AfterInjection: $("checklistA2").value.trim()
+      },
+      modules: {
+        grouting: $("modGrouting").checked,
+        stressing: stressingChecked,
+        stressingOptions: stressingChecked ? stressOptIds : [],
+        liftOff: stressAllowed && $("modLiftOff").checked,
+        diffBondlength: stressAllowed && $("modDiffBond").checked
+      },
+      jackIds
+    };
+
+    const selectedAnyModule = payload.modules.grouting || payload.modules.stressing || payload.modules.liftOff || payload.modules.diffBondlength;
+    if (!selectedAnyModule) {
+      return { error: "Velg minst en modul for prosjektet." };
+    }
+
+    return { data: payload };
+  }
+
+  function applyProjectToForm(project){
+    const stressAllowed = hasStressingAccess();
+    const jackAllowed = hasJackAccess();
+    setProjectView("new");
+
+    $("editingId").value = project.id;
+    $("projectName").value = project.name || "";
+    $("projectNo").value = project.number || "";
+    $("projectClient").value = project.client || "";
+    $("projectLocation").value = project.location || "";
+    $("projectNote").value = project.note || "";
+    $("checklistA1").value = project.checklists?.a1BeforeInjection || "";
+    $("checklistA2").value = project.checklists?.a2AfterInjection || "";
+
+    $("modGrouting").checked = !!project.modules?.grouting;
+    $("modStressing").checked = stressAllowed && !!project.modules?.stressing;
+    $("modLiftOff").checked = stressAllowed && !!project.modules?.liftOff;
+    $("modDiffBond").checked = stressAllowed && !!project.modules?.diffBondlength;
+
+    $("stressingOptionsWrap").classList.toggle("hidden", !(stressAllowed && project.modules?.stressing));
+    renderStressOptionChecks(stressAllowed ? (project.modules?.stressingOptions || []) : []);
+    if (jackAllowed) renderJackPool(project.jackIds || []);
+
+    applyAccessUi();
+    updateFormMode(true);
+    clearMsg($("formMsg"));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function finishProject(projectId){
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === projectId);
+    if (idx < 0) return;
+    if (list[idx].status === "finished") return;
+
+    list[idx].status = "finished";
+    list[idx].finishedAt = new Date().toISOString();
+    list[idx].updatedAt = new Date().toISOString();
+    saveProjects(list);
+    renderProjects();
+  }
+
+  function deleteProject(projectId){
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === projectId);
+    if (idx < 0) return;
+
+    const project = list[idx];
+    const label = (project.name || "prosjekt").toString();
+    const warning = 'Slette prosjekt "' + label + '"? Dette fjerner ogsa tilhorende TM1-planer og feltark.';
+    if (!confirm(warning)) return;
+
+    list.splice(idx, 1);
+    saveProjects(list);
+
+    if (($("editingId").value || "") === projectId) {
+      resetForm();
+    }
+
+    renderProjects();
+    setMsg(actionMsgBox(), "Prosjekt slettet.", "ok");
+  }
+
+  function reopenProject(projectId){
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === projectId);
+    if (idx < 0) return;
+
+    list[idx].status = "active";
+    list[idx].finishedAt = null;
+    list[idx].updatedAt = new Date().toISOString();
+    saveProjects(list);
+    renderProjects();
+  }
+
+  function renderProjects(){
+    const rows = $("projectRows");
+    const listMsg = $("listMsg");
+    if (listMsg) {
+      listMsg.classList.remove("error", "ok");
+      listMsg.classList.remove("hidden");
+    }
+
+    const search = $("searchInput").value.trim().toLowerCase();
+    const filter = $("statusFilter").value;
+
+    const jacks = getJacks();
+    const jackMap = new Map(jacks.map((j) => [j.id, j]));
+    const jackAllowed = hasJackAccess();
+    const stressAllowed = hasStressingAccess();
+
+    let projects = getProjects().slice().sort((a, b) => {
+      const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return bt - at;
+    });
+
+    projects = projects.filter((p) => {
+      if (filter !== "all" && p.status !== filter) return false;
+      if (!search) return true;
+      const source = ((p.name || "") + " " + (p.number || "")).toLowerCase();
+      return source.includes(search);
+    });
+
+    const all = getProjects();
+    const total = all.length;
+    const active = all.filter((p) => p.status !== "finished").length;
+    const finished = all.filter((p) => p.status === "finished").length;
+
+    $("kpiTotal").textContent = total.toLocaleString("no-NO");
+    $("kpiActive").textContent = active.toLocaleString("no-NO");
+    $("kpiFinished").textContent = finished.toLocaleString("no-NO");
+
+    if (projects.length === 0) {
+      rows.innerHTML = "";
+      listMsg.textContent = total === 0 ? "Ingen prosjekter ennå." : "Ingen treff med valgt filter/sok.";
+      return;
+    }
+
+    rows.innerHTML = projects.map((p) => {
+      const jackNames = (Array.isArray(p.jackIds) ? p.jackIds : [])
+        .map((id) => {
+          const jack = jackMap.get(id);
+          if (!jack) return null;
+          return jack.code || jack.serial || jack.name || "-";
+        })
+        .filter(Boolean);
+      const jackCalibrations = (Array.isArray(p.jackIds) ? p.jackIds : [])
+        .map((id) => jackMap.get(id))
+        .filter(Boolean)
+        .map((jack) => jackCalibrationState(jack));
+      const hasOverdueJack = jackCalibrations.some((cal) => cal.state === "overdue");
+      const hasDueJack = !hasOverdueJack && jackCalibrations.some((cal) => cal.state === "due");
+      const jackCellWarning = !jackAllowed
+        ? ""
+        : (hasOverdueJack
+            ? '<span class="jackWarn overdue">Valgt jekk er ikke innen kalibrering. Maa sendes til kalibrering.</span>'
+            : (hasDueJack
+                ? '<span class="jackWarn due">Valgt jekk forfaller innen 30 dager. Send til kalibrering snart.</span>'
+                : ""));
+      const anchorCount = Array.isArray(p?.stressingDev?.tm1Acceptance?.plans)
+        ? p.stressingDev.tm1Acceptance.plans.length
+        : 0;
+      const groutingAssignedEmail = normalizeEmailValue(p.groutingAssignedEmail || p.siteEmail || "");
+      const isGroutingAssigned = groutingAssignedEmail !== "";
+      const assignedEmail = normalizeEmailValue(p.stressingAssignedEmail || "");
+      const isSpennlisteAssigned = assignedEmail !== "";
+      const canUseGrouting = !!(p.modules?.grouting);
+
+      const statusClass = p.status === "finished" ? "finished" : "active";
+      const statusText = p.status === "finished" ? "Ferdig" : "Aktiv";
+      const groutingBadge = canUseGrouting
+        ? ('<br><span class="assignBadge ' + (isGroutingAssigned ? "assigned" : "unassigned") + '">' +
+            (isGroutingAssigned
+              ? ('Injisering felt tildelt: ' + escapeHtml(groutingAssignedEmail))
+              : "Injisering felt ikke tildelt") +
+           '</span>')
+        : "";
+      const stressingBadge = (p.modules?.stressing && stressAllowed)
+        ? ('<br><span class="assignBadge ' + (isSpennlisteAssigned ? "assigned" : "unassigned") + '">' +
+            (isSpennlisteAssigned
+              ? ('TM1 felt tildelt: ' + escapeHtml(assignedEmail))
+              : "TM1 felt ikke tildelt") +
+           '</span>')
+        : "";
+      const assignmentBadge = groutingBadge + stressingBadge;
+      const hasInjiseringReportAnchors =
+        (p.modules?.grouting && p.groutingData && Array.isArray(p.groutingData.rows) && p.groutingData.rows.length > 0) ||
+        (p.groutingWorkflow && Array.isArray(p.groutingWorkflow.anchors) && p.groutingWorkflow.anchors.length > 0);
+      const hasTm1ReportAnchors =
+        (p.modules?.stressing && p.stressingDev && p.stressingDev.tm1Acceptance &&
+         Array.isArray(p.stressingDev.tm1Acceptance.plans) && p.stressingDev.tm1Acceptance.plans.length > 0);
+
+      const actionsHtml =
+        '<div class="rowActions projectActions">' +
+        (canUseGrouting
+          ? '<a class="smallBtn" href="software-injisering.html?projectId=' + encodeURIComponent(p.id || "") + '">Injisering</a>'
+          : '') +
+        (canUseGrouting
+          ? '<a class="smallBtn" href="software-injisering-felt.html?projectId=' + encodeURIComponent(p.id || "") + '">Injisering felt</a>'
+          : '') +
+        (canUseGrouting
+          ? '<button class="smallBtn shareBtn ' + (isGroutingAssigned ? "assigned" : "unassigned") + '" type="button" data-assign-grouting="' + escapeHtml(p.id || "") + '">Tildel injisering felt</button>'
+          : '') +
+        (hasInjiseringReportAnchors
+          ? '<button class="smallBtn" type="button" data-pdf-report-inj="' + escapeHtml(p.id || "") + '">PDF Injisering</button>'
+          : '') +
+        (hasTm1ReportAnchors
+          ? '<button class="smallBtn" type="button" data-pdf-report-tm1="' + escapeHtml(p.id || "") + '">PDF TM1</button>'
+          : '') +
+        (p.modules?.stressing && stressAllowed
+          ? '<a class="smallBtn" href="software-tm1-acceptance.html?projectId=' + encodeURIComponent(p.id || "") + '">TM1 Plan</a>' +
+            '<a class="smallBtn" href="software-tm1-acceptance-field.html?projectId=' + encodeURIComponent(p.id || "") + '">TM1 Felt</a>' +
+            '<button class="smallBtn shareBtn ' + (isSpennlisteAssigned ? "assigned" : "unassigned") + '" type="button" data-share-tm1="' + escapeHtml(p.id || "") + '">Tildel TM1 felt</button>'
+          : '') +
+        '<button class="smallBtn" type="button" data-edit="' + escapeHtml(p.id) + '">Rediger</button>' +
+        (p.status === "finished"
+          ? '<button class="smallBtn" type="button" data-reopen="' + escapeHtml(p.id) + '">Apne</button>'
+          : '<button class="smallBtn" type="button" data-finish="' + escapeHtml(p.id) + '">Ferdigstill</button>') +
+        '<button class="smallBtn" type="button" data-delete="' + escapeHtml(p.id) + '">Slett</button>' +
+        '</div>';
+
+      return '<tr>' +
+        '<td><strong>' + escapeHtml(p.name || "-") + '</strong><br><span class="muted">' + escapeHtml(p.number || "-") + '</span>' + assignmentBadge + actionsHtml + '</td>' +
+        '<td>' + anchorCount.toLocaleString("no-NO") + '</td>' +
+        '<td>' + escapeHtml(jackAllowed ? (jackNames.length ? jackNames.join(", ") : "-") : "-") + jackCellWarning + '</td>' +
+        '<td><span class="status ' + statusClass + '">' + statusText + '</span></td>' +
+        '<td>' + escapeHtml(fmtDate(p.startedAt || p.createdAt)) + '</td>' +
+      '</tr>';
+    }).join("");
+
+    listMsg.textContent = "Viser " + projects.length.toLocaleString("no-NO") + " prosjekt(er).";
+
+    rows.querySelectorAll("[data-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-edit");
+        const project = getProjects().find((p) => p.id === id);
+        if (!project) return;
+        applyProjectToForm(project);
+      });
+    });
+
+    rows.querySelectorAll("[data-finish]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-finish");
+        if (confirm("Markere prosjektet som ferdig?")) {
+          finishProject(id);
+        }
+      });
+    });
+
+    rows.querySelectorAll("[data-reopen]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-reopen");
+        if (confirm("Apne prosjektet igjen?")) {
+          reopenProject(id);
+        }
+      });
+    });
+
+    rows.querySelectorAll("[data-delete]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-delete");
+        deleteProject(id);
+      });
+    });
+
+    rows.querySelectorAll("[data-share-tm1]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-share-tm1");
+        await shareTm1Field(id);
+      });
+    });
+
+    rows.querySelectorAll("[data-assign-grouting]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-assign-grouting");
+        await assignGroutingField(id);
+      });
+    });
+
+    rows.querySelectorAll("[data-pdf-report-inj]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-pdf-report-inj");
+        openPdfReportModal(id);
+      });
+    });
+
+    rows.querySelectorAll("[data-pdf-report-tm1]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-pdf-report-tm1");
+        openTm1PdfReportModal(id);
+      });
+    });
+  }
+
+  function initProjectForm(){
+    renderStressOptionChecks([]);
+    if (hasJackAccess()) renderJackPool([]);
+    applyAccessUi();
+
+    $("modStressing").addEventListener("change", () => {
+      if (!hasStressingAccess()){
+        $("modStressing").checked = false;
+        $("stressingOptionsWrap").classList.add("hidden");
+        syncStressingRuleUi();
+        return;
+      }
+      const on = $("modStressing").checked;
+      $("stressingOptionsWrap").classList.toggle("hidden", !on);
+      if (!on) {
+        document.querySelectorAll(".stressOpt").forEach((el) => { el.checked = false; });
+      }
+      syncStressingRuleUi();
+    });
+
+    $("modLiftOff").addEventListener("change", () => {
+      if (!hasStressingAccess()) {
+        $("modLiftOff").checked = false;
+        return;
+      }
+      syncStressingRuleUi();
+    });
+
+    $("modDiffBond").addEventListener("change", () => {
+      if (!hasStressingAccess()) {
+        $("modDiffBond").checked = false;
+        return;
+      }
+      syncStressingRuleUi();
+    });
+
+    $("projectForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const result = collectFormData();
+      if (result.error) {
+        setMsg($("formMsg"), result.error, "error");
+        return;
+      }
+
+      const payload = result.data;
+      const id = $("editingId").value;
+      const now = new Date().toISOString();
+      const list = getProjects();
+
+      if (id) {
+        const idx = list.findIndex((p) => p.id === id);
+        if (idx < 0) {
+          setMsg($("formMsg"), "Fant ikke prosjektet du forsokte a redigere.", "error");
+          return;
+        }
+
+        const prev = list[idx];
+        const nextPayload = { ...payload };
+
+        // Level 1 skal ikke kunne overskrive stressing/jack-felter.
+        if (!hasStressingAccess()) {
+          nextPayload.modules = {
+            ...nextPayload.modules,
+            stressing: !!prev.modules?.stressing,
+            stressingOptions: Array.isArray(prev.modules?.stressingOptions) ? prev.modules.stressingOptions : [],
+            liftOff: !!prev.modules?.liftOff,
+            diffBondlength: !!prev.modules?.diffBondlength
+          };
+        }
+        if (!hasJackAccess()) {
+          nextPayload.jackIds = Array.isArray(prev.jackIds) ? prev.jackIds : [];
+        }
+
+        list[idx] = {
+          ...prev,
+          ...nextPayload,
+          updatedAt: now
+        };
+
+        saveProjects(list);
+        setMsg($("formMsg"), "Prosjekt oppdatert.", "ok");
+      } else {
+        list.push({
+          id: uid("project"),
+          ...payload,
+          status: "active",
+          createdAt: now,
+          startedAt: now,
+          updatedAt: now,
+          finishedAt: null
+        });
+
+        saveProjects(list);
+        setMsg($("formMsg"), "Prosjekt startet.", "ok");
+      }
+
+      renderProjects();
+      setTimeout(() => {
+        resetForm();
+      }, 500);
+    });
+
+    $("resetFormBtn").addEventListener("click", () => {
+      resetForm();
+      renderProjects();
+    });
+
+    $("cancelEditBtn").addEventListener("click", () => {
+      resetForm();
+      renderProjects();
+    });
+
+    $("searchInput").addEventListener("input", renderProjects);
+    $("statusFilter").addEventListener("change", renderProjects);
+
+    window.addEventListener("storage", (ev) => {
+      if (ev.key === jacksStorageKey() || ev.key === STORAGE.jacks) {
+        const selected = Array.from(document.querySelectorAll(".jackCheck:checked")).map((el) => el.value);
+        if (hasJackAccess()) renderJackPool(selected);
+      }
+      if (ev.key === projectsStorageKey() || ev.key === STORAGE.projects) {
+        renderProjects();
+      }
+      if (ev.key === STORAGE.auth) {
+        if (!hasAccess()) {
+          location.reload();
+        } else {
+          applyAccessUi();
+          renderProjects();
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        applyAccessUi();
+      }
+    });
+  }
+
+  function showGuard(){
+    $("guardView").hidden = false;
+    $("appView").hidden = true;
+    const msg = $("loginMsg");
+    clearMsg(msg);
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: getSession() });
+    }
+
+    $("pmLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = $("pmUser").value.trim().toLowerCase();
+      const pass = $("pmPass").value;
+      if (!user || !pass) {
+        setMsg(msg, "Fyll ut e-post og passord.", "error");
+        return;
+      }
+      try {
+        const session = await loginViaApi(user, pass);
+        const confirmedSession = isLocalPreviewHost() ? (getSession() || session) : await refreshSessionFromApi();
+        if (!confirmedSession) {
+          throw new Error("Innlogging ble ikke bekreftet av server. Tillat cookies for etterspenning.no og prov igjen.");
+        }
+        location.reload();
+      } catch (err) {
+        setMsg(msg, "Innlogging feilet: " + (err?.message || "ukjent feil"), "error");
+      }
+    });
+  }
+
+  async function showApp(){
+    activeSession = getSession();
+    $("guardView").hidden = true;
+    $("appView").hidden = false;
+
+    $("logoutBtn").addEventListener("click", logout);
+    initProjectViewSwitch();
+    initPdfReportModal();
+
+    initProjectForm();
+    resetForm();
+    applyAccessUi();
+    try {
+      await hydrateProjectsFromServer();
+    } catch (err) {
+      setMsg($("listMsg"), "Kunne ikke hente prosjekter fra server: " + ((err && err.message) ? err.message : "ukjent feil"), "error");
+    }
+    renderProjects();
+    setProjectView(projectViewFromUrl(), { skipUrl: true });
+  }
+
+  async function initAccessGate(){
+    await refreshSessionFromApi();
+    if (hasAccess()) {
+      await showApp();
+    } else {
+      showGuard();
+    }
+  }
+
+  initAccessGate();
+</script>
+
+</body>
+</html>

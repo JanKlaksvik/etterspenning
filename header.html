@@ -1,0 +1,56 @@
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <!-- Replaced old "E" box with image logo -->
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" alt="Etterspenning – logo">
+        </a>
+      </div>
+      <div>
+        <div style="font-weight:900;letter-spacing:.2px">Etterspenning.no</div>
+        <div style="font-size:12px;color:var(--muted)">Praktisk faginfo for etterspenning og forankringer</div>
+      </div>
+    </div>
+
+    <!-- Språk -->
+    <button class="lang-btn" id="langBtn" aria-label="Språk" title="Språk">
+      🇬🇧 EN
+    </button>
+
+    <!-- Hamburger (mobile) -->
+    <button class="menu-btn" id="openMenu" aria-label="Åpne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <!-- Desktop menu -->
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink active" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktøy</a>
+      <a class="navlink" href="software.html">Software</a>
+      <a class="navlink" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Overlay + Drawer -->
+<div class="overlay" id="overlay" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a class="active" href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html">Software</a>
+    <a href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>

@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bilder | Etterspenning.no</title>
+  <meta name="description" content="Bilder og eksempler fra etterspenning og forankringer: utførelse, utstyr, injisering, oppspenning og skisser." />
+
+  <!-- (Valgfritt) favicon -->
+  <link rel="icon" href="Logo.jpeg" type="image/jpeg" />
+  <link rel="apple-touch-icon" href="Logo.jpeg" />
+  <meta name="theme-color" content="#0b1220" />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    /* =========================
+       HEADER (samme på alle sider)
+       ========================= */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+
+    /* Språkknapp (NO placeholder) */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+      color: var(--text);
+    }
+
+    /* Hamburger */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Drawer + overlay */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity: 1; pointer-events: auto;}
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* =========================
+       SIDEINNHOLD (bilder)
+       ========================= */
+    .hero{padding:28px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:84ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px;}
+    .chip{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      padding:8px 12px;
+      font-weight:700;
+      font-size:12px;
+      user-select:none;
+    }
+    .chip:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .chip.active{background: rgba(244,122,32,.12);border-color: rgba(244,122,32,.45);color: var(--text);}
+
+    .search{margin-left:auto;min-width:240px;flex:1 1 280px;max-width:420px;}
+    input[type="search"]{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(6,10,18,.55);
+      color:var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    input[type="search"]:focus{
+      border-color: rgba(244,122,32,.55);
+      box-shadow: 0 0 0 4px rgba(244,122,32,.10);
+    }
+
+    .notice{
+      margin-top:14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:12px;color: var(--muted);
+      line-height:1.5;font-size:13px;
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns: repeat(3, 1fr);margin-top:14px;}
+    @media (max-width: 980px){.grid{grid-template-columns: repeat(2, 1fr)}}
+    @media (max-width: 620px){.grid{grid-template-columns: 1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      cursor:pointer;
+    }
+    .thumb{
+      aspect-ratio: 16 / 10;
+      background: rgba(7,11,20,.35);
+      display:block;
+      width:100%;
+      object-fit: cover;
+    }
+    .body{padding:12px}
+    .title{font-weight:900;letter-spacing:-0.01em}
+    .meta{margin-top:6px;font-size:12px;color:var(--muted);line-height:1.45;}
+    .tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+    .tag{
+      font-size:11px;color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      padding:4px 8px;border-radius:999px;
+      background: rgba(7,11,20,.25);
+    }
+
+    /* Lightbox */
+    .lb{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.75);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index: 999;
+    }
+    .lb.open{display:flex}
+    .lbpanel{
+      max-width: 1100px;
+      width: min(1100px, 100%);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,24,.92);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .lbtop{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .lbtop .cap{color:var(--muted);font-size:12px}
+    .xbtn{
+      cursor:pointer;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:8px 10px;
+      background: rgba(16,26,47,.35);
+      color:var(--text);
+      font-weight:900;
+      line-height:1;
+    }
+    .xbtn:hover{border-color:rgba(255,255,255,.18)}
+    .lbimg{width:100%;height:auto;display:block;background: rgba(7,11,20,.35);}
+    .lbbody{padding:12px 14px;color: var(--muted);font-size:13px;line-height:1.55;}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER LASTES FRA header.html -->
+<div id="siteHeader"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Bilder</h1>
+    <p>
+      Eksempler fra forankringsarbeid: installasjon, injisering, oppspenning, utstyr – og skisser som forklarer oppbygning og lastoverføring.
+      Klikk et bilde for større visning.
+    </p>
+
+    <div class="toolbar">
+      <div class="chip active" data-filter="all">Alle</div>
+      <div class="chip" data-filter="forankring">Forankring</div>
+      <div class="chip" data-filter="verktoy">Verktøy</div>
+      <div class="chip" data-filter="grouting">Injisering</div>
+      <div class="chip" data-filter="stressing">Oppspenning</div>
+
+      <div class="search">
+        <input id="search" type="search" placeholder="Søk i titler/beskrivelser …" />
+      </div>
+    </div>
+
+    <div class="notice">
+      Tips: bruk filter for å finne relevant kategori (forankring / utstyr / injisering / oppspenning). Du kan også søke f.eks. “jekk”, “spunt”, “ankehode” osv.
+    </div>
+  </section>
+
+  <div class="grid" id="gallery">
+    <!-- 1 -->
+    <article class="card" data-tags="forankring stressing"
+      data-title="Monostrand i dekke – armering og føring"
+      data-desc="Monostrand-installering i dekke før støp. Visuell kontroll av føring, klaringer, festepunkter og grensesnitt mot armering.">
+      <img class="thumb" src="img/Mono-dekk.jpg" alt="Monostrand i dekke – armering og føring" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand i dekke – armering og føring</div>
+        <div class="meta">Kontroll før støp: føring, festing, klaringer og ryddig grensesnitt mot armering.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Forankring</span><span class="tag">Oppspenning</span></div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Jekk/måling – kontroll ved oppspenning"
+      data-desc="Nærbilde av utstyr for oppspenning/måling. Fokus: repeterbar måling, dokumentasjon og kontroll av trinn/verdier.">
+      <img class="thumb" src="img/Mono-jekk-kai.JPG" alt="Jekk/måling – kontroll ved oppspenning" loading="lazy" />
+      <div class="body">
+        <div class="title">Jekk/måling – kontroll ved oppspenning</div>
+        <div class="meta">Praktisk: tydelig avlesning og kobling mot protokoll/revisjonsspor.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Verktøy</span><span class="tag">Oppspenning</span></div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="card" data-tags="forankring"
+      data-title="Monostrand – skjøt/tilpasning i dekke"
+      data-desc="Skjøt/tilpasning og håndtering i felt. Fokus: orden i rigg, korrekt plassering, beskyttelse og sporbarhet.">
+      <img class="thumb" src="img/Mono-skjøt-dekk.png" alt="Monostrand – skjøt/tilpasning i dekke" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand – skjøt/tilpasning i dekke</div>
+        <div class="meta">Utførelse i felt: ryddighet og kontroll gir lavere feilrate.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Forankring</span><span class="tag">Utførelse</span></div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article class="card" data-tags="forankring"
+      data-title="Monostrand – tau/trebru"
+      data-desc="Oversiktsbilde av monostrand/tau i prosjekt. Fokus: håndtering, lagring og beskyttelse før installasjon.">
+      <img class="thumb" src="img/Mono-trebru.JPG" alt="Monostrand – tau/trebru" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand – tau/trebru</div>
+        <div class="meta">Lagring og håndtering: beskyttelse, orden og riktig transport for å unngå skader.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Forankring</span><span class="tag">Logistikk</span></div>
+      </div>
+    </article>
+
+    <!-- NYE -->
+    <article class="card" data-tags="forankring stressing"
+      data-title="Installasjon – montører ved ankerhode"
+      data-desc="To montører under installasjon/rigging ved ankerhode. Fokus: riktig oppsett, ryddighet og kontroll av grensesnitt i felt.">
+      <img class="thumb" src="img/forankring-top-personell.jpg" alt="Installasjon – montører ved ankerhode" loading="lazy" />
+      <div class="body">
+        <div class="title">Installasjon – montører ved ankerhode</div>
+        <div class="meta">Praktisk feltarbeid: rigg, kontrollpunkter og klaring før videre arbeid.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Oppspenning</span><span class="tag">Utførelse</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Kranhjelp ved installasjon i spunt"
+      data-desc="Eksempel på hvordan kran kan brukes til å håndtere og posisjonere forankring ved installasjon i spunt.">
+      <img class="thumb" src="img/Forankring-kran-installasjon.jpg" alt="Kranhjelp ved installasjon i spunt" loading="lazy" />
+      <div class="body">
+        <div class="title">Kranhjelp ved installasjon i spunt</div>
+        <div class="meta">Håndtering og posisjonering: tryggere montasje og bedre kontroll.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Spunt</span><span class="tag">Logistikk</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring grouting"
+      data-title="Installert og injisert forankring – Ålesund"
+      data-desc="Forankring etter installasjon og injisering. Fokus: beskyttelse og sporbar dokumentasjon før eventuell oppspenning.">
+      <img class="thumb" src="img/Forankring-Aalesund.JPG" alt="Installert og injisert forankring – Ålesund" loading="lazy" />
+      <div class="body">
+        <div class="title">Installert og injisert forankring – Ålesund</div>
+        <div class="meta">Etter injisering: beskyttelse, kontroll og klart grunnlag for videre arbeid.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Injisering</span><span class="tag">Utførelse</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Installasjon med kran – permanent forankring"
+      data-desc="To personer installerer permanent forankring med hjelp av kran. Fokus: sikker håndtering, riktig føring og kontroll av geometri.">
+      <img class="thumb" src="img/Forankring-installasjon.jpg" alt="Installasjon med kran – permanent forankring" loading="lazy" />
+      <div class="body">
+        <div class="title">Installasjon med kran – permanent forankring</div>
+        <div class="meta">Rigg og håndtering: riktig posisjonering og færre skader på komponenter.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Permanent</span><span class="tag">Utførelse</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="M1800 kN multi-strand jekk"
+      data-desc="Eksempel på hvordan en M1800 kN multi-strand jekk kan se ut. Relevant ved oppspenning, kalibrering og kontroll.">
+      <img class="thumb" src="img/Multi-TTM-jekk.jpg" alt="M1800 kN multi-strand jekk" loading="lazy" />
+      <div class="body">
+        <div class="title">M1800 kN multi-strand jekk</div>
+        <div class="meta">Utstyr: kapasitet, koblinger og praktisk bruk ved oppspenning.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Jekk</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Hydraulisk pumpe for anlegg"
+      data-desc="Hydraulisk pumpe brukt i felt. Fokus: driftssikkerhet, tilkoblinger og kontroll av trykk/last i operasjon.">
+      <img class="thumb" src="img/bilde1.JPG" alt="Hydraulisk pumpe for anlegg" loading="lazy" />
+      <div class="body">
+        <div class="title">Hydraulisk pumpe for anlegg</div>
+        <div class="meta">Kraftenhet: slanger, koblinger og praktisk rigg i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Hydraulikk</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Ankerhode i betong – skisse"
+      data-desc="Skisse som viser oppbygning ved ankerhode i betong, inkludert kileplate, underlagsskive og injiseringsslanger.">
+      <img class="thumb" src="img/Forankring-betong-web.png" alt="Ankerhode i betong – skisse" loading="lazy" />
+      <div class="body">
+        <div class="title">Ankerhode i betong – skisse</div>
+        <div class="meta">Oppbygning: komponenter, slanger og prinsipper for tetting/beskyttelse.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Skisse</span><span class="tag">Detalj</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Forankring i spunt – skisse"
+      data-desc="Skisse som viser forankring i spunt/berg, inkl. frilengde, forankringslengde og viktige avstander.">
+      <img class="thumb" src="img/Forankring-spunt.png" alt="Forankring i spunt – skisse" loading="lazy" />
+      <div class="body">
+        <div class="title">Forankring i spunt – skisse</div>
+        <div class="meta">Geometri og prinsipper: frilengde, forankringslengde og grensesnitt mot spunt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Skisse</span><span class="tag">Spunt</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Forankring i anlegg – feltfoto"
+      data-desc="Feltbilde fra installasjon av forankring i anlegg. Fokus: rigg, arbeidsområde og kontroll av utførelse.">
+      <img class="thumb" src="img/forankring-anlegg-carl.jpg" alt="Forankring i anlegg – feltfoto" loading="lazy" />
+      <div class="body">
+        <div class="title">Forankring i anlegg – feltfoto</div>
+        <div class="meta">Praktisk utførelse i felt: oversikt over rigg og arbeidsflyt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Anlegg</span><span class="tag">Utførelse</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring stressing"
+      data-title="Monostrand i dekke – detaljbilde"
+      data-desc="Detaljbilde av monostrand i dekke med fokus på føring, beskyttelse og kontroll før videre trinn i produksjonen.">
+      <img class="thumb" src="img/Monostrand-deck.jpg" alt="Monostrand i dekke – detaljbilde" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand i dekke – detaljbilde</div>
+        <div class="meta">Detaljkontroll: føring, klaringer og ryddig grensesnitt.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Forankring</span><span class="tag">Oppspenning</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Transport av permanent forankring"
+      data-desc="Eksempel på transport/logistikk av permanent forankring før installasjon. Fokus: beskyttelse, stropping og håndtering.">
+      <img class="thumb" src="img/Transport-perm-anchorage.jpg" alt="Transport av permanent forankring" loading="lazy" />
+      <div class="body">
+        <div class="title">Transport av permanent forankring</div>
+        <div class="meta">Logistikk: sikker håndtering reduserer risiko for skader på komponenter.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Transport</span><span class="tag">Logistikk</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Transport av permanent forankring – variant"
+      data-desc="Ekstra eksempel på transport og lagring av permanent forankring i felt. Fokus: orden, merking og sporbarhet.">
+      <img class="thumb" src="img/Transport-perm-anchorage1.jpg" alt="Transport av permanent forankring – variant" loading="lazy" />
+      <div class="body">
+        <div class="title">Transport av permanent forankring – variant</div>
+        <div class="meta">Lagring/transport: bedre kontroll gjennom merking og ryddig oppsett.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Transport</span><span class="tag">Sporbarhet</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Måling av forlengelse ved jekk"
+      data-desc="Måleoppsett ved jekk for kontroll av forlengelse under oppspenning. Fokus: repeterbar måling og dokumentasjon av verdier.">
+      <img class="thumb" src="img/Measuerment-elong-jack.jpg" alt="Måling av forlengelse ved jekk" loading="lazy" />
+      <div class="body">
+        <div class="title">Måling av forlengelse ved jekk</div>
+        <div class="meta">Kontrollpunkt ved oppspenning: måling, loggføring og sammenligning mot krav.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Måling</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Hydraulisk pumpe – detalj"
+      data-desc="Detaljbilde av hydraulisk pumpe brukt i feltarbeid. Fokus: tilkoblinger, driftssikkerhet og praktisk bruk på rigg.">
+      <img class="thumb" src="img/Hydraulisk-pumpe.jpg" alt="Hydraulisk pumpe – detalj" loading="lazy" />
+      <div class="body">
+        <div class="title">Hydraulisk pumpe – detalj</div>
+        <div class="meta">Kraftenhet i praksis: stabil drift og kontroll av systemtrykk.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Hydraulikk</span><span class="tag">Oppspenning</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting verktoy"
+      data-title="Kontroll av grout-densitet – 1 liter"
+      data-desc="Eksempel på enkel kontrollmåling av groutmasse med 1-liters volum. Brukes for å verifisere konsistens og blandingskvalitet.">
+      <img class="thumb" src="img/one-liter-grout-weight.jpg" alt="Kontroll av grout-densitet – 1 liter" loading="lazy" />
+      <div class="body">
+        <div class="title">Kontroll av grout-densitet – 1 liter</div>
+        <div class="meta">Kvalitetskontroll: volum/vekt gir rask indikasjon på blandingskvalitet.</div>
+        <div class="tagrow"><span class="tag">Injisering</span><span class="tag">Kontroll</span><span class="tag">Grout</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting"
+      data-title="Temperaturtest av groutmasse"
+      data-desc="Testoppsett for temperatur i groutmasse under blanding/herding. Fokus: kontroll av prosess og dokumentasjon av avvik.">
+      <img class="thumb" src="img/Temp-test-groutmass.jpg" alt="Temperaturtest av groutmasse" loading="lazy" />
+      <div class="body">
+        <div class="title">Temperaturtest av groutmasse</div>
+        <div class="meta">Injiseringskontroll: temperaturmåling støtter jevn kvalitet i utførelse.</div>
+        <div class="tagrow"><span class="tag">Injisering</span><span class="tag">Temperatur</span><span class="tag">Kvalitet</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Forskjell på forankringstyper – skisse"
+      data-desc="Forklaringsskisse som viser prinsipiell forskjell mellom ulike forankringsløsninger og lastoverføring.">
+      <img class="thumb" src="img/Diff-Forank-Forkl.png" alt="Forskjell på forankringstyper – skisse" loading="lazy" />
+      <div class="body">
+        <div class="title">Forskjell på forankringstyper – skisse</div>
+        <div class="meta">Prinsippskisse: nyttig for rask forklaring av løsning og funksjon.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Skisse</span><span class="tag">Prinsipp</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="2"
+      data-desc="Eksempelbilde fra prosjektarkiv: 2.">
+      <img class="thumb" src="img/2.jpeg" alt="2" loading="lazy" />
+      <div class="body">
+        <div class="title">2</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="4"
+      data-desc="Eksempelbilde fra prosjektarkiv: 4.">
+      <img class="thumb" src="img/4.jpeg" alt="4" loading="lazy" />
+      <div class="body">
+        <div class="title">4</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Aarstest Skraa Ror 1"
+      data-desc="Eksempelbilde fra prosjektarkiv: aarstest skraa ror 1.">
+      <img class="thumb" src="img/Aarstest-skraa-ror-1.jpeg" alt="Aarstest Skraa Ror 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Aarstest Skraa Ror 1</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Aarstest Skraa Ror 3"
+      data-desc="Eksempelbilde fra prosjektarkiv: aarstest skraa ror 3.">
+      <img class="thumb" src="img/Aarstest-skraa-ror-3.jpeg" alt="Aarstest Skraa Ror 3" loading="lazy" />
+      <div class="body">
+        <div class="title">Aarstest Skraa Ror 3</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Aarstest Skraa Ror 4"
+      data-desc="Eksempelbilde fra prosjektarkiv: aarstest skraa ror 4.">
+      <img class="thumb" src="img/Aarstest-skraa-ror-4.jpeg" alt="Aarstest Skraa Ror 4" loading="lazy" />
+      <div class="body">
+        <div class="title">Aarstest Skraa Ror 4</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting"
+      data-title="Kobling Injisering"
+      data-desc="Eksempelbilde fra prosjektarkiv: kobling injisering.">
+      <img class="thumb" src="img/Kobling-injisering.jpeg" alt="Kobling Injisering" loading="lazy" />
+      <div class="body">
+        <div class="title">Kobling Injisering</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Injisering</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring verktoy stressing"
+      data-title="Spenn Farlig 1"
+      data-desc="Eksempelbilde fra prosjektarkiv: spenn farlig 1.">
+      <img class="thumb" src="img/Spenn-farlig-1.jpeg" alt="Spenn Farlig 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Spenn Farlig 1</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Verktøy</span><span class="tag">Oppspenning</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Typisk oversvom2"
+      data-desc="Eksempelbilde fra prosjektarkiv: typisk oversvom2.">
+      <img class="thumb" src="img/Typisk-oversvom2.jpeg" alt="Typisk oversvom2" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk oversvom2</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Typisk oversvom3"
+      data-desc="Eksempelbilde fra prosjektarkiv: typisk oversvom3.">
+      <img class="thumb" src="img/Typisk-oversvom3.jpeg" alt="Typisk oversvom3" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk oversvom3</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Typisk oversvom4"
+      data-desc="Eksempelbilde fra prosjektarkiv: typisk oversvom4.">
+      <img class="thumb" src="img/Typisk-oversvom4.jpeg" alt="Typisk oversvom4" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk oversvom4</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring grouting"
+      data-title="Under Ankerhode Krympstromp"
+      data-desc="Eksempelbilde fra prosjektarkiv: under ankerhode krympstromp.">
+      <img class="thumb" src="img/Under-ankerhode-krympstromp.jpeg" alt="Under Ankerhode Krympstromp" loading="lazy" />
+      <div class="body">
+        <div class="title">Under Ankerhode Krympstromp</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Injisering</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="WhatsApp Image 2026 02 18 At 13.33.12"
+      data-desc="Eksempelbilde fra prosjektarkiv: whatsapp image 2026 02 18 at 13.33.12.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.33.12.jpeg" alt="WhatsApp Image 2026 02 18 At 13.33.12" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.33.12</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="WhatsApp Image 2026 02 18 At 13.44.17"
+      data-desc="Eksempelbilde fra prosjektarkiv: whatsapp image 2026 02 18 at 13.44.17.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.44.17.jpeg" alt="WhatsApp Image 2026 02 18 At 13.44.17" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.44.17</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="WhatsApp Image 2026 02 18 At 13.45.21"
+      data-desc="Eksempelbilde fra prosjektarkiv: whatsapp image 2026 02 18 at 13.45.21.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.45.21.jpeg" alt="WhatsApp Image 2026 02 18 At 13.45.21" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.45.21</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="WhatsApp Image 2026 02 18 At 13.45.22"
+      data-desc="Eksempelbilde fra prosjektarkiv: whatsapp image 2026 02 18 at 13.45.22.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.45.22.jpeg" alt="WhatsApp Image 2026 02 18 At 13.45.22" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.45.22</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Anker Loft 1"
+      data-desc="Eksempelbilde fra prosjektarkiv: anker loft 1.">
+      <img class="thumb" src="img/anker-loft-1.jpeg" alt="Anker Loft 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Anker Loft 1</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Anker Loft 2"
+      data-desc="Eksempelbilde fra prosjektarkiv: anker loft 2.">
+      <img class="thumb" src="img/anker-loft-2.jpeg" alt="Anker Loft 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Anker Loft 2</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Anker Loft 3"
+      data-desc="Eksempelbilde fra prosjektarkiv: anker loft 3.">
+      <img class="thumb" src="img/anker-loft-3.jpeg" alt="Anker Loft 3" loading="lazy" />
+      <div class="body">
+        <div class="title">Anker Loft 3</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Dobbel Jekk Spenn"
+      data-desc="Eksempelbilde fra prosjektarkiv: dobbel jekk spenn.">
+      <img class="thumb" src="img/dobbel-jekk-spenn.jpeg" alt="Dobbel Jekk Spenn" loading="lazy" />
+      <div class="body">
+        <div class="title">Dobbel Jekk Spenn</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring stressing"
+      data-title="Farligt"
+      data-desc="Eksempelbilde fra prosjektarkiv: farligt.">
+      <img class="thumb" src="img/farligt.jpeg" alt="Farligt" loading="lazy" />
+      <div class="body">
+        <div class="title">Farligt</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Forank Line Store Plater 1"
+      data-desc="Eksempelbilde fra prosjektarkiv: forank line store plater 1.">
+      <img class="thumb" src="img/forank-line-store-plater-1.jpeg" alt="Forank Line Store Plater 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Forank Line Store Plater 1</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Forank Line Store Plater 2"
+      data-desc="Eksempelbilde fra prosjektarkiv: forank line store plater 2.">
+      <img class="thumb" src="img/forank-line-store-plater-2.jpeg" alt="Forank Line Store Plater 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Forank Line Store Plater 2</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Oppspennings Range"
+      data-desc="Eksempelbilde fra prosjektarkiv: oppspennings range.">
+      <img class="thumb" src="img/oppspennings-range.jpeg" alt="Oppspennings Range" loading="lazy" />
+      <div class="body">
+        <div class="title">Oppspennings Range</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Passiv Linebrudd 1"
+      data-desc="Eksempelbilde fra prosjektarkiv: passiv linebrudd 1.">
+      <img class="thumb" src="img/passiv-linebrudd-1.jpeg" alt="Passiv Linebrudd 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Passiv Linebrudd 1</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Passiv Linebrudd 2"
+      data-desc="Eksempelbilde fra prosjektarkiv: passiv linebrudd 2.">
+      <img class="thumb" src="img/passiv-linebrudd-2.jpeg" alt="Passiv Linebrudd 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Passiv Linebrudd 2</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Stang Jekk 1"
+      data-desc="Eksempelbilde fra prosjektarkiv: stang jekk 1.">
+      <img class="thumb" src="img/stang-jekk-1.jpeg" alt="Stang Jekk 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 1</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Stang Jekk 2"
+      data-desc="Eksempelbilde fra prosjektarkiv: stang jekk 2.">
+      <img class="thumb" src="img/stang-jekk-2.jpeg" alt="Stang Jekk 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 2</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Stang Jekk 3"
+      data-desc="Eksempelbilde fra prosjektarkiv: stang jekk 3.">
+      <img class="thumb" src="img/stang-jekk-3.jpeg" alt="Stang Jekk 3" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 3</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="verktoy stressing"
+      data-title="Stang Jekk 4"
+      data-desc="Eksempelbilde fra prosjektarkiv: stang jekk 4.">
+      <img class="thumb" src="img/stang-jekk-4.jpeg" alt="Stang Jekk 4" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 4</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Verktøy</span><span class="tag">Oppspenning</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting"
+      data-title="Terning Stoping"
+      data-desc="Eksempelbilde fra prosjektarkiv: terning stoping.">
+      <img class="thumb" src="img/terning-stoping.jpeg" alt="Terning Stoping" loading="lazy" />
+      <div class="body">
+        <div class="title">Terning Stoping</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Injisering</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="forankring"
+      data-title="Typisk Utfordring Oversvomming"
+      data-desc="Eksempelbilde fra prosjektarkiv: typisk utfordring oversvomming.">
+      <img class="thumb" src="img/typisk-utfordring-oversvomming.jpeg" alt="Typisk Utfordring Oversvomming" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk Utfordring Oversvomming</div>
+        <div class="meta">Nytt bilde lagt til i galleriet fra dokumentasjon i felt.</div>
+        <div class="tagrow"><span class="tag">Forankring</span><span class="tag">Foto</span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Bilder. Denne nettsiden bruker Google Analytics for anonym trafikkstatistikk. Ingen informasjonskapsler brukes til markedsføring. Ingen cookies.
+  </footer>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" aria-hidden="true">
+  <div class="lbpanel" role="dialog" aria-modal="true" aria-label="Bildevisning">
+    <div class="lbtop">
+      <div>
+        <div style="font-weight:900" id="lbTitle">—</div>
+        <div class="cap" id="lbTags">—</div>
+      </div>
+      <button class="xbtn" id="lbClose" type="button" aria-label="Lukk">×</button>
+    </div>
+    <img class="lbimg" id="lbImg" alt="" />
+    <div class="lbbody" id="lbDesc">—</div>
+  </div>
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇬🇧 EN";
+      langBtn.setAttribute("aria-label", "Switch to English");
+      langBtn.setAttribute("title", "Switch to English");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "bilder-en.html";
+      });
+    }
+  }
+
+  // ======= Load header.html + sett aktiv meny =======
+  (async function(){
+    const host = document.getElementById("siteHeader");
+    if(!host) return;
+
+    try{
+      const res = await fetch("header.html", { cache: "no-store" });
+      host.innerHTML = await res.text();
+      initHeaderUi();
+
+      // Sett aktiv "Bilder" i både desktop og drawer
+      const current = "bilder.html";
+      host.querySelectorAll('a.navlink, .drawer-nav a').forEach(a=>{
+        const href = (a.getAttribute("href") || "").trim();
+        if(href === current){
+          a.classList.add("active");
+        } else if(href){
+          a.classList.remove("active");
+        }
+      });
+
+    }catch(err){
+      console.warn("Kunne ikke laste header.html:", err);
+    }
+  })();
+
+  // ========= Filter + søk =========
+  const chips = Array.from(document.querySelectorAll(".chip"));
+  const cards = Array.from(document.querySelectorAll(".card"));
+  const search = document.getElementById("search");
+
+  let activeFilter = "all";
+
+  function normalize(s){ return (s || "").toLowerCase().trim(); }
+
+  function matches(card){
+    const tags = (card.getAttribute("data-tags") || "").split(/\s+/).map(normalize);
+    const title = normalize(card.getAttribute("data-title"));
+    const desc  = normalize(card.getAttribute("data-desc"));
+    const q = normalize(search.value);
+
+    const okFilter = (activeFilter === "all") || tags.includes(activeFilter);
+    const okSearch = !q || title.includes(q) || desc.includes(q) || tags.join(" ").includes(q);
+
+    return okFilter && okSearch;
+  }
+
+  function apply(){
+    cards.forEach(c => {
+      c.style.display = matches(c) ? "" : "none";
+    });
+  }
+
+  chips.forEach(ch => {
+    ch.addEventListener("click", () => {
+      chips.forEach(x => x.classList.remove("active"));
+      ch.classList.add("active");
+      activeFilter = ch.getAttribute("data-filter");
+      apply();
+    });
+  });
+
+  search.addEventListener("input", apply);
+
+  // ========= Lightbox =========
+  const lb = document.getElementById("lb");
+  const lbImg = document.getElementById("lbImg");
+  const lbTitle = document.getElementById("lbTitle");
+  const lbTags = document.getElementById("lbTags");
+  const lbDesc = document.getElementById("lbDesc");
+  const lbClose = document.getElementById("lbClose");
+
+  function openLB(card){
+    const img = card.querySelector("img");
+    const src = img.getAttribute("src");
+    const alt = img.getAttribute("alt") || "";
+
+    const title = card.getAttribute("data-title") || alt || "Bilde";
+    const tags = (card.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
+    const desc = card.getAttribute("data-desc") || "";
+
+    lbTitle.textContent = title;
+    lbTags.textContent = tags.length ? ("Tagger: " + tags.join(", ")) : "";
+    lbDesc.textContent = desc;
+
+    lbImg.src = src;
+    lbImg.alt = alt;
+
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+  }
+
+  function closeLB(){
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden", "true");
+    lbImg.src = "";
+  }
+
+  cards.forEach(card => card.addEventListener("click", () => openLB(card)));
+  lbClose.addEventListener("click", closeLB);
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLB(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLB(); });
+
+  apply();
+</script>
+
+</body>
+</html>

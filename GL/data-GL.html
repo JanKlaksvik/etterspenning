@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etterspenning.no - Data</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+  <style>
+   section {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+      background-color: white;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+      .form-section {
+      background: #f9f9f9;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .form-section input {
+      padding: 6px;
+      margin: 4px;
+      width: 100px;
+    }
+    .warning {
+      color: red;
+      font-size: 0.9em;
+    }
+    .pdf-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 30px;
+    }
+    .pdf-link img {
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+    <header class="site-header">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Meny</span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <div class="site-title">Etterspenning.no</div>
+  </header>
+  <nav id="site-nav" class="site-nav" aria-label="Hovedmeny">
+    <a href="index.html">Hjem</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html">Software</a>
+    <a class="active" href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+
+  <section>
+    <h1>Data</h1>
+    <p>Her er de mest vanlige spenntau typer brukt i Scandinavia.</p>
+
+    <h2>Grunn data på spenntau</h2>
+    <table>
+      <tr>
+        <th>Spenntau</th>
+        <th>Type</th>
+        <th>Diameter [mm]</th>
+        <th>Areal [mm²]</th>
+        <th>Flyt [MPa]</th>
+        <th>Brudd [MPa]</th>
+        <th>Vekt [g/m]</th>
+        <th>E-Modul (+/-10)</th>
+      </tr>
+      <tr>
+        <td>T15</td>
+        <td>Normal</td>
+        <td>15,2</td>
+        <td>140</td>
+        <td>1640</td>
+        <td>1860</td>
+        <td>1,093</td>

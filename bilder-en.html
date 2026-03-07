@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Photos | Etterspenning.no</title>
+  <meta name="description" content="Photos and examples from post-tensioning and anchors: execution, equipment, grouting, stressing and sketches." />
+
+  <!-- Optional favicon -->
+  <link rel="icon" href="Logo.jpeg" type="image/jpeg" />
+  <link rel="apple-touch-icon" href="Logo.jpeg" />
+  <meta name="theme-color" content="#0b1220" />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    /* =========================
+       HEADER (same on all pages)
+       ========================= */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+
+    /* Language button (NO placeholder) */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+      color: var(--text);
+    }
+
+    /* Hamburger */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Drawer + overlay */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity: 1; pointer-events: auto;}
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* =========================
+       PAGE CONTENT (photos)
+       ========================= */
+    .hero{padding:28px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:84ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px;}
+    .chip{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      padding:8px 12px;
+      font-weight:700;
+      font-size:12px;
+      user-select:none;
+    }
+    .chip:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .chip.active{background: rgba(244,122,32,.12);border-color: rgba(244,122,32,.45);color: var(--text);}
+
+    .search{margin-left:auto;min-width:240px;flex:1 1 280px;max-width:420px;}
+    input[type="search"]{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(6,10,18,.55);
+      color:var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    input[type="search"]:focus{
+      border-color: rgba(244,122,32,.55);
+      box-shadow: 0 0 0 4px rgba(244,122,32,.10);
+    }
+
+    .notice{
+      margin-top:14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:12px;color: var(--muted);
+      line-height:1.5;font-size:13px;
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns: repeat(3, 1fr);margin-top:14px;}
+    @media (max-width: 980px){.grid{grid-template-columns: repeat(2, 1fr)}}
+    @media (max-width: 620px){.grid{grid-template-columns: 1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      cursor:pointer;
+    }
+    .thumb{
+      aspect-ratio: 16 / 10;
+      background: rgba(7,11,20,.35);
+      display:block;
+      width:100%;
+      object-fit: cover;
+    }
+    .body{padding:12px}
+    .title{font-weight:900;letter-spacing:-0.01em}
+    .meta{margin-top:6px;font-size:12px;color:var(--muted);line-height:1.45;}
+    .tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+    .tag{
+      font-size:11px;color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      padding:4px 8px;border-radius:999px;
+      background: rgba(7,11,20,.25);
+    }
+
+    /* Lightbox */
+    .lb{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.75);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index: 999;
+    }
+    .lb.open{display:flex}
+    .lbpanel{
+      max-width: 1100px;
+      width: min(1100px, 100%);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,24,.92);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .lbtop{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .lbtop .cap{color:var(--muted);font-size:12px}
+    .xbtn{
+      cursor:pointer;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:8px 10px;
+      background: rgba(16,26,47,.35);
+      color:var(--text);
+      font-weight:900;
+      line-height:1;
+    }
+    .xbtn:hover{border-color:rgba(255,255,255,.18)}
+    .lbimg{width:100%;height:auto;display:block;background: rgba(7,11,20,.35);}
+    .lbbody{padding:12px 14px;color: var(--muted);font-size:13px;line-height:1.55;}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER loaded from header-en.html -->
+<div id="siteHeader"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Photos</h1>
+    <p>
+      Examples from anchoring work: installation, grouting, stressing and equipment - plus sketches explaining build-up and load transfer.
+      Click a photo for larger view.
+    </p>
+
+    <div class="toolbar">
+      <div class="chip active" data-filter="all">All</div>
+      <div class="chip" data-filter="anchoring">Anchoring</div>
+      <div class="chip" data-filter="tools">Tools</div>
+      <div class="chip" data-filter="grouting">Grouting</div>
+      <div class="chip" data-filter="stressing">Stressing</div>
+
+      <div class="search">
+        <input id="search" type="search" placeholder="Search titles/descriptions ..." />
+      </div>
+    </div>
+
+    <div class="notice">
+      Tip: use filters to find relevant categories (anchoring / tools / grouting / stressing). You can also search for terms like "jack", "sheet pile", "anchor head", etc.
+    </div>
+  </section>
+
+  <div class="grid" id="gallery">
+    <!-- 1 -->
+    <article class="card" data-tags="anchoring stressing"
+      data-title="Monostrand in deck - reinforcement and routing"
+      data-desc="Monostrand installation in deck before casting. Visual control of routing, clearances, fixing points and interface to reinforcement.">
+      <img class="thumb" src="img/Mono-dekk.jpg" alt="Monostrand in deck - reinforcement and routing" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand in deck - reinforcement and routing</div>
+        <div class="meta">Pre-cast control: routing, fixing, clearances and a clean interface to reinforcement.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Anchoring</span><span class="tag">Stressing</span></div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="card" data-tags="tools stressing"
+      data-title="Jack/measurement - control during stressing"
+      data-desc="Close-up of stressing/measurement equipment. Focus: repeatable measurements, documentation and control of steps/values.">
+      <img class="thumb" src="img/Mono-jekk-kai.JPG" alt="Jack/measurement - control during stressing" loading="lazy" />
+      <div class="body">
+        <div class="title">Jack/measurement - control during stressing</div>
+        <div class="meta">Practical: clear readout and linkage to protocol/audit trail.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Tools</span><span class="tag">Stressing</span></div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="card" data-tags="anchoring"
+      data-title="Monostrand - splice/adaptation in deck"
+      data-desc="Splice/adaptation and handling in the field. Focus: orderly rigging, correct placement, protection and traceability.">
+      <img class="thumb" src="img/Mono-skjøt-dekk.png" alt="Monostrand - splice/adaptation in deck" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand - splice/adaptation in deck</div>
+        <div class="meta">Field execution: order and control reduce error rates.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Anchoring</span><span class="tag">Execution</span></div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article class="card" data-tags="anchoring"
+      data-title="Monostrand - strand/timber bridge"
+      data-desc="Overview image of monostrand/strand in project. Focus: handling, storage and protection before installation.">
+      <img class="thumb" src="img/Mono-trebru.JPG" alt="Monostrand - strand/timber bridge" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand - strand/timber bridge</div>
+        <div class="meta">Storage and handling: protection, order and proper transport to avoid damage.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Anchoring</span><span class="tag">Logistics</span></div>
+      </div>
+    </article>
+
+    <!-- NEW -->
+    <article class="card" data-tags="anchoring stressing"
+      data-title="Installation - installers at anchor head"
+      data-desc="Two installers during installation/rigging at the anchor head. Focus: correct setup, order and interface control in the field.">
+      <img class="thumb" src="img/forankring-top-personell.jpg" alt="Installation - installers at anchor head" loading="lazy" />
+      <div class="body">
+        <div class="title">Installation - installers at anchor head</div>
+        <div class="meta">Practical fieldwork: rigging, checkpoints and clearance before next steps.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Stressing</span><span class="tag">Execution</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Crane assistance during sheet-pile installation"
+      data-desc="Example of how a crane can be used to handle and position anchoring during installation in a sheet-pile wall.">
+      <img class="thumb" src="img/Forankring-kran-installasjon.jpg" alt="Crane assistance during sheet-pile installation" loading="lazy" />
+      <div class="body">
+        <div class="title">Crane assistance during sheet-pile installation</div>
+        <div class="meta">Handling and positioning: safer assembly and better control.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Sheet pile</span><span class="tag">Logistics</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring grouting"
+      data-title="Installed and grouted anchoring - Alesund"
+      data-desc="Anchoring after installation and grouting. Focus: protection and traceable documentation before any stressing.">
+      <img class="thumb" src="img/Forankring-Aalesund.JPG" alt="Installed and grouted anchoring - Alesund" loading="lazy" />
+      <div class="body">
+        <div class="title">Installed and grouted anchoring - Alesund</div>
+        <div class="meta">After grouting: protection, control and clear basis for further work.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Grouting</span><span class="tag">Execution</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Crane-assisted installation - permanent anchoring"
+      data-desc="Two people install permanent anchoring with crane support. Focus: safe handling, correct routing and geometry control.">
+      <img class="thumb" src="img/Forankring-installasjon.jpg" alt="Crane-assisted installation - permanent anchoring" loading="lazy" />
+      <div class="body">
+        <div class="title">Crane-assisted installation - permanent anchoring</div>
+        <div class="meta">Rigging and handling: correct positioning and less component damage.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Permanent</span><span class="tag">Execution</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="M1800 kN multi-strand jack"
+      data-desc="Example of an M1800 kN multi-strand jack. Relevant for stressing, calibration and control.">
+      <img class="thumb" src="img/Multi-TTM-jekk.jpg" alt="M1800 kN multi-strand jack" loading="lazy" />
+      <div class="body">
+        <div class="title">M1800 kN multi-strand jack</div>
+        <div class="meta">Equipment: capacity, couplings and practical use during stressing.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Jack</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Hydraulic pump for site work"
+      data-desc="Hydraulic pump used in the field. Focus: reliability, connections and control of pressure/load in operation.">
+      <img class="thumb" src="img/bilde1.JPG" alt="Hydraulic pump for site work" loading="lazy" />
+      <div class="body">
+        <div class="title">Hydraulic pump for site work</div>
+        <div class="meta">Power unit: hoses, couplings and practical site rigging.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Hydraulics</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Anchor head in concrete - sketch"
+      data-desc="Sketch showing anchor head build-up in concrete, including wedge plate, bearing washer and grout hoses.">
+      <img class="thumb" src="img/Forankring-betong-web.png" alt="Anchor head in concrete - sketch" loading="lazy" />
+      <div class="body">
+        <div class="title">Anchor head in concrete - sketch</div>
+        <div class="meta">Build-up: components, hoses and principles for sealing/protection.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Sketch</span><span class="tag">Detail</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Anchoring in sheet pile wall - sketch"
+      data-desc="Sketch showing anchoring in sheet pile wall/rock, including free length, anchor length and key distances.">
+      <img class="thumb" src="img/Forankring-spunt.png" alt="Anchoring in sheet pile wall - sketch" loading="lazy" />
+      <div class="body">
+        <div class="title">Anchoring in sheet pile wall - sketch</div>
+        <div class="meta">Geometry and principles: free length, anchor length and interface to sheet pile wall.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Sketch</span><span class="tag">Sheet pile</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Anchoring on site - field photo"
+      data-desc="Field photo from anchoring installation work. Focus: rig setup, work zone and execution control.">
+      <img class="thumb" src="img/forankring-anlegg-carl.jpg" alt="Anchoring on site - field photo" loading="lazy" />
+      <div class="body">
+        <div class="title">Anchoring on site - field photo</div>
+        <div class="meta">Practical field execution: overview of rigging and workflow.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Site work</span><span class="tag">Execution</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring stressing"
+      data-title="Monostrand in deck - detail photo"
+      data-desc="Detail image of monostrand in deck with focus on routing, protection and control before next production steps.">
+      <img class="thumb" src="img/Monostrand-deck.jpg" alt="Monostrand in deck - detail photo" loading="lazy" />
+      <div class="body">
+        <div class="title">Monostrand in deck - detail photo</div>
+        <div class="meta">Detail control: routing, clearances and clean interfaces.</div>
+        <div class="tagrow"><span class="tag">Monostrand</span><span class="tag">Anchoring</span><span class="tag">Stressing</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Transport of permanent anchoring"
+      data-desc="Example of transport/logistics for permanent anchoring before installation. Focus: protection, strapping and handling.">
+      <img class="thumb" src="img/Transport-perm-anchorage.jpg" alt="Transport of permanent anchoring" loading="lazy" />
+      <div class="body">
+        <div class="title">Transport of permanent anchoring</div>
+        <div class="meta">Logistics: safe handling reduces risk of component damage.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Transport</span><span class="tag">Logistics</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Transport of permanent anchoring - variant"
+      data-desc="Additional example of transport and storage of permanent anchoring in the field. Focus: order, labeling and traceability.">
+      <img class="thumb" src="img/Transport-perm-anchorage1.jpg" alt="Transport of permanent anchoring - variant" loading="lazy" />
+      <div class="body">
+        <div class="title">Transport of permanent anchoring - variant</div>
+        <div class="meta">Storage/transport: better control through labeling and clean setup.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Transport</span><span class="tag">Traceability</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Elongation measurement at jack"
+      data-desc="Measurement setup at the jack for elongation control during stressing. Focus: repeatable measurement and value documentation.">
+      <img class="thumb" src="img/Measuerment-elong-jack.jpg" alt="Elongation measurement at jack" loading="lazy" />
+      <div class="body">
+        <div class="title">Elongation measurement at jack</div>
+        <div class="meta">Stressing checkpoint: measurement, logging and comparison with requirements.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Measurement</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Hydraulic pump - detail"
+      data-desc="Detail photo of a hydraulic pump used in field work. Focus: connections, reliability and practical rig use.">
+      <img class="thumb" src="img/Hydraulisk-pumpe.jpg" alt="Hydraulic pump - detail" loading="lazy" />
+      <div class="body">
+        <div class="title">Hydraulic pump - detail</div>
+        <div class="meta">Power unit in practice: stable operation and pressure control.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Hydraulics</span><span class="tag">Stressing</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting tools"
+      data-title="Grout density control - 1 liter"
+      data-desc="Example of a simple grout quality check using a 1-liter volume. Used to verify consistency and mixing quality.">
+      <img class="thumb" src="img/one-liter-grout-weight.jpg" alt="Grout density control - 1 liter" loading="lazy" />
+      <div class="body">
+        <div class="title">Grout density control - 1 liter</div>
+        <div class="meta">Quality control: volume/weight gives a quick indicator of mix quality.</div>
+        <div class="tagrow"><span class="tag">Grouting</span><span class="tag">Control</span><span class="tag">Grout</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting"
+      data-title="Grout temperature test"
+      data-desc="Test setup for grout temperature during mixing/curing. Focus: process control and documentation of deviations.">
+      <img class="thumb" src="img/Temp-test-groutmass.jpg" alt="Grout temperature test" loading="lazy" />
+      <div class="body">
+        <div class="title">Grout temperature test</div>
+        <div class="meta">Grouting control: temperature measurement supports consistent quality.</div>
+        <div class="tagrow"><span class="tag">Grouting</span><span class="tag">Temperature</span><span class="tag">Quality</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Differences between anchoring types - sketch"
+      data-desc="Explanatory sketch showing principal differences between anchoring solutions and load transfer behavior.">
+      <img class="thumb" src="img/Diff-Forank-Forkl.png" alt="Differences between anchoring types - sketch" loading="lazy" />
+      <div class="body">
+        <div class="title">Differences between anchoring types - sketch</div>
+        <div class="meta">Principle sketch: useful for quick explanation of solution and function.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Sketch</span><span class="tag">Principle</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="2"
+      data-desc="Example image from the project archive: 2.">
+      <img class="thumb" src="img/2.jpeg" alt="2" loading="lazy" />
+      <div class="body">
+        <div class="title">2</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="4"
+      data-desc="Example image from the project archive: 4.">
+      <img class="thumb" src="img/4.jpeg" alt="4" loading="lazy" />
+      <div class="body">
+        <div class="title">4</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Aarstest Skraa Ror 1"
+      data-desc="Example image from the project archive: aarstest skraa ror 1.">
+      <img class="thumb" src="img/Aarstest-skraa-ror-1.jpeg" alt="Aarstest Skraa Ror 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Aarstest Skraa Ror 1</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Aarstest Skraa Ror 3"
+      data-desc="Example image from the project archive: aarstest skraa ror 3.">
+      <img class="thumb" src="img/Aarstest-skraa-ror-3.jpeg" alt="Aarstest Skraa Ror 3" loading="lazy" />
+      <div class="body">
+        <div class="title">Aarstest Skraa Ror 3</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Aarstest Skraa Ror 4"
+      data-desc="Example image from the project archive: aarstest skraa ror 4.">
+      <img class="thumb" src="img/Aarstest-skraa-ror-4.jpeg" alt="Aarstest Skraa Ror 4" loading="lazy" />
+      <div class="body">
+        <div class="title">Aarstest Skraa Ror 4</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting"
+      data-title="Kobling Injisering"
+      data-desc="Example image from the project archive: kobling injisering.">
+      <img class="thumb" src="img/Kobling-injisering.jpeg" alt="Kobling Injisering" loading="lazy" />
+      <div class="body">
+        <div class="title">Kobling Injisering</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Grouting</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring tools stressing"
+      data-title="Spenn Farlig 1"
+      data-desc="Example image from the project archive: spenn farlig 1.">
+      <img class="thumb" src="img/Spenn-farlig-1.jpeg" alt="Spenn Farlig 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Spenn Farlig 1</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Tools</span><span class="tag">Stressing</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Typisk oversvom2"
+      data-desc="Example image from the project archive: typisk oversvom2.">
+      <img class="thumb" src="img/Typisk-oversvom2.jpeg" alt="Typisk oversvom2" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk oversvom2</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Typisk oversvom3"
+      data-desc="Example image from the project archive: typisk oversvom3.">
+      <img class="thumb" src="img/Typisk-oversvom3.jpeg" alt="Typisk oversvom3" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk oversvom3</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Typisk oversvom4"
+      data-desc="Example image from the project archive: typisk oversvom4.">
+      <img class="thumb" src="img/Typisk-oversvom4.jpeg" alt="Typisk oversvom4" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk oversvom4</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring grouting"
+      data-title="Under Ankerhode Krympstromp"
+      data-desc="Example image from the project archive: under ankerhode krympstromp.">
+      <img class="thumb" src="img/Under-ankerhode-krympstromp.jpeg" alt="Under Ankerhode Krympstromp" loading="lazy" />
+      <div class="body">
+        <div class="title">Under Ankerhode Krympstromp</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Grouting</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="WhatsApp Image 2026 02 18 At 13.33.12"
+      data-desc="Example image from the project archive: whatsapp image 2026 02 18 at 13.33.12.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.33.12.jpeg" alt="WhatsApp Image 2026 02 18 At 13.33.12" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.33.12</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="WhatsApp Image 2026 02 18 At 13.44.17"
+      data-desc="Example image from the project archive: whatsapp image 2026 02 18 at 13.44.17.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.44.17.jpeg" alt="WhatsApp Image 2026 02 18 At 13.44.17" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.44.17</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="WhatsApp Image 2026 02 18 At 13.45.21"
+      data-desc="Example image from the project archive: whatsapp image 2026 02 18 at 13.45.21.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.45.21.jpeg" alt="WhatsApp Image 2026 02 18 At 13.45.21" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.45.21</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="WhatsApp Image 2026 02 18 At 13.45.22"
+      data-desc="Example image from the project archive: whatsapp image 2026 02 18 at 13.45.22.">
+      <img class="thumb" src="img/WhatsApp%20Image%202026-02-18%20at%2013.45.22.jpeg" alt="WhatsApp Image 2026 02 18 At 13.45.22" loading="lazy" />
+      <div class="body">
+        <div class="title">WhatsApp Image 2026 02 18 At 13.45.22</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Anker Loft 1"
+      data-desc="Example image from the project archive: anker loft 1.">
+      <img class="thumb" src="img/anker-loft-1.jpeg" alt="Anker Loft 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Anker Loft 1</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Anker Loft 2"
+      data-desc="Example image from the project archive: anker loft 2.">
+      <img class="thumb" src="img/anker-loft-2.jpeg" alt="Anker Loft 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Anker Loft 2</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Anker Loft 3"
+      data-desc="Example image from the project archive: anker loft 3.">
+      <img class="thumb" src="img/anker-loft-3.jpeg" alt="Anker Loft 3" loading="lazy" />
+      <div class="body">
+        <div class="title">Anker Loft 3</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Dobbel Jekk Spenn"
+      data-desc="Example image from the project archive: dobbel jekk spenn.">
+      <img class="thumb" src="img/dobbel-jekk-spenn.jpeg" alt="Dobbel Jekk Spenn" loading="lazy" />
+      <div class="body">
+        <div class="title">Dobbel Jekk Spenn</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring stressing"
+      data-title="Farligt"
+      data-desc="Example image from the project archive: farligt.">
+      <img class="thumb" src="img/farligt.jpeg" alt="Farligt" loading="lazy" />
+      <div class="body">
+        <div class="title">Farligt</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Forank Line Store Plater 1"
+      data-desc="Example image from the project archive: forank line store plater 1.">
+      <img class="thumb" src="img/forank-line-store-plater-1.jpeg" alt="Forank Line Store Plater 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Forank Line Store Plater 1</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Forank Line Store Plater 2"
+      data-desc="Example image from the project archive: forank line store plater 2.">
+      <img class="thumb" src="img/forank-line-store-plater-2.jpeg" alt="Forank Line Store Plater 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Forank Line Store Plater 2</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Oppspennings Range"
+      data-desc="Example image from the project archive: oppspennings range.">
+      <img class="thumb" src="img/oppspennings-range.jpeg" alt="Oppspennings Range" loading="lazy" />
+      <div class="body">
+        <div class="title">Oppspennings Range</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Passiv Linebrudd 1"
+      data-desc="Example image from the project archive: passiv linebrudd 1.">
+      <img class="thumb" src="img/passiv-linebrudd-1.jpeg" alt="Passiv Linebrudd 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Passiv Linebrudd 1</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Passiv Linebrudd 2"
+      data-desc="Example image from the project archive: passiv linebrudd 2.">
+      <img class="thumb" src="img/passiv-linebrudd-2.jpeg" alt="Passiv Linebrudd 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Passiv Linebrudd 2</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Stang Jekk 1"
+      data-desc="Example image from the project archive: stang jekk 1.">
+      <img class="thumb" src="img/stang-jekk-1.jpeg" alt="Stang Jekk 1" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 1</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Stang Jekk 2"
+      data-desc="Example image from the project archive: stang jekk 2.">
+      <img class="thumb" src="img/stang-jekk-2.jpeg" alt="Stang Jekk 2" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 2</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Stang Jekk 3"
+      data-desc="Example image from the project archive: stang jekk 3.">
+      <img class="thumb" src="img/stang-jekk-3.jpeg" alt="Stang Jekk 3" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 3</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="tools stressing"
+      data-title="Stang Jekk 4"
+      data-desc="Example image from the project archive: stang jekk 4.">
+      <img class="thumb" src="img/stang-jekk-4.jpeg" alt="Stang Jekk 4" loading="lazy" />
+      <div class="body">
+        <div class="title">Stang Jekk 4</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Tools</span><span class="tag">Stressing</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="grouting"
+      data-title="Terning Stoping"
+      data-desc="Example image from the project archive: terning stoping.">
+      <img class="thumb" src="img/terning-stoping.jpeg" alt="Terning Stoping" loading="lazy" />
+      <div class="body">
+        <div class="title">Terning Stoping</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Grouting</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-tags="anchoring"
+      data-title="Typisk Utfordring Oversvomming"
+      data-desc="Example image from the project archive: typisk utfordring oversvomming.">
+      <img class="thumb" src="img/typisk-utfordring-oversvomming.jpeg" alt="Typisk Utfordring Oversvomming" loading="lazy" />
+      <div class="body">
+        <div class="title">Typisk Utfordring Oversvomming</div>
+        <div class="meta">New image added to the gallery from field documentation.</div>
+        <div class="tagrow"><span class="tag">Anchoring</span><span class="tag">Photo</span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Photos. This website uses Google Analytics for anonymized traffic statistics. No cookies are used for marketing.
+  </footer>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" aria-hidden="true">
+  <div class="lbpanel" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="lbtop">
+      <div>
+        <div style="font-weight:900" id="lbTitle">—</div>
+        <div class="cap" id="lbTags">—</div>
+      </div>
+      <button class="xbtn" id="lbClose" type="button" aria-label="Close">×</button>
+    </div>
+    <img class="lbimg" id="lbImg" alt="" />
+    <div class="lbbody" id="lbDesc">—</div>
+  </div>
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇳🇴 NO";
+      langBtn.setAttribute("aria-label", "Switch to Norwegian");
+      langBtn.setAttribute("title", "Switch to Norwegian");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "bilder.html";
+      });
+    }
+  }
+
+  // ======= Load header-en.html + set active menu =======
+  (async function(){
+    const host = document.getElementById("siteHeader");
+    if(!host) return;
+
+    try{
+      const res = await fetch("header-en.html", { cache: "no-store" });
+      host.innerHTML = await res.text();
+      initHeaderUi();
+
+      // Set active "Photos" in both desktop and drawer nav
+      const current = "bilder-en.html";
+      host.querySelectorAll('a.navlink, .drawer-nav a').forEach(a=>{
+        const href = (a.getAttribute("href") || "").trim();
+        if(href === current){
+          a.classList.add("active");
+        } else if(href){
+          a.classList.remove("active");
+        }
+      });
+
+    }catch(err){
+      console.warn("Could not load header-en.html:", err);
+    }
+  })();
+
+  // ========= Filter + search =========
+  const chips = Array.from(document.querySelectorAll(".chip"));
+  const cards = Array.from(document.querySelectorAll(".card"));
+  const search = document.getElementById("search");
+
+  let activeFilter = "all";
+
+  function normalize(s){ return (s || "").toLowerCase().trim(); }
+
+  function matches(card){
+    const tags = (card.getAttribute("data-tags") || "").split(/\s+/).map(normalize);
+    const title = normalize(card.getAttribute("data-title"));
+    const desc  = normalize(card.getAttribute("data-desc"));
+    const q = normalize(search.value);
+
+    const okFilter = (activeFilter === "all") || tags.includes(activeFilter);
+    const okSearch = !q || title.includes(q) || desc.includes(q) || tags.join(" ").includes(q);
+
+    return okFilter && okSearch;
+  }
+
+  function apply(){
+    cards.forEach(c => {
+      c.style.display = matches(c) ? "" : "none";
+    });
+  }
+
+  chips.forEach(ch => {
+    ch.addEventListener("click", () => {
+      chips.forEach(x => x.classList.remove("active"));
+      ch.classList.add("active");
+      activeFilter = ch.getAttribute("data-filter");
+      apply();
+    });
+  });
+
+  search.addEventListener("input", apply);
+
+  // ========= Lightbox =========
+  const lb = document.getElementById("lb");
+  const lbImg = document.getElementById("lbImg");
+  const lbTitle = document.getElementById("lbTitle");
+  const lbTags = document.getElementById("lbTags");
+  const lbDesc = document.getElementById("lbDesc");
+  const lbClose = document.getElementById("lbClose");
+
+  function openLB(card){
+    const img = card.querySelector("img");
+    const src = img.getAttribute("src");
+    const alt = img.getAttribute("alt") || "";
+
+    const title = card.getAttribute("data-title") || alt || "Image";
+    const tags = (card.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
+    const desc = card.getAttribute("data-desc") || "";
+
+    lbTitle.textContent = title;
+    lbTags.textContent = tags.length ? ("Tags: " + tags.join(", ")) : "";
+    lbDesc.textContent = desc;
+
+    lbImg.src = src;
+    lbImg.alt = alt;
+
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+  }
+
+  function closeLB(){
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden", "true");
+    lbImg.src = "";
+  }
+
+  cards.forEach(card => card.addEventListener("click", () => openLB(card)));
+  lbClose.addEventListener("click", closeLB);
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLB(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLB(); });
+
+  apply();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tools | Etterspenning.no</title>
+  <meta name="description" content="Tools and equipment for post-tensioning and anchors: jacks, pumps, hoses, measurements, grouting, calibration and control points." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    /* ===== HEADER + NAV + DRAWER (identical to index.html) ===== */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    /* Brand (left) */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
+    }
+
+    /* image logo */
+    .logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .logo img{
+      height: 38px;
+      width: auto;
+      display:block;
+      border-radius: 10px;
+    }
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger button (hidden on desktop) */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Overlay + off-canvas */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    /* Mobile: show hamburger, hide desktop nav */
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* Language button (same as index) */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    /* ---------- Page content ---------- */
+    .hero{padding:28px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:82ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns: 1.15fr .85fr;align-items:start;margin-top:14px}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{
+      margin:0 0 6px;
+      font-size:14px;
+      letter-spacing:-0.01em;
+    }
+    .section p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    ul{margin:10px 0 0 18px;color:var(--muted);font-size:13px;line-height:1.55}
+    li{margin:6px 0}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    .notice{
+      border-radius:14px;
+      border:1px solid rgba(244,122,32,.35);
+      background: rgba(244,122,32,.10);
+      padding:12px;
+      color: var(--text);
+      line-height:1.45;
+      font-size:13px;
+    }
+    .good{
+      border-radius:14px;
+      border:1px solid rgba(139,185,61,.35);
+      background: rgba(139,185,61,.10);
+      padding:12px;
+      color: var(--text);
+      line-height:1.45;
+      font-size:13px;
+    }
+
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:700;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media (max-width:620px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:13px;font-weight:800;margin-top:6px}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+
+<!-- Header loaded from the same source as index -->
+<div id="site-header"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Tools</h1>
+    <p>
+      Good equipment is not only about capacity, but also <strong>traceability</strong>, <strong>repeatability</strong> and
+      <strong>safe execution</strong>. This is a practical overview of typical equipment for post-tensioning and anchors,
+      with focus on control points that reduce errors and downtime.
+    </p>
+
+    <div class="pillrow">
+      <div class="pill">Jacks and pumps</div>
+      <div class="pill">Measuring instruments</div>
+      <div class="pill">Measurement: pressure gauge / load cell</div>
+      <div class="pill">Grouting and testing</div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- MAIN CONTENT -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Equipment and control points</h2>
+          <small>Execution-focused checklist for field crew and project manager</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section">
+          <h3>Grouting equipment</h3>
+          <p>
+            Grouting is often where quality is won or lost. Focus on repeatable mixing, parameter control and
+            proper cleaning/maintenance.
+          </p>
+          <ul>
+            <li>Before grouting starts, perform a 3-hour test, spread plate and cup test, plus density/weight check.</li>
+            <li>Clean machine and hose at least every 4 hours.</li>
+            <li>Use a routine for measuring water volume, mixing time, temperature and consistency.</li>
+            <li>Clean immediately after use - cement residue damages valves and hoses.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Stressing jack</h3>
+          <p>
+            The jack is the central force source in stressing work. What matters is not only nominal capacity,
+            but also that applied force can be kept stable so measurement and documentation remain reliable over time.
+          </p>
+          <ul>
+            <li>Check capacity, stroke length, wedges (wear/grip), and that the jack runs smoothly without jerks.</li>
+            <li>Check for leaks at seals and connections before use.</li>
+            <li>Verify that the master wedges in the jack are not damaged or dirty.</li>
+            <li>Log serial number and linkage to project/protocol.</li>
+            <li>Verify calibration certificate, max 12 months old.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Pump (hydraulic power pack)</h3>
+          <p>
+            The pump must deliver stable pressure and flow. The most common field failures come from hoses/couplings,
+            oil contamination or incorrect pressure-relief handling.
+          </p>
+          <ul>
+            <li>Check oil level and confirm pressure relief is working.</li>
+            <li>Check that the pressure gauge is readable and physically protected.</li>
+            <li>Let the pump warm up before stressing in cold weather.</li>
+            <li>Verify correct connection on both jack and pump - wrong coupling can be life-threatening.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Hoses, couplings and safety equipment</h3>
+          <p>
+            Hoses are often a weak link. A hose rupture under pressure is a serious incident.
+          </p>
+          <ul>
+            <li>Visual inspection: cracks, bulges, kinks, abrasion against reinforcement/concrete edges.</li>
+            <li>Check locking ring/clips on quick couplings - always use correct safety retention.</li>
+            <li>Use hose protection where there is risk of impact or splash.</li>
+            <li>Keep absorbent mats available where leakage risk exists.</li>
+            <li>Keep personnel out of the line of hoses and jacks under pressure.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Force measurement: pressure gauge vs. load cell</h3>
+          <p>
+            Traditionally, force is calculated from pressure (gauge) and a calibrated area ratio.
+            A more robust solution is a load cell that measures force directly.
+          </p>
+          <ul>
+            <li><strong>Pressure gauge:</strong> requires stable calibration of jack/pump/gauge as one system.</li>
+            <li><strong>Load cell:</strong> provides direct force measurement and can reduce cross-equipment calibration dependency.</li>
+            <li>Regardless of method: traceable calibration and a deviation-handling routine are critical.</li>
+            <li>Maximum 12 months since last calibration, and total system deviation should remain within project acceptance limits.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Measurement instrument for stressing</h3>
+          <p>
+            Accurate elongation measurement is critical and often decisive for whether an anchor is accepted or rejected.
+          </p>
+          <ul>
+            <li>The instrument should be protected against weather and mechanical impact (rain, wind, shocks).</li>
+            <li>Calibration with traceability is essential for verifiable documentation.</li>
+            <li>Not all digital instruments tolerate rain or low temperatures - verify IP rating and operating temperature.</li>
+          </ul>
+        </div>
+
+        <div class="section" id="offerTools">
+          <h3>Additional equipment on request</h3>
+          <p>
+            Specify what should be quoted together with the work. Equipment is delivered in accordance with Publication No. 14,
+            NS EN 447 and NS EN ISO 22477-5.
+          </p>
+          <p style="margin-top:8px;color:var(--muted);font-size:13px;line-height:1.55">
+            Enter the quantities you want quoted. For <strong>1 meter duct (without strand)</strong>, supply is in sets of 3 pcs.
+          </p>
+          <div class="kpi" style="grid-template-columns: 1.4fr .6fr; margin-top:10px">
+            <div class="box">
+              <div class="lab">Weight scale</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Weight scale" />
+            </div>
+            <div class="box">
+              <div class="lab">Liter measure</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Liter measure" />
+            </div>
+            <div class="box">
+              <div class="lab">Thermometer</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Thermometer" />
+            </div>
+            <div class="box">
+              <div class="lab">Dial gauge (extra long)</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Dial gauge (extra long)" />
+            </div>
+            <div class="box">
+              <div class="lab">Magnetic base</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Magnetic base" />
+            </div>
+            <div class="box">
+              <div class="lab">Tripod</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Tripod" />
+            </div>
+            <div class="box">
+              <div class="lab">Spread plate</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Spread plate" />
+            </div>
+            <div class="box">
+              <div class="lab">Cup</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Cup" />
+            </div>
+            <div class="box">
+              <div class="lab">T-piece</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="T-piece" />
+            </div>
+            <div class="box">
+              <div class="lab">Sieve</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Sieve" />
+            </div>
+            <div class="box">
+              <div class="lab">Cubes (100x100x100 mm)</div>
+              <input type="number" min="0" step="1" placeholder="Quantity" data-offer="Cubes (100x100x100 mm)" />
+            </div>
+            <div class="box">
+              <div class="lab">1 meter duct (without strand)</div>
+              <input type="number" min="0" step="1" placeholder="Quantity sets (of 3 pcs)" data-offer="1 meter duct (without strand)" data-unit="set of 3 pcs" />
+            </div>
+          </div>
+          <div class="btnrow" style="margin-top:12px">
+            <button class="btn secondary" type="button" id="btnToolsOffer">Request quote</button>
+          </div>
+          <div class="notice" id="toolsOfferResult" style="margin-top:10px;display:none"></div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="notice">
+          <strong>Practical recommendation:</strong> Store equipment at stable temperature and protected from rain, dust and splash (welding/grinding).
+          Connect equipment the day before stressing and verify function. Check calibration certificates against the actual delivered equipment.
+        </div>
+
+        <div class="btnrow">
+          <a class="btn primary" href="data-en.html">Data & calculations</a>
+          <a class="btn secondary" href="software-en.html">Software / protocols</a>
+          <a class="btn" href="kontakt-en.html">Contact</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Control & operations</h2>
+          <small>Quick field overview</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Before stressing</div>
+            <div class="val">Calibration OK · correct equipment · hoses inspected · safety zone established</div>
+          </div>
+          <div class="box">
+            <div class="lab">During stressing</div>
+            <div class="val">Stepwise load · ΔL measurement · deviation limit defined · protocol logging</div>
+          </div>
+          <div class="box">
+            <div class="lab">After stressing</div>
+            <div class="val">Protocol signed · sent to project manager · equipment packed and stored safely</div>
+          </div>
+          <div class="box">
+            <div class="lab">Grouting</div>
+            <div class="val">Water/mass/time log · consistency/temperature · samples · immediate cleaning</div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="good">
+          <strong>Tip for fewer stoppages:</strong>
+          Digitize checklists. Fewer field variants usually means a lower error rate.
+        </div>
+
+        <div class="sep"></div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Tools. This website uses Google Analytics for anonymized traffic statistics. No cookies are used for marketing.
+  </footer>
+
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇳🇴 NO";
+      langBtn.setAttribute("aria-label", "Switch to Norwegian");
+      langBtn.setAttribute("title", "Switch to Norwegian");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "verktoy.html";
+      });
+    }
+  }
+
+  // Include header-en.html and set the correct active link automatically (desktop + mobile)
+  (async function () {
+    const mount = document.getElementById("site-header");
+    if (!mount) return;
+
+    try{
+      const res = await fetch("header-en.html", { cache: "no-cache" });
+      if (!res.ok) return;
+      mount.innerHTML = await res.text();
+      initHeaderUi();
+
+      const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+
+      // Desktop
+      mount.querySelectorAll("nav.primary a.navlink").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+
+      // Mobile
+      mount.querySelectorAll(".drawer-nav a").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+    }catch(e){
+      console.warn("Could not load header-en.html", e);
+    }
+  })();
+
+  function initToolsOffer(){
+    const btn = document.getElementById("btnToolsOffer");
+    const result = document.getElementById("toolsOfferResult");
+    if (!btn || !result) return;
+
+    btn.addEventListener("click", () => {
+      const inputs = Array.from(document.querySelectorAll("[data-offer]"));
+      const picked = [];
+      inputs.forEach(input => {
+        const raw = (input.value || "").toString().trim();
+        const qty = parseInt(raw, 10);
+        if (!Number.isFinite(qty) || qty <= 0) return;
+        const name = input.getAttribute("data-offer") || "Equipment";
+        const unit = input.getAttribute("data-unit");
+        const line = unit ? `${name}: ${qty} ${unit}` : `${name}: ${qty} pcs`;
+        picked.push(line);
+      });
+
+      if (picked.length === 0){
+        result.style.display = "block";
+        result.textContent = "No equipment selected. Enter quantity before requesting a quote.";
+        return;
+      }
+
+      result.style.display = "block";
+      result.innerHTML = `<strong>Quote for additional equipment:</strong><br>${picked.join("<br>")}`;
+
+      const subject = "Quote for additional equipment";
+      const body = [
+        "Hello,",
+        "",
+        "I would like a quote for the following additional equipment:",
+        ...picked.map(line => `- ${line}`),
+        "",
+        "Regards,",
+        ""
+      ].join("\n");
+      const mailto = `mailto:jan@etterspenning.no?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    });
+  }
+
+  initToolsOffer();
+</script>
+
+</body>
+</html>

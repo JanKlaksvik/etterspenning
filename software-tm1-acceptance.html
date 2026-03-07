@@ -1,0 +1,2409 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - TM1 Acceptance Plan | Etterspenning.no</title>
+  <meta name="description" content="TM1 Acceptance planleggingsside for prosjektleder: lengder, laster og testoppsett." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+      --danger:#ff6b6b;
+      --ok:#8bb93d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(10px);
+      background:rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1180px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+    .brandtitle{font-weight:900;letter-spacing:.2px}
+    .brandsub{font-size:12px;color:var(--muted)}
+
+    nav.primary{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background:rgba(244,122,32,.12);border-color:rgba(244,122,32,.45);color:var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;justify-content:center;
+      width:44px;height:44px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;left:0;right:0;height:2px;background:var(--text);border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.45);
+      opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;
+    }
+    .overlay.open{opacity:1;pointer-events:auto}
+    .drawer{
+      position:fixed;top:0;right:0;height:100%;
+      width:min(84vw, 340px);
+      background:rgba(7,11,20,.96);
+      border-left:1px solid rgba(255,255,255,.12);
+      box-shadow:-18px 0 40px rgba(0,0,0,.35);
+      transform:translateX(102%);
+      transition:transform .22s ease;
+      z-index:100;
+      display:flex;flex-direction:column;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{background:rgba(244,122,32,.12);border-color:rgba(244,122,32,.45)}
+
+    @media (max-width:720px){
+      nav.primary{display:none}
+      .menu-btn{display:flex}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px}
+    }
+
+    .hero{padding:24px 0 10px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size:clamp(24px, 3.2vw, 40px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:96ch;
+      line-height:1.55;
+      font-size:15px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:1.15fr .85fr;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width:1080px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 8px;font-size:14px;letter-spacing:-0.01em}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    @media (max-width:900px){
+      .row,.row3{grid-template-columns:1fr}
+    }
+
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      outline:none;
+      width:100%;
+      max-width:100%;
+    }
+    textarea{resize:vertical;min-height:86px}
+    input:focus, select:focus, textarea:focus{border-color:rgba(244,122,32,.55)}
+
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
+    .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background:rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color:rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background:linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color:rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.ghost{background:rgba(16,26,47,.28)}
+    .btn.danger{
+      background:rgba(255,90,90,.12);
+      border-color:rgba(255,90,90,.35);
+    }
+    .btn[aria-disabled="true"]{opacity:.5;pointer-events:none}
+
+    .kpi{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-top:8px;
+    }
+    .kpi .box{
+      padding:10px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:14px;font-weight:900;margin-top:4px;overflow-wrap:anywhere}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.25);
+      margin-top:8px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+      font-size:13px;
+    }
+    tbody tr:last-child td{border-bottom:none}
+
+    .rowActions{display:flex;flex-wrap:wrap;gap:8px}
+    .smallBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.45);
+      color:var(--text);
+      border-radius:10px;
+      padding:6px 9px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .smallBtn:hover{border-color:rgba(255,255,255,.18)}
+
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+    .hidden{display:none !important}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - TM1 Acceptance Plan</div>
+        <div class="brandsub" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="openMenu" aria-label="Apne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktoy</a>
+      <a class="navlink active" href="software.html">Software</a>
+      <a class="navlink" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktoy</a>
+    <a class="active" href="software.html">Software</a>
+    <a href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap" id="guardView">
+  <section class="hero">
+    <h1>Firma-innlogging</h1>
+    <p>
+      TM1 Acceptance krever Level 2. Logg inn med firma-konto for a sjekke tilgang.
+    </p>
+  </section>
+
+  <div class="card" style="max-width:560px">
+    <div class="cardhead">
+      <div>
+        <h2>Innlogging</h2>
+        <small>Tilgang etter betalt nivaa</small>
+      </div>
+    </div>
+    <div class="cardbody">
+      <form id="pmLoginForm" style="display:grid;gap:10px" autocomplete="off">
+        <label>
+          <span class="lab">E-post</span>
+          <input id="pmUser" type="email" required placeholder="pm@firma.no">
+        </label>
+        <label>
+          <span class="lab">Passord</span>
+          <input id="pmPass" type="password" required placeholder="********">
+        </label>
+        <button class="btn primary" type="submit" style="justify-content:center">Logg inn</button>
+      </form>
+
+      <div class="hint" style="margin-top:10px">
+        Innlogging styres av backend/API og tilgangsnivaa per firma.
+      </div>
+      <div id="loginMsg" class="msg hidden"></div>
+      <div class="actions hidden" id="guardActions">
+        <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+        <a class="btn secondary" href="software-injisering.html">Injisering</a>
+        <button class="btn" id="guardLogoutBtn" type="button">Logg ut</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - TM1 Acceptance Plan (lukket). Ingen markedsforing-cookies.
+  </footer>
+</div>
+
+<div class="wrap" id="appView" hidden>
+  <section class="hero">
+    <h1>TM1 Acceptance - Planlegging</h1>
+    <p>
+      Prosjektleder setter opp testgrunnlag med lengder, laster og kriterier iht. NS-EN ISO 22477-5:2018 (TM1 Acceptance).
+      Feltpersonell registrerer resultatene pa egen felt-side under stressing.
+    </p>
+    <div class="hint" id="accessInfo"></div>
+    <div class="actions">
+      <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+      <a class="btn secondary" id="openFieldPageBtn" href="software-tm1-acceptance-field.html" aria-disabled="true">Aapne TM1 Feltark</a>
+      <button class="btn ghost" id="logoutBtn" type="button">Logg ut</button>
+    </div>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+        <div class="cardhead">
+          <div>
+            <h2>Planinput</h2>
+            <small>Velg prosjekt og legg inn TM1 Acceptance ankere</small>
+          </div>
+        </div>
+      <div class="cardbody">
+        <div class="section">
+	          <div class="row">
+	            <label>
+	              <span class="lab">Prosjekt</span>
+	              <select id="projectSelect">
+	                <option value="">Velg stressing-prosjekt...</option>
+	              </select>
+	            </label>
+	          </div>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn" id="loadProjectBtn" type="button">Hent prosjekt</button>
+            <a class="btn secondary" id="openInjiseringLink" href="software-injisering.html">Aapne Injisering</a>
+          </div>
+          <div class="hint" id="projectSelectHint">Kun prosjekter med stressing-modul vises.</div>
+          <input id="currentProjectId" type="hidden" value="">
+        </div>
+
+        <form id="planForm">
+          <div class="section">
+            <h3>Felles grunndata (samme for flere ankere)</h3>
+
+            <div class="row">
+              <label>
+                <span class="lab">Jekk brukt i test *</span>
+                <select id="planJackId" required>
+                  <option value="">Velg jekk fra prosjekt...</option>
+                </select>
+              </label>
+              <label>
+                <span class="lab">Grunnforhold / jordtype</span>
+                <select id="planSoilType">
+                  <option value="coarse">Coarse soil and rock</option>
+                  <option value="fine">Fine soil</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">E-modul (N/mm2)</span>
+                <input id="planEModulusNPerMm2" type="number" min="1" step="1" value="195000" placeholder="f.eks. 195000">
+              </label>
+              <label>
+                <span class="lab">Delta-grense</span>
+                <input id="criteriaDelta" type="text" readonly placeholder="-">
+              </label>
+              <label>
+                <span class="lab">Ankerpunkt i jekk (mm)</span>
+                <input id="planJackAnchorPointMm" type="text" readonly placeholder="-">
+              </label>
+            </div>
+
+            <div class="row" style="margin-top:10px">
+              <label>
+                <span class="lab">Staaltype</span>
+                <select id="planSteelType">
+                  <option value="strands">Spenntau</option>
+                  <option value="bar">Spennstang</option>
+                </select>
+              </label>
+              <label>
+                <span class="lab">Total stalareal (mm2)</span>
+                <input id="planSteelAreaMm2" type="number" min="0" step="0.01" readonly placeholder="Beregnes automatisk">
+              </label>
+            </div>
+
+            <div class="row" id="planStrandsWrap" style="margin-top:10px">
+              <label>
+                <span class="lab">Antall strands</span>
+                <input id="planStrandCount" type="number" min="1" step="1" placeholder="f.eks. 12">
+              </label>
+              <label>
+                <span class="lab">Tverrsnitt per strand (mm2)</span>
+                <select id="planStrandAreaMm2">
+                  <option value="">Velg</option>
+                  <option value="140">140</option>
+                  <option value="150">150</option>
+                  <option value="165">165</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row hidden" id="planBarWrap" style="margin-top:10px;grid-template-columns:1fr">
+              <label>
+                <span class="lab">Tverrsnitt bar (mm2)</span>
+                <select id="planBarAreaMm2">
+                  <option value="">Velg</option>
+                  <option value="140">140</option>
+                  <option value="150">150</option>
+                  <option value="165">165</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="hint" style="margin-top:10px">
+              Felles grunndata beholdes naar du lagrer/nullstiller, slik at du raskt kan legge inn flere ankere i samme prosjekt.
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>TM1 Acceptance testdata (per anker)</h3>
+
+            <div class="row3">
+              <label>
+                <span class="lab">Anker/Test-ID *</span>
+                <input id="planAnchorId" type="text" required placeholder="f.eks. A12-TM1-ACC">
+              </label>
+              <label>
+                <span class="lab">Fri lengde Lf (m) *</span>
+                <input id="planFreeLengthM" type="number" min="0" step="0.01" required placeholder="f.eks. 12.50">
+              </label>
+              <label>
+                <span class="lab">Forankret lengde Lb (m) *</span>
+                <input id="planBondLengthM" type="number" min="0" step="0.01" required placeholder="f.eks. 8.00">
+              </label>
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Proof load Pp (kN) *</span>
+                <input id="planProofLoad" type="number" min="1" step="1" required placeholder="f.eks. 1200">
+              </label>
+              <label>
+                <span class="lab">Datum load Pa (kN)</span>
+                <input id="planDatumLoad" type="number" min="0" step="1" placeholder="tom = 10% av Pp">
+              </label>
+              <label>
+                <span class="lab">Lock-off load P0 (kN) *</span>
+                <input id="planLockOffLoad" type="number" min="0" step="1" required placeholder="f.eks. 700">
+              </label>
+            </div>
+
+            <label style="margin-top:10px">
+              <span class="lab">Kommentar *</span>
+              <input id="planComment" type="text" required placeholder="f.eks. Krever utvidet observasjon ved behov">
+            </label>
+
+            <input id="editingPlanId" type="hidden" value="">
+
+            <div class="kpi" style="margin-top:10px">
+              <div class="box">
+                <div class="lab" id="criteriaPaLabel">Beregnet Pa</div>
+                <div class="val" id="criteriaPa">-</div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn primary" id="savePlanBtn" type="submit">Lagre anker</button>
+              <button class="btn secondary" id="duplicateAnchorBtn" type="button">+ Nytt anker</button>
+              <button class="btn" id="resetPlanBtn" type="button">Nullstill</button>
+              <button class="btn danger hidden" id="cancelEditPlanBtn" type="button">Avbryt redigering</button>
+            </div>
+            <div id="planMsg" class="msg hidden"></div>
+          </div>
+        </form>
+
+        <div class="section">
+          <h3>Forhandsvisning av lastetrinn (TM1 Acceptance)</h3>
+          <table aria-label="Forhandsvisning TM1 steps">
+            <thead>
+              <tr>
+                <th style="width:16%">Steg</th>
+                <th style="width:28%">Last i %</th>
+                <th style="width:28%">Last (kN)</th>
+                <th style="width:28%">Beregnet forl. (mm)</th>
+              </tr>
+            </thead>
+            <tbody id="stepPreviewRows"></tbody>
+          </table>
+          <div class="hint">Steg: Pa, 0.40Pp, 0.55Pp, 0.70Pp, 0.85Pp, 1.00Pp og P0 (lock load). Beregnet elongasjon er elastisk verdi basert pa Lf + jekk ankerpunkt.</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Ankere i valgt prosjekt</h2>
+          <small>Alle ankere tilhorer samme TM1-plan for prosjektet</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Prosjektnavn</div>
+            <div class="val" id="metaName">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Prosjektnummer</div>
+            <div class="val mono" id="metaNumber">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Prosjektstatus</div>
+            <div class="val" id="metaStatus">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Ankere i plan</div>
+            <div class="val" id="metaPlansCount">0</div>
+          </div>
+        </div>
+
+        <table aria-label="TM1 plans">
+          <thead>
+            <tr>
+              <th style="width:28%">Anker/Test</th>
+              <th style="width:28%">Laster</th>
+              <th style="width:18%">Oppdatert</th>
+              <th style="width:26%">Handling</th>
+            </tr>
+          </thead>
+          <tbody id="planRows"></tbody>
+        </table>
+        <div id="listMsg" class="msg" style="margin-top:10px">Velg prosjekt for a vise ankere.</div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - TM1 Acceptance Plan (prosjektleder).
+  </footer>
+</div>
+
+<script>
+  (function initMenu(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+  })();
+</script>
+
+<script src="company-branding.js"></script>
+<script>
+  const STORAGE = {
+    auth: "esp_pm_auth_v1",
+    projects: "esp_pm_projects_v1",
+    jacks: "esp_pm_jacks_v1"
+  };
+  const DEFAULT_STEEL_E_N_PER_MM2 = 195000;
+  const ALLOWED_CROSS_SECTION_MM2 = [140, 150, 165];
+
+  const ACCESS_CONFIG = {
+    hours: 12
+  };
+  const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+
+  function modulesForTier(tier){
+    const level2 = tier === "level2";
+    return {
+      projectHandling: true,
+      grouting: true,
+      stressing: level2,
+      jackData: level2
+    };
+  }
+
+  function tierLabel(tier){
+    return tier === "level2" ? "Level 2" : "Level 1";
+  }
+
+  function parseEpochMs(value){
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string"){
+      const parsed = Date.parse(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  function normalizeSession(session){
+    if (!session || typeof session !== "object") return null;
+    const tier = session.tier === "level2" ? "level2" : "level1";
+    const expiresAtMs = parseEpochMs(session.expiresAt);
+    if (!expiresAtMs) return null;
+    const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+    return {
+      ...session,
+      tier,
+      modules: {
+        ...modulesForTier(tier),
+        ...incomingModules,
+        projectHandling: true,
+        grouting: true
+      },
+      loginAt: session.loginAt || new Date().toISOString(),
+      expiresAt: expiresAtMs
+    };
+  }
+
+  function migrateLegacySession(raw){
+    if (!raw || raw.role !== "project_manager") return null;
+    const migrated = normalizeSession({
+      type: "company_access",
+      companyId: "legacy-pm",
+      companyName: "Legacy prosjektleder",
+      tier: "level2",
+      email: "",
+      modules: modulesForTier("level2"),
+      loginAt: raw.loginAt || new Date().toISOString(),
+      expiresAt: raw.expiresAt || (Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000))
+    });
+    if (!migrated) return null;
+    writeJson(STORAGE.auth, migrated);
+    return migrated;
+  }
+
+  function apiUrl(path){
+    return API_BASE + "/" + path.replace(/^\/+/, "");
+  }
+
+  async function requestApi(path, options){
+    const opts = options || {};
+    const headers = {};
+    if (opts.body) headers["Content-Type"] = "application/json";
+
+    const res = await fetch(apiUrl(path), {
+      method: opts.method || "GET",
+      credentials: "include",
+      headers,
+      body: opts.body
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {}
+
+    if (!res.ok || !data || data.ok === false) {
+      const msg = (data && (data.error || data.message))
+        ? (data.error || data.message)
+        : ("HTTP " + res.status);
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  function isLocalPreviewHost(){
+    const host = (window.location.hostname || "").toLowerCase();
+    if (window.location.protocol === "file:") return true;
+    if (!host) return true;
+    if (host === "etterspenning.no" || host.endsWith(".etterspenning.no")) return false;
+    return true;
+  }
+
+  function previewFallbackSession(email){
+    const nowIso = new Date().toISOString();
+    return {
+      type: "company_access",
+      userId: 0,
+      name: "Preview bruker",
+      fullName: "Preview bruker",
+      email: (email || "preview@local").toString().trim().toLowerCase(),
+      role: "admin",
+      companyId: "preview-local",
+      companyName: "Preview firma",
+      companyLogo: "",
+      tier: "level2",
+      tierLabel: "Level 2",
+      modules: {
+        projectHandling: true,
+        grouting: true,
+        stressing: true,
+        jackData: true,
+        jackControl: true
+      },
+      previewMode: true,
+      loginAt: nowIso,
+      expiresAt: Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000)
+    };
+  }
+
+  function writeSession(session){
+    const normalized = normalizeSession(session);
+    if (!normalized) return null;
+    writeJson(STORAGE.auth, normalized);
+    return normalized;
+  }
+
+  function clearSession(){
+    localStorage.removeItem(STORAGE.auth);
+  }
+
+  async function refreshSessionFromApi(){
+    try {
+      const data = await requestApi("me.php");
+      if (!data.authenticated || !data.session) {
+        clearSession();
+        return null;
+      }
+      return writeSession(data.session);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function loginViaApi(email, password){
+    try {
+      const data = await requestApi("login.php", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
+      });
+      const session = writeSession(data.session);
+      if (!session) throw new Error("Ugyldig sesjon fra server.");
+      return session;
+    } catch (err) {
+      if (!isLocalPreviewHost()) throw err;
+      const fallback = writeSession(previewFallbackSession(email));
+      if (!fallback) throw err;
+      return fallback;
+    }
+  }
+
+  function $(id){ return document.getElementById(id); }
+
+  function readJson(key, fallback){
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function companyScopeId(){
+    const session = getSession();
+    const raw = session && session.companyId !== undefined && session.companyId !== null
+      ? String(session.companyId).trim()
+      : "";
+    return raw || "no_company";
+  }
+
+  function scopedStorageKey(baseKey){
+    return baseKey + "__company_" + companyScopeId();
+  }
+
+  function projectsStorageKey(){
+    return scopedStorageKey(STORAGE.projects);
+  }
+
+  function jacksStorageKey(){
+    return scopedStorageKey(STORAGE.jacks);
+  }
+
+  function isLegacyCompanyScope(){
+    return companyScopeId() === "legacy-pm";
+  }
+
+  function migrateScopedArrayStore(scopedKey, legacyKey){
+    if (!isLegacyCompanyScope()) return;
+    if (localStorage.getItem(scopedKey) !== null) return;
+
+    const markerKey = legacyKey + "__scoped_v1_migrated";
+    if (localStorage.getItem(markerKey) === "1") return;
+
+    const legacyValue = readJson(legacyKey, null);
+    if (Array.isArray(legacyValue)) {
+      writeJson(scopedKey, legacyValue);
+      localStorage.setItem(markerKey, "1");
+    }
+  }
+
+  function normalizeProjectListForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const normalized = [];
+    let changed = !Array.isArray(list);
+
+    source.forEach((project) => {
+      if (!project || typeof project !== "object") {
+        changed = true;
+        return;
+      }
+
+      const rawProjectCompanyId = project.companyId;
+      const projectCompanyId = rawProjectCompanyId === undefined || rawProjectCompanyId === null
+        ? ""
+        : String(rawProjectCompanyId).trim();
+
+      if (projectCompanyId === "") {
+        if (!isLegacyCompanyScope()) {
+          changed = true;
+          return;
+        }
+      } else if (projectCompanyId !== companyId) {
+        changed = true;
+        return;
+      }
+
+      normalized.push({
+        ...project,
+        companyId
+      });
+
+      if (projectCompanyId !== companyId) {
+        changed = true;
+      }
+    });
+
+    return { normalized, changed };
+  }
+
+  function getProjects(){
+    const key = projectsStorageKey();
+    migrateScopedArrayStore(key, STORAGE.projects);
+    const parsed = readJson(key, []);
+    const normalizedResult = normalizeProjectListForCompany(parsed);
+    if (normalizedResult.changed) {
+      writeJson(key, normalizedResult.normalized);
+    }
+    return normalizedResult.normalized;
+  }
+
+  function saveProjects(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const scopedProjects = source
+      .filter((project) => project && typeof project === "object")
+      .map((project) => ({
+        ...project,
+        companyId
+      }));
+
+    writeJson(projectsStorageKey(), scopedProjects);
+  }
+
+  function getJacks(){
+    const key = jacksStorageKey();
+    migrateScopedArrayStore(key, STORAGE.jacks);
+    const v = readJson(key, []);
+    return Array.isArray(v) ? v : [];
+  }
+
+  function getSession(){
+    const raw = readJson(STORAGE.auth, null);
+    if (!raw) return null;
+
+    const normalized = normalizeSession(raw);
+    if (normalized) {
+      if (normalized.expiresAt < Date.now()) {
+        clearSession();
+        return null;
+      }
+      if (Number(raw.expiresAt) !== normalized.expiresAt) {
+        writeJson(STORAGE.auth, normalized);
+      }
+      return normalized;
+    }
+
+    const migrated = migrateLegacySession(raw);
+    if (!migrated || migrated.expiresAt < Date.now()) {
+      clearSession();
+      return null;
+    }
+    return migrated;
+  }
+
+  function hasPageAccess(){
+    const session = getSession();
+    return !!(
+      session &&
+      session.role !== "onsite_user" &&
+      session.modules &&
+      session.modules.stressing
+    );
+  }
+
+  function uid(prefix){
+    return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function fmtDate(iso){
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+  }
+
+  function fmtNum(n, dec){
+    const v = Number(n);
+    if (!Number.isFinite(v)) return "-";
+    return v.toLocaleString("no-NO", {
+      minimumFractionDigits: dec,
+      maximumFractionDigits: dec
+    });
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  async function logout(){
+    try {
+      await requestApi("logout.php", { method: "POST", body: "{}" });
+    } catch (e) {}
+    clearSession();
+    location.reload();
+  }
+
+  let activeSession = getSession();
+
+  function setMsg(el, text, type){
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("hidden", "error", "ok");
+    if (type) el.classList.add(type);
+  }
+
+  function clearMsg(el){
+    if (!el) return;
+    el.textContent = "";
+    el.classList.add("hidden");
+    el.classList.remove("error", "ok");
+  }
+
+  function updateAccessUi(){
+    activeSession = getSession();
+    const info = $("accessInfo");
+    if (!info || !activeSession) {
+      if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+        window.CompanyBranding.apply({ session: activeSession });
+      }
+      return;
+    }
+
+    const userLabel = (activeSession.fullName || activeSession.email || "-").toString();
+    info.textContent =
+      "Innlogget: " + userLabel + " • Firma: " + (activeSession.companyName || "-") +
+      " (" + tierLabel(activeSession.tier) + "). Tilgang: Stressing + Jack data.";
+
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: activeSession });
+    }
+  }
+
+  function projectHasStressing(project){
+    return !!(project && project.modules && project.modules.stressing);
+  }
+
+  function projectListForPage(){
+    return getProjects()
+      .filter(projectHasStressing)
+      .sort((a, b) => {
+        const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return bt - at;
+      });
+  }
+
+  function projectOptionLabel(project){
+    const name = project.name || "Uten navn";
+    const number = (project.number || "").toString().trim();
+    const status = project.status === "finished" ? "ferdig" : "aktiv";
+    return number ? (name + " (" + number + ") - " + status) : (name + " - " + status);
+  }
+
+  function moduleSummary(project){
+    const parts = [];
+    if (project.modules?.grouting) parts.push("Injisering");
+    if (project.modules?.stressing) {
+      const count = Array.isArray(project.modules.stressingOptions) ? project.modules.stressingOptions.length : 0;
+      parts.push("Oppspenning (" + count + "/9)");
+    }
+    if (project.modules?.liftOff) parts.push("Lift-off");
+    if (project.modules?.diffBondlength) parts.push("Differensiert bondlength");
+    return parts.length ? parts.join(", ") : "-";
+  }
+
+  function criteriaForSoil(soilType){
+    const isFine = soilType === "fine";
+    return {
+      soilType: isFine ? "fine" : "coarse",
+      holdAtPpMin: isFine ? 15 : 5,
+      taMin: isFine ? 5 : 2,
+      tbMin: isFine ? 15 : 5,
+      deltaLimitMm: isFine ? 0.25 : 0.20
+    };
+  }
+
+  function stepDefinitions(Pp, Pa, soilType, lockOffLoadP0){
+    const pp = Number(Pp);
+    const pa = Number(Pa);
+    if (!Number.isFinite(pp) || pp <= 0 || !Number.isFinite(pa) || pa < 0) return [];
+
+    const criteria = criteriaForSoil(soilType);
+    const values = [
+      { step: 0, label: "Pa", load: pa, minHold: 1 },
+      { step: 1, label: "0.40 Pp", load: pp * 0.40, minHold: 1 },
+      { step: 2, label: "0.55 Pp", load: pp * 0.55, minHold: 1 },
+      { step: 3, label: "0.70 Pp", load: pp * 0.70, minHold: 1 },
+      { step: 4, label: "0.85 Pp", load: pp * 0.85, minHold: 1 },
+      { step: 5, label: "1.00 Pp", load: pp, minHold: criteria.holdAtPpMin }
+    ];
+    const p0 = Number(lockOffLoadP0);
+    if (Number.isFinite(p0) && p0 > 0) {
+      values.push({ step: 6, label: "P0 lock load", load: p0, minHold: 1 });
+    }
+    return values;
+  }
+
+  function effectiveElasticLengthM(freeLengthM, jackAnchorPointMm){
+    const lf = Number(freeLengthM);
+    const anchorM = Number(jackAnchorPointMm) / 1000;
+    if (!Number.isFinite(lf) || lf <= 0) return null;
+    if (!Number.isFinite(anchorM) || anchorM < 0) return lf;
+    return lf + anchorM;
+  }
+
+  function calculatedElongationMm(loadkN, datumLoadkN, steelAreaMm2, elasticLengthM, eModulusNPerMm2){
+    const load = Number(loadkN);
+    const datum = Number(datumLoadkN);
+    const area = Number(steelAreaMm2);
+    const lenM = Number(elasticLengthM);
+    const eModulus = Number(eModulusNPerMm2);
+    if (
+      !Number.isFinite(load) ||
+      !Number.isFinite(datum) ||
+      !Number.isFinite(area) ||
+      area <= 0 ||
+      !Number.isFinite(lenM) ||
+      lenM <= 0 ||
+      !Number.isFinite(eModulus) ||
+      eModulus <= 0
+    ) {
+      return null;
+    }
+    const deltaLoadkN = load - datum;
+    const lenMm = lenM * 1000;
+    return (deltaLoadkN * 1000 * lenMm) / (eModulus * area);
+  }
+
+  function projectAssignedJacks(project){
+    if (!project || !Array.isArray(project.jackIds) || project.jackIds.length === 0) return [];
+    const jackMap = new Map(getJacks().map((j) => [j.id, j]));
+    return project.jackIds
+      .map((id) => jackMap.get(id))
+      .filter(Boolean);
+  }
+
+  function isMultiStrandJackType(typeValue){
+    const type = (typeValue || "").toString().trim().toLowerCase();
+    return type === "multi" || type === "multi-strand" || type === "multistrand";
+  }
+
+  function planJackLabel(jack){
+    const code = jack.code || jack.serial || jack.id || "Uten kode";
+    const model = jack.model || "-";
+    const strands = Number(jack.strands);
+    const strandInfo = isMultiStrandJackType(jack.type) && Number.isFinite(strands) && strands > 0
+      ? " (max " + Math.floor(strands).toLocaleString("no-NO") + " strands)"
+      : "";
+    return code + " - " + model + strandInfo;
+  }
+
+  function renderPlanJackSelect(project, selectedJackId){
+    const select = $("planJackId");
+    const anchorInput = $("planJackAnchorPointMm");
+    if (!select || !anchorInput) return;
+
+    const assigned = projectAssignedJacks(project);
+    let html = '<option value="">Velg jekk fra prosjekt...</option>';
+    html += assigned.map((jack) =>
+      '<option value="' + escapeHtml(jack.id || "") + '">' + escapeHtml(planJackLabel(jack)) + "</option>"
+    ).join("");
+    select.innerHTML = html;
+
+    const wanted = selectedJackId || "";
+    if (wanted && assigned.some((jack) => jack.id === wanted)) {
+      select.value = wanted;
+    } else {
+      select.value = "";
+    }
+
+    const selected = assigned.find((jack) => jack.id === select.value);
+    const anchor = selected && Number.isFinite(Number(selected.anchorPointMm))
+      ? Number(selected.anchorPointMm).toLocaleString("no-NO", { maximumFractionDigits: 2 }) + " mm"
+      : "-";
+    anchorInput.value = anchor;
+    updateCriteriaPreview();
+  }
+
+  function projectById(projectId){
+    return getProjects().find((p) => p.id === projectId) || null;
+  }
+
+  function tm1Block(project){
+    const dev = (project && project.stressingDev && typeof project.stressingDev === "object")
+      ? project.stressingDev
+      : {};
+    const tm1 = (dev.tm1Acceptance && typeof dev.tm1Acceptance === "object")
+      ? dev.tm1Acceptance
+      : {};
+    const plans = Array.isArray(tm1.plans) ? tm1.plans : [];
+    const records = Array.isArray(tm1.records) ? tm1.records : [];
+    return { dev, tm1, plans, records };
+  }
+
+  function normalizeImportedAnchorId(value, idx){
+    const raw = (value || "").toString().trim();
+    return raw || ("A" + (idx + 1));
+  }
+
+  function positiveNumberOrNull(value){
+    const n = Number(value);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+
+  function positiveIntegerOrNull(value){
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return null;
+    return Number.isInteger(n) ? n : null;
+  }
+
+  function barAreaFromDiameterMm(diameterMm){
+    const d = positiveNumberOrNull(diameterMm);
+    if (!d) return null;
+    const r = d / 2;
+    return Math.PI * r * r;
+  }
+
+  function groutingImportPayload(project){
+    const groutingData = (project && project.groutingData && typeof project.groutingData === "object")
+      ? project.groutingData
+      : null;
+
+    if (!groutingData) {
+      return {
+        rows: [],
+        steelType: "strands",
+        strandCount: null,
+        strandAreaMm2: null,
+        barAreaMm2: null,
+        steelAreaMm2: null
+      };
+    }
+
+    const steelType = groutingData.anchorType === "bar" ? "bar" : "strands";
+    const strandCount = steelType === "strands" ? positiveIntegerOrNull(groutingData.strandCount) : null;
+    const strandAreaMm2 = steelType === "strands" ? positiveNumberOrNull(groutingData.strandArea) : null;
+    const barAreaMm2 = steelType === "bar" ? barAreaFromDiameterMm(groutingData.barDia) : null;
+    const steelAreaMm2 = steelType === "strands"
+      ? ((strandCount && strandAreaMm2) ? (strandCount * strandAreaMm2) : null)
+      : barAreaMm2;
+
+    const rows = Array.isArray(groutingData.rows) ? groutingData.rows : [];
+    const rowsByAnchor = new Map();
+    rows.forEach((row, idx) => {
+      const anchorId = normalizeImportedAnchorId(row && row.anchorNo, idx);
+      rowsByAnchor.set(anchorId.toLowerCase(), {
+        anchorId,
+        freeLengthM: positiveNumberOrNull(row && row.lFree),
+        bondLengthM: positiveNumberOrNull(row && row.lBond)
+      });
+    });
+
+    return {
+      rows: Array.from(rowsByAnchor.values()),
+      steelType,
+      strandCount,
+      strandAreaMm2,
+      barAreaMm2,
+      steelAreaMm2
+    };
+  }
+
+  function importedPlanPatch(anchorRow, imported){
+    return {
+      anchorId: anchorRow.anchorId,
+      freeLengthM: anchorRow.freeLengthM,
+      bondLengthM: anchorRow.bondLengthM,
+      steelType: imported.steelType,
+      strandCount: imported.steelType === "strands" ? imported.strandCount : null,
+      strandAreaMm2: imported.steelType === "strands" ? imported.strandAreaMm2 : null,
+      barAreaMm2: imported.steelType === "bar" ? imported.barAreaMm2 : null,
+      steelAreaMm2: imported.steelAreaMm2
+    };
+  }
+
+  function normalizedPlanNumber(value){
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function planHasImportValues(plan, patch){
+    return (plan.anchorId || "").trim() === patch.anchorId &&
+      normalizedPlanNumber(plan.freeLengthM) === patch.freeLengthM &&
+      normalizedPlanNumber(plan.bondLengthM) === patch.bondLengthM &&
+      (plan.steelType === "bar" ? "bar" : "strands") === patch.steelType &&
+      normalizedPlanNumber(plan.strandCount) === patch.strandCount &&
+      normalizedPlanNumber(plan.strandAreaMm2) === patch.strandAreaMm2 &&
+      normalizedPlanNumber(plan.barAreaMm2) === patch.barAreaMm2 &&
+      normalizedPlanNumber(plan.steelAreaMm2) === patch.steelAreaMm2;
+  }
+
+  function syncTm1PlansFromGrouting(projectId){
+    const id = (projectId || "").trim();
+    if (!id) return { changed: false, imported: 0, updated: 0, project: null };
+
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === id);
+    if (idx < 0) return { changed: false, imported: 0, updated: 0, project: null };
+
+    const project = list[idx];
+    const imported = groutingImportPayload(project);
+    if (imported.rows.length === 0) {
+      return { changed: false, imported: 0, updated: 0, project };
+    }
+
+    const { dev, tm1, plans, records } = tm1Block(project);
+    const nextPlans = plans.slice();
+    const now = new Date().toISOString();
+    let importedCount = 0;
+    let updatedCount = 0;
+    let changed = false;
+
+    imported.rows.forEach((anchorRow) => {
+      const key = anchorRow.anchorId.toLowerCase();
+      const planIndex = nextPlans.findIndex((plan) => ((plan.anchorId || "").trim().toLowerCase() === key));
+      const patch = importedPlanPatch(anchorRow, imported);
+
+      if (planIndex >= 0) {
+        const current = nextPlans[planIndex];
+        if (planHasImportValues(current, patch)) return;
+        nextPlans[planIndex] = {
+          ...current,
+          ...patch,
+          updatedAt: now
+        };
+        updatedCount += 1;
+        changed = true;
+        return;
+      }
+
+      nextPlans.push({
+        id: uid("tm1_plan"),
+        ...patch,
+        jackId: "",
+        jackCode: "",
+        jackModel: "",
+        jackAnchorPointMm: null,
+        jackAreaCm2: null,
+        jackFrictionPct: 0,
+        eModulusNPerMm2: DEFAULT_STEEL_E_N_PER_MM2,
+        soilType: "coarse",
+        responsible: "",
+        comment: "Importert fra injisering. Legg inn lastdata og jekk for feltregistrering.",
+        criteria: criteriaForSoil("coarse"),
+        steps: [],
+        createdAt: now,
+        updatedAt: now
+      });
+      importedCount += 1;
+      changed = true;
+    });
+
+    if (!changed) {
+      return { changed: false, imported: 0, updated: 0, project };
+    }
+
+    list[idx] = {
+      ...project,
+      stressingDev: {
+        ...dev,
+        tm1Acceptance: {
+          ...tm1,
+          plans: nextPlans,
+          records,
+          updatedAt: now
+        }
+      },
+      updatedAt: now
+    };
+
+    saveProjects(list);
+    return { changed: true, imported: importedCount, updated: updatedCount, project: list[idx] };
+  }
+
+  function refreshProjectSelect(selectedId){
+    const select = $("projectSelect");
+    if (!select) return;
+    const projects = projectListForPage();
+
+    const current = selectedId !== undefined ? selectedId : (select.value || "");
+    let html = '<option value="">Velg stressing-prosjekt...</option>';
+    html += projects.map((project) =>
+      '<option value="' + escapeHtml(project.id || "") + '">' + escapeHtml(projectOptionLabel(project)) + "</option>"
+    ).join("");
+    select.innerHTML = html;
+
+    if (current && projects.some((project) => project.id === current)) {
+      select.value = current;
+    }
+
+    const hint = $("projectSelectHint");
+    if (hint && projects.length === 0) {
+      hint.textContent = "Ingen stressing-prosjekter funnet enda. Opprett/oppdater prosjekt i Prosjektstyring.";
+    } else if (hint) {
+      hint.textContent = "Kun prosjekter med stressing-modul vises.";
+    }
+  }
+
+  function setProjectMeta(project){
+    $("metaName").textContent = project ? (project.name || "-") : "-";
+    $("metaNumber").textContent = project ? (project.number || "-") : "-";
+    $("metaStatus").textContent = project
+      ? (project.status === "finished" ? "Ferdig" : "Aktiv")
+      : "-";
+
+	    const projectId = project ? (project.id || "") : "";
+
+    const fieldBtn = $("openFieldPageBtn");
+    if (fieldBtn) {
+      if (projectId) {
+        fieldBtn.href = "software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(projectId);
+        fieldBtn.setAttribute("aria-disabled", "false");
+      } else {
+        fieldBtn.href = "software-tm1-acceptance-field.html";
+        fieldBtn.setAttribute("aria-disabled", "true");
+      }
+    }
+
+    const injLink = $("openInjiseringLink");
+    if (injLink) {
+      injLink.href = projectId
+        ? ("software-injisering.html?projectId=" + encodeURIComponent(projectId))
+        : "software-injisering.html";
+    }
+
+    const selectedJackId = $("planJackId") ? $("planJackId").value : "";
+    renderPlanJackSelect(project || null, selectedJackId);
+  }
+
+  function activeProjectId(){
+    return ($("currentProjectId").value || "").trim();
+  }
+
+  function activeProject(){
+    const id = activeProjectId();
+    return id ? projectById(id) : null;
+  }
+
+  function currentProjectIdFromUrl(){
+    const qp = new URLSearchParams(window.location.search);
+    return (qp.get("projectId") || "").trim();
+  }
+
+  function currentPlanIdFromUrl(){
+    const qp = new URLSearchParams(window.location.search);
+    return (qp.get("planId") || "").trim();
+  }
+
+  function defaultPa(pp){
+    const n = Number(pp);
+    return Number.isFinite(n) && n > 0 ? (n * 0.10) : 0;
+  }
+
+  function selectedSteelType(){
+    const steelType = $("planSteelType");
+    return steelType && steelType.value === "bar" ? "bar" : "strands";
+  }
+
+  function currentEModulusNPerMm2(){
+    const input = $("planEModulusNPerMm2");
+    const parsed = Number(input ? input.value : DEFAULT_STEEL_E_N_PER_MM2);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_STEEL_E_N_PER_MM2;
+  }
+
+  function isAllowedCrossSection(value){
+    const numeric = Number(value);
+    return Number.isFinite(numeric) && ALLOWED_CROSS_SECTION_MM2.includes(numeric);
+  }
+
+  function parseOptionalNumber(value){
+    const raw = (value ?? "").toString().trim();
+    if (raw === "") return null;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : NaN;
+  }
+
+  function formatNumberInputValue(value, decimals){
+    if (!Number.isFinite(Number(value))) return "";
+    const d = Number.isFinite(Number(decimals)) ? Number(decimals) : 2;
+    return String(Number(Number(value).toFixed(d)));
+  }
+
+  function incrementAnchorId(anchorId){
+    const raw = (anchorId || "").trim();
+    if (!raw) return "";
+    const match = raw.match(/^(.*?)(\d+)$/);
+    if (!match) return raw + "2";
+    const prefix = match[1];
+    const suffix = match[2];
+    const next = String(Number(suffix) + 1).padStart(suffix.length, "0");
+    return prefix + next;
+  }
+
+  function nextAvailableAnchorId(startAnchorId){
+    const project = activeProject();
+    let candidate = incrementAnchorId(startAnchorId);
+    if (!candidate) return "";
+    if (!project) return candidate;
+
+    const editingId = ($("editingPlanId").value || "").trim();
+    const taken = new Set(
+      tm1Block(project).plans
+        .filter((p) => p.id !== editingId)
+        .map((p) => (p.anchorId || "").trim().toLowerCase())
+        .filter(Boolean)
+    );
+
+    let guard = 0;
+    while (taken.has(candidate.toLowerCase()) && guard < 300) {
+      candidate = incrementAnchorId(candidate);
+      guard += 1;
+    }
+    return candidate;
+  }
+
+  function syncSteelTypeUi(){
+    const steelType = selectedSteelType();
+    const strandsWrap = $("planStrandsWrap");
+    const barWrap = $("planBarWrap");
+    if (strandsWrap) strandsWrap.classList.toggle("hidden", steelType !== "strands");
+    if (barWrap) barWrap.classList.toggle("hidden", steelType !== "bar");
+  }
+
+  function updateSteelAreaFromSelection(){
+    const steelType = selectedSteelType();
+    const totalAreaInput = $("planSteelAreaMm2");
+    if (!totalAreaInput) return;
+
+    let totalArea = NaN;
+    if (steelType === "strands") {
+      const strandCount = parseOptionalNumber($("planStrandCount") ? $("planStrandCount").value : "");
+      const strandArea = parseOptionalNumber($("planStrandAreaMm2") ? $("planStrandAreaMm2").value : "");
+      if (Number.isFinite(strandCount) && strandCount > 0 && Number.isFinite(strandArea) && strandArea > 0) {
+        totalArea = strandCount * strandArea;
+      }
+    } else {
+      const barArea = parseOptionalNumber($("planBarAreaMm2") ? $("planBarAreaMm2").value : "");
+      if (Number.isFinite(barArea) && barArea > 0) {
+        totalArea = barArea;
+      }
+    }
+
+    totalAreaInput.value = Number.isFinite(totalArea) ? formatNumberInputValue(totalArea, 2) : "";
+  }
+
+  function updateCriteriaPreview(){
+    syncSteelTypeUi();
+    updateSteelAreaFromSelection();
+    const soil = $("planSoilType").value;
+    const eModulus = currentEModulusNPerMm2();
+    const pp = Number($("planProofLoad").value);
+    const paInput = $("planDatumLoad").value.trim();
+    const paRaw = paInput === "" ? null : Number(paInput);
+    const pa = Number.isFinite(paRaw) && paRaw >= 0 ? paRaw : defaultPa(pp);
+    const defaultPaValue = defaultPa(pp);
+    const isBestemtPa = Number.isFinite(pa) && Number.isFinite(defaultPaValue) && Math.abs(pa - defaultPaValue) > 1e-9;
+    const p0Input = $("planLockOffLoad").value.trim();
+    const p0Raw = p0Input === "" ? null : Number(p0Input);
+    const p0 = Number.isFinite(p0Raw) && p0Raw >= 0 ? p0Raw : null;
+    const criteria = criteriaForSoil(soil);
+    const steelAreaMm2 = Number($("planSteelAreaMm2").value);
+    const freeLengthM = Number($("planFreeLengthM").value);
+    const project = activeProject();
+    const selectedJack = projectAssignedJacks(project).find((j) => j.id === ($("planJackId").value || "").trim());
+    const jackAnchorPointMm = selectedJack ? Number(selectedJack.anchorPointMm) : NaN;
+    const elasticLengthM = effectiveElasticLengthM(freeLengthM, jackAnchorPointMm);
+
+    if ($("criteriaDelta")) {
+      $("criteriaDelta").value = "<= " + criteria.deltaLimitMm.toLocaleString("no-NO", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " mm";
+    }
+    if ($("criteriaPaLabel")) {
+      $("criteriaPaLabel").textContent = isBestemtPa ? "Bestemt Pa" : "Beregnet Pa";
+    }
+    $("criteriaPa").textContent = Number.isFinite(pa) && pa > 0
+      ? fmtNum(pa, 1) + " kN"
+      : "-";
+
+    const rows = $("stepPreviewRows");
+    if (!rows) return;
+
+    const defs = stepDefinitions(pp, pa, soil, p0);
+    if (defs.length === 0) {
+      rows.innerHTML = '<tr><td colspan="4" class="muted">Legg inn Pp for a vise trinn.</td></tr>';
+      return;
+    }
+
+    rows.innerHTML = defs.map((step, index) => {
+      const calcElongMm = calculatedElongationMm(step.load, 0, steelAreaMm2, elasticLengthM, eModulus);
+      const calcElongTxt = Number.isFinite(Number(calcElongMm)) ? fmtNum(calcElongMm, 2) : "-";
+      return "<tr>" +
+        "<td>" + (index + 1).toLocaleString("no-NO") + "</td>" +
+        "<td>" + escapeHtml(step.label) + "</td>" +
+        "<td>" + escapeHtml(fmtNum(step.load, 1)) + " kN</td>" +
+        "<td class=\"mono\">" + escapeHtml(calcElongTxt) + "</td>" +
+      "</tr>";
+    }).join("");
+  }
+
+  function updateFormMode(isEdit){
+    $("savePlanBtn").textContent = isEdit ? "Lagre endringer" : "Lagre anker";
+    $("cancelEditPlanBtn").classList.toggle("hidden", !isEdit);
+  }
+
+  function readCommonPlanDefaults(){
+    return {
+      jackId: $("planJackId").value || "",
+      soilType: $("planSoilType").value || "coarse",
+      eModulusNPerMm2: $("planEModulusNPerMm2").value || String(DEFAULT_STEEL_E_N_PER_MM2),
+      steelType: selectedSteelType(),
+      strandCount: $("planStrandCount").value || "",
+      strandAreaMm2: $("planStrandAreaMm2").value || "",
+      barAreaMm2: $("planBarAreaMm2").value || ""
+    };
+  }
+
+  function applyCommonPlanDefaults(defaults){
+    if (!defaults) return;
+    $("planSoilType").value = defaults.soilType === "fine" ? "fine" : "coarse";
+    $("planEModulusNPerMm2").value = defaults.eModulusNPerMm2 || String(DEFAULT_STEEL_E_N_PER_MM2);
+    $("planSteelType").value = defaults.steelType === "bar" ? "bar" : "strands";
+    $("planStrandCount").value = defaults.strandCount || "";
+    $("planStrandAreaMm2").value = defaults.strandAreaMm2 || "";
+    $("planBarAreaMm2").value = defaults.barAreaMm2 || "";
+    syncSteelTypeUi();
+    updateSteelAreaFromSelection();
+    renderPlanJackSelect(activeProject(), defaults.jackId || "");
+  }
+
+  function resetPlanForm(options){
+    const opts = options || {};
+    const preserveCommon = opts.preserveCommon !== false;
+    const commonDefaults = preserveCommon ? readCommonPlanDefaults() : null;
+
+    $("planForm").reset();
+    $("editingPlanId").value = "";
+    if (commonDefaults) {
+      applyCommonPlanDefaults(commonDefaults);
+    } else {
+      $("planSoilType").value = "coarse";
+      $("planEModulusNPerMm2").value = String(DEFAULT_STEEL_E_N_PER_MM2);
+      $("planSteelType").value = "strands";
+      syncSteelTypeUi();
+      updateSteelAreaFromSelection();
+      renderPlanJackSelect(activeProject(), "");
+    }
+    updateFormMode(false);
+    clearMsg($("planMsg"));
+    updateCriteriaPreview();
+  }
+
+  function fillPlanForm(plan){
+    const project = activeProject();
+    renderPlanJackSelect(project, plan.jackId || "");
+
+    $("editingPlanId").value = plan.id || "";
+    $("planAnchorId").value = plan.anchorId || "";
+    const steelType = plan.steelType === "bar" ? "bar" : "strands";
+    const eModulusValue = Number.isFinite(Number(plan.eModulusNPerMm2)) && Number(plan.eModulusNPerMm2) > 0
+      ? Number(plan.eModulusNPerMm2)
+      : DEFAULT_STEEL_E_N_PER_MM2;
+    $("planEModulusNPerMm2").value = formatNumberInputValue(eModulusValue, 0);
+    $("planSteelType").value = steelType;
+    $("planFreeLengthM").value = Number.isFinite(Number(plan.freeLengthM)) ? String(plan.freeLengthM) : "";
+    $("planBondLengthM").value = Number.isFinite(Number(plan.bondLengthM)) ? String(plan.bondLengthM) : "";
+    if (steelType === "bar") {
+      const barArea = Number.isFinite(Number(plan.barAreaMm2))
+        ? Number(plan.barAreaMm2)
+        : (Number.isFinite(Number(plan.steelAreaMm2)) ? Number(plan.steelAreaMm2) : NaN);
+      $("planBarAreaMm2").value = isAllowedCrossSection(barArea) ? String(Number(barArea)) : "";
+      $("planStrandCount").value = "";
+      $("planStrandAreaMm2").value = "";
+    } else {
+      const strandCount = Number.isFinite(Number(plan.strandCount)) && Number(plan.strandCount) > 0
+        ? Number(plan.strandCount)
+        : 1;
+      const strandArea = Number.isFinite(Number(plan.strandAreaMm2)) && Number(plan.strandAreaMm2) > 0
+        ? Number(plan.strandAreaMm2)
+        : (Number.isFinite(Number(plan.steelAreaMm2)) ? (Number(plan.steelAreaMm2) / strandCount) : NaN);
+      $("planStrandCount").value = formatNumberInputValue(strandCount, 0);
+      $("planStrandAreaMm2").value = isAllowedCrossSection(strandArea) ? String(Number(strandArea)) : "";
+      $("planBarAreaMm2").value = "";
+    }
+    syncSteelTypeUi();
+    updateSteelAreaFromSelection();
+    if (!$("planSteelAreaMm2").value && Number.isFinite(Number(plan.steelAreaMm2))) {
+      $("planSteelAreaMm2").value = formatNumberInputValue(plan.steelAreaMm2, 2);
+    }
+    $("planProofLoad").value = Number.isFinite(Number(plan.proofLoadPp)) ? String(plan.proofLoadPp) : "";
+    $("planDatumLoad").value = Number.isFinite(Number(plan.datumLoadPa)) ? String(plan.datumLoadPa) : "";
+    $("planLockOffLoad").value = Number.isFinite(Number(plan.lockOffLoadP0)) ? String(plan.lockOffLoadP0) : "";
+    $("planSoilType").value = plan.soilType === "fine" ? "fine" : "coarse";
+    $("planComment").value = plan.comment || "";
+
+    updateFormMode(true);
+    clearMsg($("planMsg"));
+    updateCriteriaPreview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function duplicateAnchorForNewPlan(){
+    const outcome = upsertPlanFromForm();
+    if (outcome.error) {
+      setMsg($("planMsg"), outcome.error, "error");
+      return;
+    }
+
+    renderPlans(outcome.savedId);
+
+    const fieldBtn = $("openFieldPageBtn");
+    if (fieldBtn) {
+      fieldBtn.href = "software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(outcome.projectId) + "&planId=" + encodeURIComponent(outcome.savedId);
+      fieldBtn.setAttribute("aria-disabled", "false");
+    }
+
+    $("editingPlanId").value = "";
+    const nextAnchorId = nextAvailableAnchorId(outcome.anchorId);
+    if (!nextAnchorId) {
+      setMsg($("planMsg"), "Anker lagret, men klarte ikke a lage neste Anker/Test-ID.", "error");
+      return;
+    }
+
+    $("planAnchorId").value = nextAnchorId;
+    updateFormMode(false);
+    updateCriteriaPreview();
+    setMsg($("planMsg"), "Anker " + outcome.anchorId + " lagret. Nytt anker klart: " + nextAnchorId + ".", "ok");
+    $("planAnchorId").focus();
+    $("planAnchorId").select();
+  }
+
+  function collectPlanData(){
+    const project = activeProject();
+    const anchorId = $("planAnchorId").value.trim();
+    const jackId = $("planJackId").value.trim();
+    const soilType = $("planSoilType").value === "fine" ? "fine" : "coarse";
+    const responsible = "";
+    const comment = $("planComment").value.trim();
+    const eModulusNPerMm2 = Number($("planEModulusNPerMm2").value);
+    const steelType = selectedSteelType();
+
+    if (!project) return { error: "Velg prosjekt forst." };
+    if (!anchorId) return { error: "Anker/Test-ID er obligatorisk." };
+
+    const jack = projectAssignedJacks(project).find((j) => j.id === jackId);
+    if (!jack) return { error: "Velg en jekk fra prosjektets jekk-liste." };
+
+    const jackAnchorPointMm = Number(jack.anchorPointMm);
+    if (!Number.isFinite(jackAnchorPointMm) || jackAnchorPointMm < 0) {
+      return { error: "Valgt jekk mangler gyldig 'Ankerpunkt i jekk (mm)'. Oppdater jack-registeret." };
+    }
+    const jackAreaCm2 = Number(jack.areaCm2);
+    if (!Number.isFinite(jackAreaCm2) || jackAreaCm2 <= 0) {
+      return { error: "Valgt jekk mangler gyldig 'Area (cm2)'. Oppdater jack-registeret." };
+    }
+    const jackFrictionPctRaw = Number(jack.frictionPct);
+    const jackFrictionPct = Number.isFinite(jackFrictionPctRaw) && jackFrictionPctRaw >= 0 ? jackFrictionPctRaw : 0;
+
+    const freeLengthM = $("planFreeLengthM").value.trim() === "" ? null : Number($("planFreeLengthM").value);
+    const bondLengthM = $("planBondLengthM").value.trim() === "" ? null : Number($("planBondLengthM").value);
+    const strandCount = parseOptionalNumber($("planStrandCount").value);
+    const strandAreaMm2 = parseOptionalNumber($("planStrandAreaMm2").value);
+    const barAreaMm2 = parseOptionalNumber($("planBarAreaMm2").value);
+    let steelAreaMm2 = null;
+    const proofLoadPp = Number($("planProofLoad").value);
+    const datumLoadRaw = $("planDatumLoad").value.trim();
+    const datumLoadPa = datumLoadRaw === "" ? defaultPa(proofLoadPp) : Number(datumLoadRaw);
+    const lockOffRaw = $("planLockOffLoad").value.trim();
+    const lockOffLoadP0 = lockOffRaw === "" ? null : Number(lockOffRaw);
+
+    if (!Number.isFinite(proofLoadPp) || proofLoadPp <= 0) {
+      return { error: "Proof load Pp maa vaere et positivt tall." };
+    }
+    if (!Number.isFinite(datumLoadPa) || datumLoadPa < 0) {
+      return { error: "Datum load Pa maa vaere et gyldig tall." };
+    }
+    if (datumLoadPa > proofLoadPp) {
+      return { error: "Datum load Pa kan ikke vaere storre enn Pp." };
+    }
+
+    if (lockOffLoadP0 !== null && (!Number.isFinite(lockOffLoadP0) || lockOffLoadP0 < 0)) {
+      return { error: "Lock-off load P0 maa vaere et gyldig tall." };
+    }
+    if (lockOffLoadP0 === null || lockOffLoadP0 <= 0) {
+      return { error: "Lock-off load P0 er obligatorisk og maa vaere storre enn 0." };
+    }
+
+    if (freeLengthM !== null && (!Number.isFinite(freeLengthM) || freeLengthM < 0)) {
+      return { error: "Fri lengde Lf maa vaere et gyldig tall." };
+    }
+    if (freeLengthM === null || freeLengthM <= 0) {
+      return { error: "Fri lengde Lf er obligatorisk og maa vaere storre enn 0." };
+    }
+    if (bondLengthM !== null && (!Number.isFinite(bondLengthM) || bondLengthM < 0)) {
+      return { error: "Forankret lengde Lb maa vaere et gyldig tall." };
+    }
+    if (bondLengthM === null || bondLengthM <= 0) {
+      return { error: "Forankret lengde Lb er obligatorisk og maa vaere storre enn 0." };
+    }
+    if (!Number.isFinite(eModulusNPerMm2) || eModulusNPerMm2 <= 0) {
+      return { error: "E-modul maa vaere et gyldig tall storre enn 0." };
+    }
+    if (!comment) {
+      return { error: "Kommentar er obligatorisk." };
+    }
+
+    if (steelType === "strands") {
+      if (!Number.isFinite(strandCount) || strandCount <= 0 || !Number.isInteger(strandCount)) {
+        return { error: "Antall strands maa vaere et heltall storre enn 0." };
+      }
+      if (!Number.isFinite(strandAreaMm2) || strandAreaMm2 <= 0) {
+        return { error: "Tverrsnitt per strand maa vaere storre enn 0 mm2." };
+      }
+      if (!isAllowedCrossSection(strandAreaMm2)) {
+        return { error: "Tverrsnitt per strand maa vaere 140, 150 eller 165 mm2." };
+      }
+      if (isMultiStrandJackType(jack.type)) {
+        const jackMaxStrands = Number(jack.strands);
+        if (!Number.isFinite(jackMaxStrands) || jackMaxStrands <= 0 || !Number.isInteger(jackMaxStrands)) {
+          return { error: "Valgt multi-strand jekk mangler gyldig 'Strands'. Oppdater jack-registeret." };
+        }
+        if (strandCount > jackMaxStrands) {
+          return {
+            error:
+              "Valgt multi-strand jekk er registrert for maks " +
+              jackMaxStrands.toLocaleString("no-NO") +
+              " strands og kan ikke brukes for " +
+              strandCount.toLocaleString("no-NO") +
+              " strands."
+          };
+        }
+      }
+      steelAreaMm2 = strandCount * strandAreaMm2;
+    } else {
+      if (!Number.isFinite(barAreaMm2) || barAreaMm2 <= 0) {
+        return { error: "Tverrsnitt for bar maa vaere storre enn 0 mm2." };
+      }
+      if (!isAllowedCrossSection(barAreaMm2)) {
+        return { error: "Tverrsnitt for spennstang maa vaere 140, 150 eller 165 mm2." };
+      }
+      steelAreaMm2 = barAreaMm2;
+    }
+
+    if (!Number.isFinite(steelAreaMm2) || steelAreaMm2 <= 0) {
+      return { error: "Stalareal er obligatorisk og maa vaere storre enn 0." };
+    }
+    $("planSteelAreaMm2").value = formatNumberInputValue(steelAreaMm2, 2);
+
+    const criteria = criteriaForSoil(soilType);
+    const steps = stepDefinitions(proofLoadPp, datumLoadPa, soilType, lockOffLoadP0);
+
+    return {
+      data: {
+        anchorId,
+        jackId: jack.id,
+        jackCode: jack.code || "",
+        jackModel: jack.model || "",
+        jackAnchorPointMm,
+        jackAreaCm2,
+        jackFrictionPct,
+        freeLengthM,
+        bondLengthM,
+        steelType,
+        strandCount: steelType === "strands" ? strandCount : null,
+        strandAreaMm2: steelType === "strands" ? strandAreaMm2 : null,
+        barAreaMm2: steelType === "bar" ? barAreaMm2 : null,
+        steelAreaMm2,
+        eModulusNPerMm2,
+        proofLoadPp,
+        datumLoadPa,
+        lockOffLoadP0,
+        soilType,
+        responsible,
+        comment,
+        criteria,
+        steps
+      }
+    };
+  }
+
+  function upsertPlanFromForm(){
+    const projectId = activeProjectId();
+    if (!projectId) {
+      return { error: "Velg prosjekt for du lagrer en plan." };
+    }
+
+    const result = collectPlanData();
+    if (result.error) {
+      return { error: result.error };
+    }
+
+    const payload = result.data;
+    const editingId = ($("editingPlanId").value || "").trim();
+
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === projectId);
+    if (idx < 0) {
+      return { error: "Prosjektet finnes ikke lenger." };
+    }
+
+    const project = list[idx];
+    if (!projectHasStressing(project)) {
+      return { error: "Prosjektet har ikke stressing aktivert." };
+    }
+
+    const { dev, tm1, plans, records } = tm1Block(project);
+    const now = new Date().toISOString();
+
+    const duplicate = plans.find((p) =>
+      p.anchorId.toLowerCase() === payload.anchorId.toLowerCase() && p.id !== editingId
+    );
+    if (duplicate) {
+      return { error: "Anker/Test-ID finnes allerede i dette prosjektet." };
+    }
+
+    let savedId = "";
+    let message = "";
+
+    if (editingId) {
+      const pidx = plans.findIndex((p) => p.id === editingId);
+      if (pidx < 0) {
+        return { error: "Fant ikke planen du forsokte a redigere." };
+      }
+      plans[pidx] = {
+        ...plans[pidx],
+        ...payload,
+        updatedAt: now
+      };
+      savedId = plans[pidx].id;
+      message = "Anker oppdatert.";
+    } else {
+      const created = {
+        id: uid("tm1_plan"),
+        ...payload,
+        createdAt: now,
+        updatedAt: now
+      };
+      plans.push(created);
+      savedId = created.id;
+      message = "Anker lagret.";
+    }
+
+    list[idx] = {
+      ...project,
+      stressingDev: {
+        ...dev,
+        tm1Acceptance: {
+          ...tm1,
+          plans,
+          records,
+          updatedAt: now
+        }
+      },
+      updatedAt: now
+    };
+
+    saveProjects(list);
+    return {
+      projectId,
+      savedId,
+      anchorId: payload.anchorId,
+      message
+    };
+  }
+
+  function renderPlans(selectPlanId){
+    const rows = $("planRows");
+    const listMsg = $("listMsg");
+    const project = activeProject();
+
+    if (!project) {
+      rows.innerHTML = "";
+      $("metaPlansCount").textContent = "0";
+      listMsg.textContent = "Velg prosjekt for a vise ankere.";
+      return;
+    }
+
+    const block = tm1Block(project);
+    const plans = block.plans.slice().sort((a, b) => {
+      const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return bt - at;
+    });
+    const records = block.records;
+
+    $("metaPlansCount").textContent = plans.length.toLocaleString("no-NO");
+
+    if (plans.length === 0) {
+      rows.innerHTML = "";
+      listMsg.textContent = "Ingen ankere registrert ennå.";
+      return;
+    }
+
+    rows.innerHTML = plans.map((plan) => {
+      const recordsCount = records.filter((r) => r.planId === plan.id).length;
+      const label = plan.anchorId || "-";
+      return "<tr>" +
+        "<td><strong>" + escapeHtml(label) + "</strong></td>" +
+        "<td><span class=\"mono\">Pa " + escapeHtml(fmtNum(plan.datumLoadPa, 1)) + "</span><br><span class=\"mono\">Pp " + escapeHtml(fmtNum(plan.proofLoadPp, 1)) + "</span><br><span class=\"mono\">P0 " + escapeHtml(plan.lockOffLoadP0 === null ? "-" : fmtNum(plan.lockOffLoadP0, 1)) + "</span></td>" +
+        "<td>" + escapeHtml(fmtDate(plan.updatedAt || plan.createdAt)) + "<br><span class=\"muted\">Feltark: " + recordsCount.toLocaleString("no-NO") + "</span></td>" +
+        "<td><div class=\"rowActions\">" +
+          "<button class=\"smallBtn\" type=\"button\" data-edit=\"" + escapeHtml(plan.id) + "\">Rediger</button>" +
+          "<a class=\"smallBtn\" href=\"software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(project.id || "") + "&planId=" + encodeURIComponent(plan.id || "") + "\">Feltark</a>" +
+          "<button class=\"smallBtn\" type=\"button\" data-remove=\"" + escapeHtml(plan.id) + "\">Slett</button>" +
+        "</div></td>" +
+      "</tr>";
+    }).join("");
+
+    if (selectPlanId) {
+      const plan = plans.find((p) => p.id === selectPlanId);
+      if (plan) {
+        const fieldBtn = $("openFieldPageBtn");
+        if (fieldBtn) {
+          fieldBtn.href = "software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(project.id || "") + "&planId=" + encodeURIComponent(plan.id || "");
+          fieldBtn.setAttribute("aria-disabled", "false");
+        }
+      }
+    }
+
+    listMsg.textContent = "Viser " + plans.length.toLocaleString("no-NO") + " anker(e) i prosjektplanen.";
+
+    rows.querySelectorAll("[data-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-edit");
+        const projectNow = activeProject();
+        if (!projectNow) return;
+        const plan = tm1Block(projectNow).plans.find((p) => p.id === id);
+        if (!plan) return;
+        fillPlanForm(plan);
+      });
+    });
+
+    rows.querySelectorAll("[data-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-remove");
+        removePlan(id);
+      });
+    });
+  }
+
+  function removePlan(planId){
+    const projectId = activeProjectId();
+    if (!projectId) return;
+
+    const list = getProjects();
+    const idx = list.findIndex((p) => p.id === projectId);
+    if (idx < 0) return;
+
+    const { dev, tm1, plans, records } = tm1Block(list[idx]);
+    const plan = plans.find((p) => p.id === planId);
+    if (!plan) return;
+
+    const recCount = records.filter((r) => r.planId === planId).length;
+    const warning = recCount > 0
+      ? "Ankeret har " + recCount + " feltark. Slette anker og tilhorende feltark?"
+      : "Slette ankeret?";
+
+    if (!confirm(warning)) return;
+
+    const nextPlans = plans.filter((p) => p.id !== planId);
+    const nextRecords = records.filter((r) => r.planId !== planId);
+
+    const now = new Date().toISOString();
+    list[idx] = {
+      ...list[idx],
+      stressingDev: {
+        ...dev,
+        tm1Acceptance: {
+          ...tm1,
+          plans: nextPlans,
+          records: nextRecords,
+          updatedAt: now
+        }
+      },
+      updatedAt: now
+    };
+
+    saveProjects(list);
+
+    if ($("editingPlanId").value === planId) {
+      resetPlanForm();
+    }
+
+    renderPlans();
+    setMsg($("planMsg"), "Anker slettet.", "ok");
+  }
+
+  function loadSelectedProject(){
+    const selectedId = ($("projectSelect").value || "").trim();
+    if (!selectedId) {
+      setMsg($("planMsg"), "Velg et prosjekt forst.", "error");
+      return;
+    }
+
+    const project = projectListForPage().find((p) => p.id === selectedId);
+    if (!project) {
+      refreshProjectSelect("");
+      $("currentProjectId").value = "";
+      setProjectMeta(null);
+      renderPlans();
+      setMsg($("planMsg"), "Fant ikke prosjektet. Listen er oppdatert.", "error");
+      return;
+    }
+
+    $("currentProjectId").value = project.id || "";
+    const syncResult = syncTm1PlansFromGrouting(project.id || "");
+    const syncedProject = (syncResult && syncResult.project) ? syncResult.project : (projectById(project.id || "") || project);
+    setProjectMeta(syncedProject);
+    renderPlans();
+    resetPlanForm({ preserveCommon: false });
+    if (syncResult && syncResult.changed) {
+      const syncParts = [];
+      if (syncResult.imported > 0) syncParts.push(syncResult.imported.toLocaleString("no-NO") + " importert");
+      if (syncResult.updated > 0) syncParts.push(syncResult.updated.toLocaleString("no-NO") + " oppdatert");
+      const syncText = syncParts.length > 0 ? syncParts.join(", ") : "ankere synkronisert";
+      setMsg($("planMsg"), "Prosjekt lastet. Injisering -> TM1: " + syncText + ".", "ok");
+    } else {
+      setMsg($("planMsg"), "Prosjekt lastet.", "ok");
+    }
+  }
+
+  function applyProject(project){
+    if (!project) return false;
+    const projectId = project.id || "";
+    $("currentProjectId").value = projectId;
+    $("projectSelect").value = projectId;
+    const syncResult = syncTm1PlansFromGrouting(projectId);
+    const syncedProject = (syncResult && syncResult.project) ? syncResult.project : (projectById(projectId) || project);
+    setProjectMeta(syncedProject);
+    renderPlans();
+    return true;
+  }
+
+  function savePlan(){
+    const outcome = upsertPlanFromForm();
+    if (outcome.error) {
+      setMsg($("planMsg"), outcome.error, "error");
+      return;
+    }
+
+    renderPlans(outcome.savedId);
+
+    const fieldBtn = $("openFieldPageBtn");
+    if (fieldBtn) {
+      fieldBtn.href = "software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(outcome.projectId) + "&planId=" + encodeURIComponent(outcome.savedId);
+      fieldBtn.setAttribute("aria-disabled", "false");
+    }
+
+    resetPlanForm();
+    setMsg($("planMsg"), outcome.message, "ok");
+  }
+
+  function showGuard(){
+    $("guardView").hidden = false;
+    $("appView").hidden = true;
+    $("guardActions").classList.add("hidden");
+
+    const msg = $("loginMsg");
+    clearMsg(msg);
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: getSession() });
+    }
+
+    const existing = getSession();
+    if (existing && existing.modules && !existing.modules.stressing) {
+      $("pmLoginForm").classList.add("hidden");
+      setMsg(
+        msg,
+        "Innlogget som " + (existing.companyName || "-") + " (" + tierLabel(existing.tier) + "). TM1 Acceptance krever Level 2.",
+        "error"
+      );
+      $("guardActions").classList.remove("hidden");
+      const logoutGuardBtn = $("guardLogoutBtn");
+      if (logoutGuardBtn) logoutGuardBtn.addEventListener("click", logout);
+      return;
+    }
+
+    $("pmLoginForm").classList.remove("hidden");
+    $("pmLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = $("pmUser").value.trim().toLowerCase();
+      const pass = $("pmPass").value;
+      if (!user || !pass) {
+        setMsg(msg, "Fyll ut e-post og passord.", "error");
+        return;
+      }
+      try {
+        const session = await loginViaApi(user, pass);
+        const confirmedSession = isLocalPreviewHost() ? (getSession() || session) : await refreshSessionFromApi();
+        if (!confirmedSession) {
+          throw new Error("Innlogging ble ikke bekreftet av server. Tillat cookies for etterspenning.no og prov igjen.");
+        }
+        location.reload();
+      } catch (err) {
+        setMsg(msg, "Innlogging feilet: " + (err?.message || "ukjent feil"), "error");
+      }
+    });
+  }
+
+  function showApp(){
+    $("guardView").hidden = true;
+    $("appView").hidden = false;
+    updateAccessUi();
+
+    $("logoutBtn").addEventListener("click", logout);
+    $("loadProjectBtn").addEventListener("click", loadSelectedProject);
+
+    $("planForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      savePlan();
+    });
+
+    $("resetPlanBtn").addEventListener("click", () => {
+      resetPlanForm();
+      renderPlans();
+    });
+
+    $("cancelEditPlanBtn").addEventListener("click", () => {
+      resetPlanForm();
+      renderPlans();
+    });
+
+    $("duplicateAnchorBtn").addEventListener("click", duplicateAnchorForNewPlan);
+
+    ["planProofLoad", "planDatumLoad", "planLockOffLoad", "planSoilType", "planFreeLengthM", "planEModulusNPerMm2"].forEach((id) => {
+      const el = $(id);
+      if (el) {
+        el.addEventListener("input", updateCriteriaPreview);
+        el.addEventListener("change", updateCriteriaPreview);
+      }
+    });
+
+    const steelRecalc = () => {
+      syncSteelTypeUi();
+      updateSteelAreaFromSelection();
+      updateCriteriaPreview();
+    };
+    ["planSteelType", "planStrandCount", "planStrandAreaMm2", "planBarAreaMm2"].forEach((id) => {
+      const el = $(id);
+      if (el) {
+        el.addEventListener("input", steelRecalc);
+        el.addEventListener("change", steelRecalc);
+      }
+    });
+
+    $("planJackId").addEventListener("change", () => {
+      renderPlanJackSelect(activeProject(), $("planJackId").value);
+    });
+
+    refreshProjectSelect("");
+    setProjectMeta(null);
+    resetPlanForm({ preserveCommon: false });
+    renderPlans();
+
+    const fromUrl = currentProjectIdFromUrl();
+    const fromPlan = currentPlanIdFromUrl();
+
+    if (fromUrl) {
+      const project = projectListForPage().find((p) => p.id === fromUrl);
+      if (project) {
+        applyProject(project);
+        setMsg($("planMsg"), "Prosjekt lastet fra prosjektoversikten.", "ok");
+
+        if (fromPlan) {
+          const projectNow = activeProject() || project;
+          const plan = tm1Block(projectNow).plans.find((p) => p.id === fromPlan);
+          if (plan) {
+            fillPlanForm(plan);
+            const fieldBtn = $("openFieldPageBtn");
+            if (fieldBtn) {
+              fieldBtn.href = "software-tm1-acceptance-field.html?projectId=" + encodeURIComponent(projectNow.id || "") + "&planId=" + encodeURIComponent(plan.id || "");
+              fieldBtn.setAttribute("aria-disabled", "false");
+            }
+          }
+        }
+      } else {
+        setMsg($("planMsg"), "Fant ikke prosjekt i lenken.", "error");
+      }
+    } else {
+      const first = projectListForPage()[0];
+      if (first) applyProject(first);
+    }
+
+    window.addEventListener("storage", (ev) => {
+      if (ev.key === projectsStorageKey() || ev.key === STORAGE.projects) {
+        const currentId = activeProjectId();
+        refreshProjectSelect(currentId);
+        if (currentId) {
+          const project = projectListForPage().find((p) => p.id === currentId);
+          if (project) {
+            applyProject(project);
+          } else {
+            $("currentProjectId").value = "";
+            setProjectMeta(null);
+            renderPlans();
+          }
+        } else {
+          renderPlans();
+        }
+      }
+      if (ev.key === STORAGE.auth) {
+        if (!hasPageAccess()) {
+          location.reload();
+        } else {
+          updateAccessUi();
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        updateAccessUi();
+      }
+    });
+  }
+
+  async function initAccessGate(){
+    await refreshSessionFromApi();
+    if (hasPageAccess()) {
+      showApp();
+    } else {
+      showGuard();
+    }
+  }
+
+  initAccessGate();
+</script>
+
+</body>
+</html>

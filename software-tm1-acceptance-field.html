@@ -1,0 +1,2879 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - TM1 Acceptance Feltark | Etterspenning.no</title>
+  <meta name="description" content="TM1 Acceptance feltark for registrering av resultater under stressing." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+      --danger:#ff6b6b;
+      --ok:#8bb93d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1260px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(10px);
+      background:rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1260px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+    .brandtitle{font-weight:900;letter-spacing:.2px}
+    .brandsub{font-size:12px;color:var(--muted)}
+
+    nav.primary{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background:rgba(244,122,32,.12);border-color:rgba(244,122,32,.45);color:var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;justify-content:center;
+      width:44px;height:44px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;left:0;right:0;height:2px;background:var(--text);border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.45);
+      opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:90;
+    }
+    .overlay.open{opacity:1;pointer-events:auto}
+    .drawer{
+      position:fixed;top:0;right:0;height:100%;
+      width:min(84vw, 340px);
+      background:rgba(7,11,20,.96);
+      border-left:1px solid rgba(255,255,255,.12);
+      box-shadow:-18px 0 40px rgba(0,0,0,.35);
+      transform:translateX(102%);
+      transition:transform .22s ease;
+      z-index:100;
+      display:flex;flex-direction:column;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{background:rgba(244,122,32,.12);border-color:rgba(244,122,32,.45)}
+
+    @media (max-width:720px){
+      nav.primary{display:none}
+      .menu-btn{display:flex}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px}
+    }
+
+    .hero{padding:24px 0 10px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size:clamp(24px, 3.2vw, 40px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:96ch;
+      line-height:1.55;
+      font-size:15px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:1fr;
+      align-items:start;
+      margin-top:14px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 8px;font-size:14px;letter-spacing:-0.01em}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    @media (max-width:980px){
+      .row,.row3{grid-template-columns:1fr}
+    }
+
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      outline:none;
+      width:100%;
+      max-width:100%;
+    }
+    textarea{resize:vertical;min-height:78px}
+    input:focus, select:focus, textarea:focus{border-color:rgba(244,122,32,.55)}
+
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
+    .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background:rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color:rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background:linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color:rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.ghost{background:rgba(16,26,47,.28)}
+    .btn.danger{background:rgba(255,90,90,.12);border-color:rgba(255,90,90,.35)}
+
+    .kpi{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-top:8px;
+    }
+    @media (max-width:980px){.kpi{grid-template-columns:1fr 1fr}}
+    @media (max-width:620px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:10px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:14px;font-weight:900;margin-top:4px;overflow-wrap:anywhere}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.25);
+      margin-top:8px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+      font-size:13px;
+    }
+    tbody tr:last-child td{border-bottom:none}
+
+    .cellInput{
+      width:100%;
+      padding:8px 9px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.30);
+      color:var(--text);
+    }
+    .dispTriplet{
+      display:grid;
+      gap:6px;
+    }
+    .dispTripletRow{
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:6px;
+      align-items:center;
+    }
+    .dispTripletRow small{
+      color:var(--muted);
+      font-size:11px;
+      white-space:nowrap;
+    }
+    @media (max-width:980px){
+      table[aria-label="TM1 feltsteg"] th.col-step,
+      table[aria-label="TM1 feltsteg"] td.col-step{
+        display:none;
+      }
+    }
+    @media (max-width:840px){
+      table[aria-label="TM1 feltsteg"] th.col-loadpct,
+      table[aria-label="TM1 feltsteg"] td.col-loadpct{
+        display:none;
+      }
+    }
+    @media (max-width:720px){
+      table[aria-label="TM1 feltsteg"] th.col-loadkn,
+      table[aria-label="TM1 feltsteg"] td.col-loadkn{
+        display:none;
+      }
+    }
+    @media (max-width:620px){
+      table[aria-label="TM1 feltsteg"] th.col-note,
+      table[aria-label="TM1 feltsteg"] td.col-note{
+        display:none;
+      }
+    }
+    .checklist{
+      display:grid;
+      gap:8px;
+      margin-top:10px;
+    }
+    .checkItem{
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      font-size:13px;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.20);
+      border-radius:10px;
+      padding:8px;
+    }
+    .checkItem input{
+      width:auto;
+      margin-top:2px;
+    }
+    .chartWrap{
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      background:rgba(7,11,20,.22);
+      padding:10px;
+    }
+    .chartCanvas{
+      width:100%;
+      height:260px;
+      display:block;
+    }
+
+    .rowActions{display:flex;flex-wrap:wrap;gap:8px}
+    .smallBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.45);
+      color:var(--text);
+      border-radius:10px;
+      padding:6px 9px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .smallBtn:hover{border-color:rgba(255,255,255,.18)}
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.5);
+      font-weight:700;
+    }
+    .status.ok{border-color:rgba(139,185,61,.6);background:rgba(139,185,61,.12)}
+    .status.bad{border-color:rgba(255,107,107,.6);background:rgba(255,107,107,.14)}
+    .status.neutral{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.08)}
+
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+    .msg.warn{border-color:rgba(242,171,59,.6);color:#ffe2b2;background:rgba(242,171,59,.14)}
+    .hidden{display:none !important}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - TM1 Acceptance Feltark</div>
+        <div class="brandsub" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="openMenu" aria-label="Apne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktoy</a>
+      <a class="navlink active" href="software.html">Software</a>
+      <a class="navlink" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktoy</a>
+    <a class="active" href="software.html">Software</a>
+    <a href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap" id="guardView">
+  <section class="hero">
+    <h1>Firma-innlogging</h1>
+    <p>
+      TM1 Acceptance feltark krever Level 2. Logg inn med firma-konto for a sjekke tilgang.
+    </p>
+  </section>
+
+  <div class="card" style="max-width:560px">
+    <div class="cardhead">
+      <div>
+        <h2>Innlogging</h2>
+        <small>Tilgang etter betalt nivaa</small>
+      </div>
+    </div>
+    <div class="cardbody">
+      <form id="pmLoginForm" style="display:grid;gap:10px" autocomplete="off">
+        <label>
+          <span class="lab">E-post</span>
+          <input id="pmUser" type="email" required placeholder="pm@firma.no">
+        </label>
+        <label>
+          <span class="lab">Passord</span>
+          <input id="pmPass" type="password" required placeholder="********">
+        </label>
+        <button class="btn primary" type="submit" style="justify-content:center">Logg inn</button>
+      </form>
+
+      <div class="hint" style="margin-top:10px">
+        Innlogging styres av backend/API og tilgangsnivaa per firma.
+      </div>
+      <div id="loginMsg" class="msg hidden"></div>
+      <div class="actions hidden" id="guardActions">
+        <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+        <a class="btn secondary" href="software-injisering.html">Injisering</a>
+        <button class="btn" id="guardLogoutBtn" type="button">Logg ut</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - TM1 Acceptance Feltark (lukket). Ingen markedsforing-cookies.
+  </footer>
+</div>
+
+<div class="wrap" id="appView" hidden>
+  <section class="hero">
+    <h1>TM1 Acceptance - Feltark</h1>
+    <p>
+      Side for montor/site personell: registrer testtrinn, holdetider og forskyvninger under stressing.
+      Data lagres per prosjekt og TM1-plan.
+    </p>
+    <div class="hint" id="accessInfo"></div>
+    <div class="actions">
+      <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+      <a class="btn secondary" id="openPlanPageBtn" href="software-tm1-acceptance.html">Aapne TM1 Plan</a>
+      <button class="btn ghost" id="logoutBtn" type="button">Logg ut</button>
+    </div>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Kontekst</h2>
+          <small>Velg prosjekt og testplan</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="section">
+          <div class="row">
+            <label>
+              <span class="lab">Prosjekt</span>
+              <select id="projectSelect">
+                <option value="">Velg stressing-prosjekt...</option>
+              </select>
+            </label>
+            <label>
+              <span class="lab">TM1-plan</span>
+              <select id="planSelect">
+                <option value="">Velg plan...</option>
+              </select>
+            </label>
+          </div>
+          <div class="actions">
+            <button class="btn" id="loadContextBtn" type="button">Hent</button>
+          </div>
+          <div class="hint" id="contextHint">Velg prosjekt og plan opprettet i TM1 Plan-siden.</div>
+          <input id="currentProjectId" type="hidden" value="">
+          <input id="currentPlanId" type="hidden" value="">
+        </div>
+
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Anker/Test-ID</div>
+            <div class="val" id="metaAnchor">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Pp / Pa / P0 (kN)</div>
+            <div class="val mono" id="metaLoads">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Lengder (Lf / Lb)</div>
+            <div class="val" id="metaLengths">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Jordtype</div>
+            <div class="val" id="metaSoil">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Jekk</div>
+            <div class="val" id="metaJack">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Ankerpunkt i jekk (mm)</div>
+            <div class="val" id="metaAnchorPoint">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Tverrsnitt (mm2)</div>
+            <div class="val" id="metaCrossSection">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Jekk friksjon (%)</div>
+            <div class="val" id="metaJackFriction">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Feltregistrering</h2>
+          <small>Registrer maledata under test</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <form id="fieldForm">
+          <div class="section">
+            <div class="row">
+              <label>
+                <span class="lab">Kjoring / run-ID</span>
+                <select id="runLabel">
+                  <option value="">Velg run-ID...</option>
+                </select>
+              </label>
+              <label>
+                <span class="lab">Operator</span>
+                <input id="operatorName" type="text" placeholder="f.eks. M. Hansen">
+              </label>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <label>
+                <span class="lab">Temperatur (C)</span>
+                <input id="ambientTempC" type="number" step="0.1" inputmode="decimal" placeholder="f.eks. 7.5">
+              </label>
+            </div>
+            <div id="ambientTempWarning" class="msg warn hidden"><strong>[!]</strong> Temperatur kan påvirke jekk og pumpe, pass på at de er varme før oppspenning startes.</div>
+          </div>
+
+	          <div class="section">
+	            <h3>Jekk-info fra plan</h3>
+	            <div class="kpi">
+	              <div class="box">
+	                <div class="lab">Jack i plan</div>
+	                <div class="val" id="jackPlanInfo">-</div>
+	              </div>
+	              <div class="box">
+	                <div class="lab">Ankerpunkt i jack (mm)</div>
+	                <div class="val" id="jackPlanAnchorPoint">-</div>
+	              </div>
+	            </div>
+	            <div class="hint">Stressingregistrering kan fylles ut direkte etter at plan er valgt.</div>
+	          </div>
+
+          <div class="section">
+            <h3>Trinnregistrering</h3>
+            <table aria-label="TM1 feltsteg">
+              <thead>
+                <tr>
+                  <th class="col-step" style="width:7%">Steg</th>
+                  <th class="col-loadpct" style="width:14%">Last i %</th>
+                  <th class="col-loadkn" style="width:14%">Last (kN)</th>
+                  <th style="width:11%">min.</th>
+                  <th style="width:12%">Trykk (bar)</th>
+                  <th style="width:14%">Beregnet forl. (mm)</th>
+                  <th style="width:18%">forl. (mm)</th>
+                  <th class="col-note" style="width:10%">Notat</th>
+                </tr>
+              </thead>
+              <tbody id="stepRows"></tbody>
+            </table>
+            <div class="hint">Registrer endeforskyvning per trinn. Trinn 1.00 Pp krever alltid 1, 2 og 5 min. Felt for 15 min vises automatisk hvis avvik mellom 2 og 5 min overstiger jordtype-grensen (coarse: 0,20 mm, fine: 0,25 mm). Siste trinn er lock-load (P0).</div>
+          </div>
+
+          <div class="section">
+            <h3>Trykk, Lapp og graf</h3>
+            <div class="kpi">
+              <div class="box">
+                <div class="lab">Lapp (m)</div>
+                <div class="val" id="calcLapp">-</div>
+              </div>
+              <div class="box">
+                <div class="lab">Lapp grense (m)</div>
+                <div class="val" id="calcLappLimit">-</div>
+              </div>
+              <div class="box">
+                <div class="lab">Lapp status</div>
+                <div class="val" id="calcLappStatus">-</div>
+              </div>
+            </div>
+            <div class="chartWrap">
+              <canvas id="pressureDispChart" class="chartCanvas" width="1100" height="360"></canvas>
+            </div>
+	            <div class="hint">Grafen viser last (%) pa x-aksen og forlengelse (mm) pa hoyre akse. P0 lock load vises ikke i grafen.</div>
+          </div>
+
+          <div class="section">
+            <label>
+              <span class="lab">Kommentar feltresultat</span>
+              <textarea id="fieldComment" placeholder="F.eks. avvik, observasjoner, utstyr, forlengelser"></textarea>
+            </label>
+            <input id="editingRecordId" type="hidden" value="">
+            <div class="actions">
+              <button class="btn" id="saveDraftBtn" type="button">Lagre utkast</button>
+              <button class="btn primary" id="saveCompletedBtn" type="button">Lagre som fullfort</button>
+              <button class="btn danger hidden" id="cancelRecordEditBtn" type="button">Avbryt redigering</button>
+              <button class="btn" id="resetFieldBtn" type="button">Nullstill skjema</button>
+            </div>
+            <div id="fieldMsg" class="msg hidden"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Lagrede feltark</h2>
+          <small>Resultater for valgt plan</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <table aria-label="TM1 feltrecords">
+	          <thead>
+	            <tr>
+	              <th style="width:18%">Run</th>
+	              <th style="width:28%">Operator/oppdatert</th>
+	              <th style="width:14%">Lapp</th>
+	              <th style="width:12%">Status</th>
+	              <th style="width:28%">Handling</th>
+            </tr>
+          </thead>
+          <tbody id="recordRows"></tbody>
+        </table>
+        <div id="recordsMsg" class="msg" style="margin-top:10px">Velg plan for a vise feltark.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - TM1 Acceptance Feltark (site personell).
+  </footer>
+</div>
+
+<script>
+  (function initMenu(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+  })();
+</script>
+
+<script src="company-branding.js"></script>
+<script>
+  const STORAGE = {
+    auth: "esp_pm_auth_v1",
+    projects: "esp_pm_projects_v1",
+    jacks: "esp_pm_jacks_v1"
+  };
+
+  const ACCESS_CONFIG = {
+    hours: 12
+  };
+  const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+
+  function modulesForTier(tier){
+    const level2 = tier === "level2";
+    return {
+      projectHandling: true,
+      grouting: true,
+      stressing: level2,
+      jackData: level2
+    };
+  }
+
+  function tierLabel(tier){
+    return tier === "level2" ? "Level 2" : "Level 1";
+  }
+
+  function parseEpochMs(value){
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string"){
+      const parsed = Date.parse(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  function normalizeEmailValue(value){
+    return (value || "").toString().trim().toLowerCase();
+  }
+
+  function normalizeSession(session){
+    if (!session || typeof session !== "object") return null;
+    const tier = session.tier === "level2" ? "level2" : "level1";
+    const expiresAtMs = parseEpochMs(session.expiresAt);
+    if (!expiresAtMs) return null;
+    const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+    return {
+      ...session,
+      tier,
+      modules: {
+        ...modulesForTier(tier),
+        ...incomingModules,
+        projectHandling: true,
+        grouting: true
+      },
+      loginAt: session.loginAt || new Date().toISOString(),
+      expiresAt: expiresAtMs
+    };
+  }
+
+  function migrateLegacySession(raw){
+    if (!raw || raw.role !== "project_manager") return null;
+    const migrated = normalizeSession({
+      type: "company_access",
+      companyId: "legacy-pm",
+      companyName: "Legacy prosjektleder",
+      tier: "level2",
+      email: "",
+      modules: modulesForTier("level2"),
+      loginAt: raw.loginAt || new Date().toISOString(),
+      expiresAt: raw.expiresAt || (Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000))
+    });
+    if (!migrated) return null;
+    writeJson(STORAGE.auth, migrated);
+    return migrated;
+  }
+
+  function apiUrl(path){
+    return API_BASE + "/" + path.replace(/^\/+/, "");
+  }
+
+  async function requestApi(path, options){
+    const opts = options || {};
+    const headers = {};
+    if (opts.body) headers["Content-Type"] = "application/json";
+
+    const res = await fetch(apiUrl(path), {
+      method: opts.method || "GET",
+      credentials: "include",
+      headers,
+      body: opts.body
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {}
+
+    if (!res.ok || !data || data.ok === false) {
+      const msg = (data && (data.error || data.message))
+        ? (data.error || data.message)
+        : ("HTTP " + res.status);
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  function isLocalPreviewHost(){
+    const host = (window.location.hostname || "").toLowerCase();
+    if (window.location.protocol === "file:") return true;
+    if (!host) return true;
+    if (host === "etterspenning.no" || host.endsWith(".etterspenning.no")) return false;
+    return true;
+  }
+
+  function previewFallbackSession(email){
+    const nowIso = new Date().toISOString();
+    return {
+      type: "company_access",
+      userId: 0,
+      name: "Preview bruker",
+      fullName: "Preview bruker",
+      email: (email || "preview@local").toString().trim().toLowerCase(),
+      role: "admin",
+      companyId: "preview-local",
+      companyName: "Preview firma",
+      companyLogo: "",
+      tier: "level2",
+      tierLabel: "Level 2",
+      modules: {
+        projectHandling: true,
+        grouting: true,
+        stressing: true,
+        jackData: true,
+        jackControl: true
+      },
+      previewMode: true,
+      loginAt: nowIso,
+      expiresAt: Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000)
+    };
+  }
+
+  function writeSession(session){
+    const normalized = normalizeSession(session);
+    if (!normalized) return null;
+    writeJson(STORAGE.auth, normalized);
+    return normalized;
+  }
+
+  function clearSession(){
+    localStorage.removeItem(STORAGE.auth);
+  }
+
+  async function refreshSessionFromApi(){
+    try {
+      const data = await requestApi("me.php");
+      if (!data.authenticated || !data.session) {
+        clearSession();
+        return null;
+      }
+      return writeSession(data.session);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function loginViaApi(email, password){
+    try {
+      const data = await requestApi("login.php", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
+      });
+      const session = writeSession(data.session);
+      if (!session) throw new Error("Ugyldig sesjon fra server.");
+      return session;
+    } catch (err) {
+      if (!isLocalPreviewHost()) throw err;
+      const fallback = writeSession(previewFallbackSession(email));
+      if (!fallback) throw err;
+      return fallback;
+    }
+  }
+
+  function $(id){ return document.getElementById(id); }
+
+  function readJson(key, fallback){
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function companyScopeId(){
+    const session = getSession();
+    const raw = session && session.companyId !== undefined && session.companyId !== null
+      ? String(session.companyId).trim()
+      : "";
+    return raw || "no_company";
+  }
+
+  function scopedStorageKey(baseKey){
+    return baseKey + "__company_" + companyScopeId();
+  }
+
+  function projectsStorageKey(){
+    return scopedStorageKey(STORAGE.projects);
+  }
+
+  function jacksStorageKey(){
+    return scopedStorageKey(STORAGE.jacks);
+  }
+
+  function isLegacyCompanyScope(){
+    return companyScopeId() === "legacy-pm";
+  }
+
+  function migrateScopedArrayStore(scopedKey, legacyKey){
+    if (!isLegacyCompanyScope()) return;
+    if (localStorage.getItem(scopedKey) !== null) return;
+
+    const markerKey = legacyKey + "__scoped_v1_migrated";
+    if (localStorage.getItem(markerKey) === "1") return;
+
+    const legacyValue = readJson(legacyKey, null);
+    if (Array.isArray(legacyValue)) {
+      writeJson(scopedKey, legacyValue);
+      localStorage.setItem(markerKey, "1");
+    }
+  }
+
+  function normalizeProjectListForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const normalized = [];
+    let changed = !Array.isArray(list);
+
+    source.forEach((project) => {
+      if (!project || typeof project !== "object") {
+        changed = true;
+        return;
+      }
+
+      const rawProjectCompanyId = project.companyId;
+      const projectCompanyId = rawProjectCompanyId === undefined || rawProjectCompanyId === null
+        ? ""
+        : String(rawProjectCompanyId).trim();
+
+      if (projectCompanyId === "") {
+        if (!isLegacyCompanyScope()) {
+          changed = true;
+          return;
+        }
+      } else if (projectCompanyId !== companyId) {
+        changed = true;
+        return;
+      }
+
+      normalized.push({
+        ...project,
+        companyId
+      });
+
+      if (projectCompanyId !== companyId) {
+        changed = true;
+      }
+    });
+
+    return { normalized, changed };
+  }
+
+  function getProjects(){
+    const key = projectsStorageKey();
+    migrateScopedArrayStore(key, STORAGE.projects);
+    const parsed = readJson(key, []);
+    const normalizedResult = normalizeProjectListForCompany(parsed);
+    if (normalizedResult.changed) {
+      writeJson(key, normalizedResult.normalized);
+    }
+    return normalizedResult.normalized;
+  }
+
+  function saveProjects(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const scopedProjects = source
+      .filter((project) => project && typeof project === "object")
+      .map((project) => ({
+        ...project,
+        companyId
+      }));
+
+    writeJson(projectsStorageKey(), scopedProjects);
+  }
+
+  function getJacks(){
+    const key = jacksStorageKey();
+    migrateScopedArrayStore(key, STORAGE.jacks);
+    const v = readJson(key, []);
+    return Array.isArray(v) ? v : [];
+  }
+
+  function getSession(){
+    const raw = readJson(STORAGE.auth, null);
+    if (!raw) return null;
+
+    const normalized = normalizeSession(raw);
+    if (normalized) {
+      if (normalized.expiresAt < Date.now()) {
+        clearSession();
+        return null;
+      }
+      if (Number(raw.expiresAt) !== normalized.expiresAt) {
+        writeJson(STORAGE.auth, normalized);
+      }
+      return normalized;
+    }
+
+    const migrated = migrateLegacySession(raw);
+    if (!migrated || migrated.expiresAt < Date.now()) {
+      clearSession();
+      return null;
+    }
+    return migrated;
+  }
+
+  function hasPageAccess(){
+    const session = getSession();
+    return !!(session && session.modules && session.modules.stressing);
+  }
+
+  function isOnsiteUserSession(session){
+    return !!(session && session.role === "onsite_user");
+  }
+
+  function stressingAssignedEmailForProject(project){
+    return normalizeEmailValue(project && project.stressingAssignedEmail);
+  }
+
+  function canCurrentUserAccessStressingProject(project){
+    const session = getSession();
+    if (!session) return false;
+    if (!isOnsiteUserSession(session)) return true;
+
+    const userEmail = normalizeEmailValue(session.email || "");
+    if (!userEmail) return false;
+    return stressingAssignedEmailForProject(project) === userEmail;
+  }
+
+  function uid(prefix){
+    return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function fmtDate(iso){
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+  }
+
+  function fmtNum(n, dec){
+    const v = Number(n);
+    if (!Number.isFinite(v)) return "-";
+    return v.toLocaleString("no-NO", {
+      minimumFractionDigits: dec,
+      maximumFractionDigits: dec
+    });
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  async function logout(){
+    try {
+      await requestApi("logout.php", { method: "POST", body: "{}" });
+    } catch (e) {}
+    clearSession();
+    location.reload();
+  }
+
+  let activeSession = getSession();
+
+  function setMsg(el, text, type){
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("hidden", "error", "ok");
+    if (type) el.classList.add(type);
+  }
+
+  function clearMsg(el){
+    if (!el) return;
+    el.textContent = "";
+    el.classList.add("hidden");
+    el.classList.remove("error", "ok");
+  }
+
+  function updateAccessUi(){
+    activeSession = getSession();
+    const info = $("accessInfo");
+    if (!info || !activeSession) {
+      if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+        window.CompanyBranding.apply({ session: activeSession });
+      }
+      return;
+    }
+
+    const userLabel = (activeSession.fullName || activeSession.email || "-").toString();
+    info.textContent =
+      "Innlogget: " + userLabel + " • Firma: " + (activeSession.companyName || "-") +
+      " (" + tierLabel(activeSession.tier) + "). Tilgang: Stressing + Jack data.";
+
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: activeSession });
+    }
+  }
+
+  function projectHasStressing(project){
+    return !!(project && project.modules && project.modules.stressing);
+  }
+
+  function projectListForPage(){
+    return getProjects()
+      .filter(projectHasStressing)
+      .filter(canCurrentUserAccessStressingProject)
+      .sort((a, b) => {
+        const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return bt - at;
+      });
+  }
+
+  function projectOptionLabel(project){
+    const name = project.name || "Uten navn";
+    const number = (project.number || "").toString().trim();
+    const status = project.status === "finished" ? "ferdig" : "aktiv";
+    return number ? (name + " (" + number + ") - " + status) : (name + " - " + status);
+  }
+
+  function criteriaForSoil(soilType){
+    const isFine = soilType === "fine";
+    return {
+      soilType: isFine ? "fine" : "coarse",
+      holdAtPpMin: isFine ? 15 : 5,
+      taMin: isFine ? 5 : 2,
+      tbMin: isFine ? 15 : 5,
+      deltaLimitMm: isFine ? 0.25 : 0.20
+    };
+  }
+
+  const DEFAULT_STEEL_E_N_PER_MM2 = 195000;
+  const STEEL_E_KN_PER_MM2 = 195;
+  const LAPP_LOWER_FACTOR = 0.80;
+  const LAPP_UPPER_FACTOR = 1.20;
+
+  function eModulusForPlan(plan){
+    const parsed = Number(plan && plan.eModulusNPerMm2);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_STEEL_E_N_PER_MM2;
+  }
+
+  function stepDefinitionsFromPlan(plan){
+    if (!plan) return [];
+    const pp = Number(plan.proofLoadPp);
+    const pa = Number(plan.datumLoadPa);
+    if (!Number.isFinite(pp) || pp <= 0 || !Number.isFinite(pa) || pa < 0) return [];
+
+    const steps = [
+      { step: 0, label: "Pa", targetLoadkN: pa, minHoldMin: 1 },
+      { step: 1, label: "0.40 Pp", targetLoadkN: pp * 0.40, minHoldMin: 1 },
+      { step: 2, label: "0.55 Pp", targetLoadkN: pp * 0.55, minHoldMin: 1 },
+      { step: 3, label: "0.70 Pp", targetLoadkN: pp * 0.70, minHoldMin: 1 },
+      { step: 4, label: "0.85 Pp", targetLoadkN: pp * 0.85, minHoldMin: 1 },
+      { step: 5, label: "1.00 Pp", targetLoadkN: pp, minHoldMin: 5 }
+    ];
+
+    const p0 = Number(plan.lockOffLoadP0);
+    if (Number.isFinite(p0) && p0 > 0) {
+      steps.push({ step: 6, label: "P0 lock load", targetLoadkN: p0, minHoldMin: 1 });
+    }
+
+    return steps;
+  }
+
+  function resolveJackDataForPlan(plan){
+    if (!plan) {
+      return { areaCm2: null, frictionPct: 0, source: "none" };
+    }
+
+    const fromPlanArea = Number(plan.jackAreaCm2);
+    const fromPlanFric = Number(plan.jackFrictionPct);
+
+    if (Number.isFinite(fromPlanArea) && fromPlanArea > 0) {
+      return {
+        areaCm2: fromPlanArea,
+        frictionPct: Number.isFinite(fromPlanFric) && fromPlanFric >= 0 ? fromPlanFric : 0,
+        source: "plan"
+      };
+    }
+
+    const jack = getJacks().find((j) => j.id === plan.jackId);
+    const area = jack ? Number(jack.areaCm2) : NaN;
+    const friction = jack ? Number(jack.frictionPct) : NaN;
+
+    return {
+      areaCm2: Number.isFinite(area) && area > 0 ? area : null,
+      frictionPct: Number.isFinite(friction) && friction >= 0 ? friction : 0,
+      source: jack ? "jack-register" : "missing"
+    };
+  }
+
+  function pressureBarForLoad(loadkN, areaCm2, frictionPct){
+    const load = Number(loadkN);
+    const area = Number(areaCm2);
+    const friction = Number(frictionPct);
+    if (!Number.isFinite(load) || load < 0 || !Number.isFinite(area) || area <= 0) return null;
+    const frictionFactor = Number.isFinite(friction) ? (1 - friction / 100) : 1;
+    if (!Number.isFinite(frictionFactor) || frictionFactor <= 0) return null;
+    return (load * 100) / (area * frictionFactor);
+  }
+
+  function effectiveElasticLengthM(plan){
+    if (!plan) return null;
+    const freeLengthM = Number(plan.freeLengthM);
+    const jackAnchorPointM = Number(plan.jackAnchorPointMm) / 1000;
+    if (!Number.isFinite(freeLengthM) || freeLengthM <= 0) return null;
+    if (!Number.isFinite(jackAnchorPointM) || jackAnchorPointM < 0) return freeLengthM;
+    return freeLengthM + jackAnchorPointM;
+  }
+
+  function calculatedElongationMm(loadkN, datumLoadkN, steelAreaMm2, elasticLengthM, eModulusNPerMm2){
+    const load = Number(loadkN);
+    const datum = Number(datumLoadkN);
+    const area = Number(steelAreaMm2);
+    const lenM = Number(elasticLengthM);
+    const eModulus = Number(eModulusNPerMm2);
+    if (
+      !Number.isFinite(load) ||
+      !Number.isFinite(datum) ||
+      !Number.isFinite(area) ||
+      area <= 0 ||
+      !Number.isFinite(lenM) ||
+      lenM <= 0 ||
+      !Number.isFinite(eModulus) ||
+      eModulus <= 0
+    ) {
+      return null;
+    }
+    const deltaLoadkN = load - datum;
+    const lengthMm = lenM * 1000;
+    return (deltaLoadkN * 1000 * lengthMm) / (eModulus * area);
+  }
+
+  function projectById(projectId){
+    return projectListForPage().find((p) => p.id === projectId) || null;
+  }
+
+  function tm1Block(project){
+    const dev = (project && project.stressingDev && typeof project.stressingDev === "object")
+      ? project.stressingDev
+      : {};
+    const tm1 = (dev.tm1Acceptance && typeof dev.tm1Acceptance === "object")
+      ? dev.tm1Acceptance
+      : {};
+    const plans = Array.isArray(tm1.plans) ? tm1.plans : [];
+    const records = Array.isArray(tm1.records) ? tm1.records : [];
+    return { dev, tm1, plans, records };
+  }
+
+  function currentProjectId(){
+    return ($("currentProjectId").value || "").trim();
+  }
+
+  function currentPlanId(){
+    return ($("currentPlanId").value || "").trim();
+  }
+
+  function activeProject(){
+    const id = currentProjectId();
+    return id ? projectById(id) : null;
+  }
+
+  function activePlan(){
+    const project = activeProject();
+    if (!project) return null;
+    const planId = currentPlanId();
+    if (!planId) return null;
+    return tm1Block(project).plans.find((p) => p.id === planId) || null;
+  }
+
+  function normalizeRunOptions(raw){
+    const tokens = [];
+    if (Array.isArray(raw)) {
+      raw.forEach((v) => {
+        const txt = (v || "").toString().trim();
+        if (txt) tokens.push(txt);
+      });
+    } else if (raw !== undefined && raw !== null) {
+      raw.toString().split(/[,;\n]/).forEach((v) => {
+        const txt = v.trim();
+        if (txt) tokens.push(txt);
+      });
+    }
+
+    const unique = [];
+    const seen = new Set();
+    tokens.forEach((txt) => {
+      const key = txt.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      unique.push(txt);
+    });
+    return unique;
+  }
+
+  function runOptionsForPlan(plan){
+    if (!plan) return [];
+    const options = normalizeRunOptions(plan.runOptions);
+    return options.length ? options : ["Run 1"];
+  }
+
+  function renderRunSelect(plan, selectedValue){
+    const select = $("runLabel");
+    if (!select) return;
+
+    const options = runOptionsForPlan(plan).slice();
+    const wanted = (selectedValue || "").trim();
+    if (wanted && !options.includes(wanted)) {
+      options.push(wanted);
+    }
+    let html = '<option value="">Velg run-ID...</option>';
+    html += options.map((opt) => '<option value="' + escapeHtml(opt) + '">' + escapeHtml(opt) + '</option>').join("");
+    select.innerHTML = html;
+
+    if (wanted && options.includes(wanted)) {
+      select.value = wanted;
+    } else if (options.length === 1) {
+      select.value = options[0];
+    } else {
+      select.value = "";
+    }
+  }
+
+  function projectIdFromUrl(){
+    const qp = new URLSearchParams(window.location.search);
+    return (qp.get("projectId") || "").trim();
+  }
+
+  function planIdFromUrl(){
+    const qp = new URLSearchParams(window.location.search);
+    return (qp.get("planId") || "").trim();
+  }
+
+  function refreshProjectSelect(selectedId){
+    const select = $("projectSelect");
+    const projects = projectListForPage();
+
+    const current = selectedId !== undefined ? selectedId : (select.value || "");
+    let html = '<option value="">Velg stressing-prosjekt...</option>';
+    html += projects.map((project) =>
+      '<option value="' + escapeHtml(project.id || "") + '">' + escapeHtml(projectOptionLabel(project)) + "</option>"
+    ).join("");
+    select.innerHTML = html;
+
+    if (current && projects.some((project) => project.id === current)) {
+      select.value = current;
+    }
+  }
+
+  function planSortForExecution(a, b){
+    const aAnchor = (a && a.anchorId ? String(a.anchorId) : "").trim();
+    const bAnchor = (b && b.anchorId ? String(b.anchorId) : "").trim();
+
+    if (aAnchor && bAnchor) {
+      const anchorCmp = aAnchor.localeCompare(bAnchor, "no", { numeric: true, sensitivity: "base" });
+      if (anchorCmp !== 0) return anchorCmp;
+    } else if (aAnchor && !bAnchor) {
+      return -1;
+    } else if (!aAnchor && bAnchor) {
+      return 1;
+    }
+
+    const at = new Date(a && (a.createdAt || a.updatedAt) || 0).getTime();
+    const bt = new Date(b && (b.createdAt || b.updatedAt) || 0).getTime();
+    return at - bt;
+  }
+
+  function finishedPlanIdSet(project){
+    const ids = new Set();
+    if (!project) return ids;
+    const block = tm1Block(project);
+    block.records.forEach((record) => {
+      if (!record || !record.completed) return;
+      const id = (record.planId || "").toString().trim();
+      if (id) ids.add(id);
+    });
+    return ids;
+  }
+
+  function isPlanFinished(project, planId){
+    const id = (planId || "").toString().trim();
+    if (!project || !id) return false;
+    return finishedPlanIdSet(project).has(id);
+  }
+
+  function unfinishedPlansForProject(project){
+    if (!project) return [];
+    const block = tm1Block(project);
+    const finishedIds = finishedPlanIdSet(project);
+    return block.plans
+      .filter((plan) => plan && !finishedIds.has((plan.id || "").toString().trim()))
+      .slice()
+      .sort(planSortForExecution);
+  }
+
+  function nextUnfinishedPlan(project, currentPlanId){
+    if (!project) return null;
+    const pending = unfinishedPlansForProject(project);
+    if (pending.length === 0) return null;
+
+    const currentId = (currentPlanId || "").toString().trim();
+    if (!currentId) return pending[0];
+
+    const allPlans = tm1Block(project).plans.slice().sort(planSortForExecution);
+    const pendingById = new Map(pending.map((plan) => [String(plan.id || ""), plan]));
+    const currentIdx = allPlans.findIndex((plan) => String(plan.id || "") === currentId);
+
+    if (currentIdx >= 0) {
+      for (let i = currentIdx + 1; i < allPlans.length; i += 1) {
+        const candidate = pendingById.get(String(allPlans[i].id || ""));
+        if (candidate) return candidate;
+      }
+    }
+
+    return pending[0];
+  }
+
+  function refreshPlanSelect(projectId, selectedPlanId){
+    const select = $("planSelect");
+    if (!projectId) {
+      select.innerHTML = '<option value="">Velg plan...</option>';
+      return;
+    }
+
+    const project = projectById(projectId);
+    if (!project) {
+      select.innerHTML = '<option value="">Velg plan...</option>';
+      return;
+    }
+
+    const plans = unfinishedPlansForProject(project);
+
+    let html = '<option value="">Velg plan...</option>';
+    if (plans.length === 0) {
+      html += '<option value="" disabled>Ingen utestaaende ankere</option>';
+    }
+    html += plans.map((plan) => {
+      const label = plan.title ? (plan.anchorId + " - " + plan.title) : plan.anchorId;
+      return '<option value="' + escapeHtml(plan.id || "") + '">' + escapeHtml(label) + '</option>';
+    }).join("");
+    select.innerHTML = html;
+
+    if (selectedPlanId && plans.some((p) => p.id === selectedPlanId)) {
+      select.value = selectedPlanId;
+    }
+  }
+
+  function applyContext(project, plan){
+    const projectId = project ? (project.id || "") : "";
+    const planId = plan ? (plan.id || "") : "";
+
+    $("currentProjectId").value = projectId;
+    $("currentPlanId").value = planId;
+
+    if (projectId) $("projectSelect").value = projectId;
+    if (planId) $("planSelect").value = planId;
+    else $("planSelect").value = "";
+
+    const planBtn = $("openPlanPageBtn");
+    if (planBtn) {
+      if (projectId) {
+        const url = "software-tm1-acceptance.html?projectId=" + encodeURIComponent(projectId) + (planId ? ("&planId=" + encodeURIComponent(planId)) : "");
+        planBtn.href = url;
+      } else {
+        planBtn.href = "software-tm1-acceptance.html";
+      }
+    }
+
+    $("metaAnchor").textContent = plan ? (plan.anchorId || "-") : "-";
+    $("metaLoads").textContent = plan
+      ? ("Pp " + fmtNum(plan.proofLoadPp, 1) + " | Pa " + fmtNum(plan.datumLoadPa, 1) + " | P0 " + (plan.lockOffLoadP0 === null ? "-" : fmtNum(plan.lockOffLoadP0, 1)))
+      : "-";
+    $("metaLengths").textContent = plan
+      ? ("Lf " + (plan.freeLengthM === null ? "-" : fmtNum(plan.freeLengthM, 2)) + " m | Lb " + (plan.bondLengthM === null ? "-" : fmtNum(plan.bondLengthM, 2)) + " m")
+      : "-";
+    $("metaSoil").textContent = plan ? (plan.soilType === "fine" ? "Fine soil" : "Coarse soil and rock") : "-";
+    const jackLabel = plan
+      ? ((plan.jackCode || "Ukjent jekk") + (plan.jackModel ? (" (" + plan.jackModel + ")") : ""))
+      : "-";
+    const jackAnchor = plan && Number.isFinite(Number(plan.jackAnchorPointMm))
+      ? Number(plan.jackAnchorPointMm).toLocaleString("no-NO", { maximumFractionDigits: 2 }) + " mm"
+      : "-";
+    const jackCalc = resolveJackDataForPlan(plan);
+    const jackFriction = Number.isFinite(jackCalc.frictionPct)
+      ? Number(jackCalc.frictionPct).toLocaleString("no-NO", { maximumFractionDigits: 2 }) + " %"
+      : "-";
+    const steelArea = plan && Number.isFinite(Number(plan.steelAreaMm2))
+      ? Number(plan.steelAreaMm2).toLocaleString("no-NO", { maximumFractionDigits: 0 }) + " mm2"
+      : "-";
+    $("metaJack").textContent = plan ? jackLabel : "-";
+    $("metaAnchorPoint").textContent = plan ? jackAnchor : "-";
+    $("metaCrossSection").textContent = plan ? steelArea : "-";
+    $("metaJackFriction").textContent = plan ? jackFriction : "-";
+    $("jackPlanInfo").textContent = plan ? jackLabel : "-";
+    $("jackPlanAnchorPoint").textContent = plan ? jackAnchor : "-";
+
+	    renderRunSelect(plan, "");
+
+	    renderStepRows(plan, null);
+	    resetFieldForm(false);
+	    renderRecords();
+  }
+
+  function renderStepRows(plan, record){
+    const tbody = $("stepRows");
+    if (!tbody) return;
+
+    const defs = stepDefinitionsFromPlan(plan);
+    const jackCalc = resolveJackDataForPlan(plan);
+    const steelAreaMm2 = Number(plan && plan.steelAreaMm2);
+    const eModulusNPerMm2 = eModulusForPlan(plan);
+    const elasticLengthM = effectiveElasticLengthM(plan);
+    if (!plan || defs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="muted">Velg plan for a vise testtrinn.</td></tr>';
+      return;
+    }
+
+    const byStep = new Map();
+    if (record && Array.isArray(record.steps)) {
+      record.steps.forEach((s) => byStep.set(Number(s.step), s));
+    }
+
+    const criteria = criteriaForSoil(plan.soilType);
+    tbody.innerHTML = defs.map((def, index) => {
+      const saved = byStep.get(Number(def.step));
+      const endDisp = saved && Number.isFinite(Number(saved.endDispMm)) ? String(saved.endDispMm) : "";
+      const endDispAt1 = saved && Number.isFinite(Number(saved.endDispAt1MinMm))
+        ? String(saved.endDispAt1MinMm)
+        : (def.step === 5 && Number.isFinite(Number(saved && saved.endDispMm)) ? String(saved.endDispMm) : "");
+      const endDispAt2 = saved && Number.isFinite(Number(saved.endDispAt2MinMm))
+        ? String(saved.endDispAt2MinMm)
+        : "";
+      const endDispAt5 = saved && Number.isFinite(Number(saved.endDispAt5MinMm))
+        ? String(saved.endDispAt5MinMm)
+        : (def.step === 5 && Number.isFinite(Number(saved && saved.endDispMm)) ? String(saved.endDispMm) : "");
+      const endDispAt15 = saved && Number.isFinite(Number(saved.endDispAt15MinMm))
+        ? String(saved.endDispAt15MinMm)
+        : "";
+      const step5Delta = (def.step === 5 && Number.isFinite(Number(endDispAt2)) && Number.isFinite(Number(endDispAt5)))
+        ? Math.abs(Number(endDispAt5) - Number(endDispAt2))
+        : null;
+      const requires15 = def.step === 5 && step5Delta !== null && step5Delta > criteria.deltaLimitMm;
+      const note = saved && saved.stepNote ? escapeHtml(saved.stepNote) : "";
+      const pressureBar = pressureBarForLoad(def.targetLoadkN, jackCalc.areaCm2, jackCalc.frictionPct);
+      const pressureTxt = Number.isFinite(Number(pressureBar)) ? fmtNum(pressureBar, 1) : "-";
+      const calcElongMm = calculatedElongationMm(def.targetLoadkN, 0, steelAreaMm2, elasticLengthM, eModulusNPerMm2);
+      const calcElongTxt = Number.isFinite(Number(calcElongMm)) ? fmtNum(calcElongMm, 2) : "-";
+      const dispCell = def.step === 5
+        ? (
+          '<div class="dispTriplet">' +
+            '<div class="dispTripletRow"><small>1 min</small><input class="cellInput" type="number" step="0.001" inputmode="decimal" data-k="disp1" value="' + escapeHtml(endDispAt1) + '" placeholder="mm"></div>' +
+            '<div class="dispTripletRow"><small>2 min</small><input class="cellInput" type="number" step="0.001" inputmode="decimal" data-k="disp2" value="' + escapeHtml(endDispAt2) + '" placeholder="mm"></div>' +
+            '<div class="dispTripletRow"><small>5 min</small><input class="cellInput" type="number" step="0.001" inputmode="decimal" data-k="disp5" value="' + escapeHtml(endDispAt5) + '" placeholder="mm"></div>' +
+            '<div class="dispTripletRow ' + (requires15 ? "" : "hidden") + '" data-k="disp15row"><small>15 min</small><input class="cellInput" type="number" step="0.001" inputmode="decimal" data-k="disp15" value="' + escapeHtml(endDispAt15) + '" placeholder="mm"></div>' +
+          '</div>'
+        )
+        : '<input class="cellInput" type="number" step="0.001" inputmode="decimal" data-k="disp" value="' + escapeHtml(endDisp) + '" placeholder="mm">';
+
+      return '<tr data-step="' + def.step + '">' +
+        '<td class="col-step">' + (index + 1).toLocaleString("no-NO") + '</td>' +
+        '<td class="col-loadpct">' + escapeHtml(def.label) + '</td>' +
+        '<td class="mono col-loadkn">' + escapeHtml(fmtNum(def.targetLoadkN, 1)) + ' kN</td>' +
+        '<td>' + def.minHoldMin.toLocaleString("no-NO") + '</td>' +
+        '<td class="mono">' + escapeHtml(pressureTxt) + '</td>' +
+        '<td class="mono">' + escapeHtml(calcElongTxt) + '</td>' +
+        '<td>' + dispCell + '</td>' +
+        '<td class="col-note"><input class="cellInput" type="text" data-k="note" value="' + note + '" placeholder="observasjon"></td>' +
+      '</tr>';
+    }).join("");
+
+    tbody.querySelectorAll('input[data-k^="disp"]').forEach((input) => {
+      input.addEventListener("input", () => {
+        updateStep5Disp15Visibility(plan);
+        computeChecks();
+      });
+    });
+
+    updateStep5Disp15Visibility(plan);
+    updateStressingGate();
+  }
+
+  function step5DeviationState(plan){
+    const criteria = criteriaForSoil(plan && plan.soilType);
+    const limit = Number(criteria.deltaLimitMm);
+    const row = document.querySelector('#stepRows tr[data-step="5"]');
+    if (!row || !Number.isFinite(limit) || limit <= 0) {
+      return { delta: null, deltaLimit: Number.isFinite(limit) ? limit : null, exceedsLimit: false };
+    }
+
+    const d2Input = row.querySelector('input[data-k="disp2"]');
+    const d5Input = row.querySelector('input[data-k="disp5"]');
+    const d2 = d2Input ? Number(d2Input.value.trim()) : NaN;
+    const d5 = d5Input ? Number(d5Input.value.trim()) : NaN;
+    const delta = Number.isFinite(d2) && Number.isFinite(d5) ? Math.abs(d5 - d2) : null;
+    const exceedsLimit = delta !== null && delta > limit;
+
+    return { delta, deltaLimit: limit, exceedsLimit };
+  }
+
+  function updateStep5Disp15Visibility(plan){
+    const row = document.querySelector('#stepRows tr[data-step="5"]');
+    if (!row) return;
+    const row15 = row.querySelector('[data-k="disp15row"]');
+    if (!row15) return;
+
+    const state = step5DeviationState(plan);
+    row15.classList.toggle("hidden", !state.exceedsLimit);
+  }
+
+	  function updateStressingGate(){
+	    const ready = !!activePlan();
+
+	    document.querySelectorAll('#stepRows input, #stepRows select, #stepRows textarea').forEach((input) => {
+	      input.disabled = !ready;
+	    });
+
+	    ["saveDraftBtn", "saveCompletedBtn"].forEach((id) => {
+	      const btn = $(id);
+	      if (btn) btn.disabled = !ready;
+	    });
+	  }
+
+  function updateTemperatureWarning(){
+    const warning = $("ambientTempWarning");
+    const input = $("ambientTempC");
+    if (!warning || !input) return;
+    const raw = (input.value || "").trim();
+    const value = raw === "" ? NaN : Number(raw);
+    warning.classList.toggle("hidden", !(Number.isFinite(value) && value < 0));
+  }
+
+  function loadContext(){
+    const projectId = ($("projectSelect").value || "").trim();
+    const planId = ($("planSelect").value || "").trim();
+
+    if (!projectId || !planId) {
+      setMsg($("fieldMsg"), "Velg baade prosjekt og plan.", "error");
+      return;
+    }
+
+    const project = projectById(projectId);
+    if (!project || !projectHasStressing(project)) {
+      setMsg($("fieldMsg"), "Fant ikke prosjektet.", "error");
+      return;
+    }
+
+    const plan = tm1Block(project).plans.find((p) => p.id === planId);
+    if (!plan) {
+      setMsg($("fieldMsg"), "Fant ikke valgt TM1-plan.", "error");
+      return;
+    }
+    if (isPlanFinished(project, plan.id)) {
+      refreshPlanSelect(projectId, "");
+      setMsg($("fieldMsg"), "Valgt anker er allerede fullfort og kan ikke stresses pa nytt her.", "error");
+      return;
+    }
+
+    applyContext(project, plan);
+    setMsg($("fieldMsg"), "Kontekst lastet.", "ok");
+  }
+
+  function gatherStepValues(plan){
+    const defs = stepDefinitionsFromPlan(plan);
+    const jackCalc = resolveJackDataForPlan(plan);
+    const steelAreaMm2 = Number(plan && plan.steelAreaMm2);
+    const eModulusNPerMm2 = eModulusForPlan(plan);
+    const elasticLengthM = effectiveElasticLengthM(plan);
+    const rows = Array.from($("stepRows").querySelectorAll("tr[data-step]"));
+    const out = [];
+
+    defs.forEach((def) => {
+      const tr = rows.find((r) => Number(r.getAttribute("data-step")) === Number(def.step));
+      if (!tr) return;
+      const dispInput = tr.querySelector('input[data-k="disp"]');
+      const dispRaw = dispInput ? dispInput.value.trim() : "";
+      const disp1Input = tr.querySelector('input[data-k="disp1"]');
+      const disp2Input = tr.querySelector('input[data-k="disp2"]');
+      const disp5Input = tr.querySelector('input[data-k="disp5"]');
+      const disp15Input = tr.querySelector('input[data-k="disp15"]');
+      const disp1Raw = disp1Input ? disp1Input.value.trim() : "";
+      const disp2Raw = disp2Input ? disp2Input.value.trim() : "";
+      const disp5Raw = disp5Input ? disp5Input.value.trim() : "";
+      const disp15Raw = disp15Input ? disp15Input.value.trim() : "";
+      const note = tr.querySelector('input[data-k="note"]').value.trim();
+
+      const endDispMm = dispRaw === "" ? null : Number(dispRaw);
+      const endDispAt1MinMm = disp1Raw === "" ? null : Number(disp1Raw);
+      const endDispAt2MinMm = disp2Raw === "" ? null : Number(disp2Raw);
+      const endDispAt5MinMm = disp5Raw === "" ? null : Number(disp5Raw);
+      const endDispAt15MinMm = disp15Raw === "" ? null : Number(disp15Raw);
+      const calcElongMm = calculatedElongationMm(def.targetLoadkN, 0, steelAreaMm2, elasticLengthM, eModulusNPerMm2);
+      const representativeDisp = def.step === 5
+        ? (Number.isFinite(endDispAt5MinMm) ? endDispAt5MinMm : (Number.isFinite(endDispAt2MinMm) ? endDispAt2MinMm : endDispAt1MinMm))
+        : endDispMm;
+
+      out.push({
+        step: def.step,
+        label: def.label,
+        targetLoadkN: def.targetLoadkN,
+        targetPressureBar: pressureBarForLoad(def.targetLoadkN, jackCalc.areaCm2, jackCalc.frictionPct),
+        minHoldMin: def.minHoldMin,
+        actualHoldMin: null,
+        calcElongMm: Number.isFinite(Number(calcElongMm)) ? Number(calcElongMm) : null,
+        endDispMm: representativeDisp,
+        endDispAt1MinMm: def.step === 5 ? endDispAt1MinMm : null,
+        endDispAt2MinMm: def.step === 5 ? endDispAt2MinMm : null,
+        endDispAt5MinMm: def.step === 5 ? endDispAt5MinMm : null,
+        endDispAt15MinMm: def.step === 5 ? endDispAt15MinMm : null,
+        stepNote: note
+      });
+    });
+
+    return out;
+  }
+
+  function chartProofLoadFromSteps(steps){
+    const step5 = (Array.isArray(steps) ? steps : []).find((s) => Number(s.step) === 5);
+    const pp = step5 ? Number(step5.targetLoadkN) : NaN;
+    return Number.isFinite(pp) && pp > 0 ? pp : null;
+  }
+
+  function chartPercentForStep(step, proofLoad){
+    const load = Number(step && step.targetLoadkN);
+    if (!Number.isFinite(load) || !Number.isFinite(proofLoad) || proofLoad <= 0) return null;
+    return (load / proofLoad) * 100;
+  }
+
+  function isLockLoadStepForChart(step, proofLoad){
+    const stepNo = Number(step && step.step);
+    const label = ((step && step.label) || "").toString().trim().toLowerCase();
+    const load = Number(step && step.targetLoadkN);
+
+    if (Number.isFinite(stepNo) && stepNo >= 6) return true;
+    if (label.indexOf("p0") >= 0) return true;
+    if (label.indexOf("lock") >= 0) return true;
+    if (Number.isFinite(proofLoad) && proofLoad > 0 && Number.isFinite(load) && load > proofLoad) return true;
+    return false;
+  }
+
+  function chartStepsWithoutLockLoad(steps){
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = chartProofLoadFromSteps(list);
+    return list.filter((s) => !isLockLoadStepForChart(s, proofLoad));
+  }
+
+  function chartPressurePointsFromSteps(steps){
+    const out = [];
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = chartProofLoadFromSteps(list);
+    if (!proofLoad) return out;
+
+    list.forEach((s) => {
+      if (isLockLoadStepForChart(s, proofLoad)) return;
+      const stepNo = Number(s.step);
+      const pressure = Number(s.targetPressureBar);
+      const percent = chartPercentForStep(s, proofLoad);
+      if (!Number.isFinite(pressure) || !Number.isFinite(percent)) return;
+      out.push({ x: percent, y: pressure, label: String(stepNo) });
+    });
+    return out;
+  }
+
+  function chartPointsFromSteps(steps){
+    const out = [];
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = chartProofLoadFromSteps(list);
+    if (!proofLoad) return out;
+
+    list.forEach((s) => {
+      if (isLockLoadStepForChart(s, proofLoad)) return;
+      const stepNo = Number(s.step);
+      const percent = chartPercentForStep(s, proofLoad);
+      if (!Number.isFinite(percent)) return;
+
+      if (stepNo === 5) {
+        const d1 = Number(s.endDispAt1MinMm);
+        const d2 = Number(s.endDispAt2MinMm);
+        const d5 = Number(s.endDispAt5MinMm);
+        const d15 = Number(s.endDispAt15MinMm);
+        if (Number.isFinite(d1)) out.push({ x: percent, y: d1, label: "5@1" });
+        if (Number.isFinite(d2)) out.push({ x: percent, y: d2, label: "5@2" });
+        if (Number.isFinite(d5)) out.push({ x: percent, y: d5, label: "5@5" });
+        if (Number.isFinite(d15)) out.push({ x: percent, y: d15, label: "5@15" });
+        return;
+      }
+
+      const disp = Number(s.endDispMm);
+      if (Number.isFinite(disp)) {
+        out.push({ x: percent, y: disp, label: String(stepNo) });
+      }
+    });
+    return out;
+  }
+
+  function chartCalculatedPointsFromSteps(steps){
+    const out = [];
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = chartProofLoadFromSteps(list);
+    if (!proofLoad) return out;
+
+    list.forEach((s) => {
+      if (isLockLoadStepForChart(s, proofLoad)) return;
+      const stepNo = Number(s.step);
+      const calcDisp = Number(s.calcElongMm);
+      const percent = chartPercentForStep(s, proofLoad);
+      if (!Number.isFinite(calcDisp) || !Number.isFinite(percent)) return;
+      out.push({ x: percent, y: calcDisp, label: String(stepNo) + "c" });
+    });
+    return out;
+  }
+
+  function chartLappLimitPointsFromSteps(steps, plan, lappFactor, labelSuffix){
+    const out = [];
+    const list = Array.isArray(steps) ? steps : [];
+    const proofLoad = chartProofLoadFromSteps(list);
+    if (!proofLoad) return out;
+
+    const lappRefM = effectiveElasticLengthM(plan);
+    const steelAreaMm2 = Number(plan && plan.steelAreaMm2);
+    if (!Number.isFinite(lappRefM) || lappRefM <= 0 || !Number.isFinite(steelAreaMm2) || steelAreaMm2 <= 0) {
+      return out;
+    }
+    const lappLimitM = lappRefM * Number(lappFactor);
+    if (!Number.isFinite(lappLimitM) || lappLimitM <= 0) return out;
+
+    list.forEach((s) => {
+      if (isLockLoadStepForChart(s, proofLoad)) return;
+      const stepNo = Number(s && s.step);
+      const loadkN = Number(s && s.targetLoadkN);
+      const percent = chartPercentForStep(s, proofLoad);
+      if (!Number.isFinite(loadkN) || !Number.isFinite(percent)) return;
+
+      // mm = kN * Lapp(m) * 1000 / (195 * As(mm2))
+      const limitMm = (loadkN * lappLimitM * 1000) / (STEEL_E_KN_PER_MM2 * steelAreaMm2);
+      if (!Number.isFinite(limitMm)) return;
+
+      out.push({
+        x: percent,
+        y: limitMm,
+        label: Number.isFinite(stepNo) ? (String(stepNo) + labelSuffix) : ""
+      });
+    });
+
+    return out;
+  }
+
+  function drawPressureDispChart(measuredPoints, calculatedPoints, lowerLimitPoints, upperLimitPoints){
+    const canvas = $("pressureDispChart");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const cssWidth = canvas.clientWidth || 900;
+    const left = 62;
+    const right = 62;
+    const top = 24;
+    const lineLen = 18;
+    const itemGap = 14;
+    const rowGap = 16;
+
+    if (!canvas.dataset.baseHeight) {
+      const baseH = canvas.clientHeight || 260;
+      canvas.dataset.baseHeight = String(Math.max(180, Math.round(baseH)));
+    }
+    const baseCssHeight = Number(canvas.dataset.baseHeight) || 260;
+
+    const validMeasured = (Array.isArray(measuredPoints) ? measuredPoints : []).filter((p) =>
+      Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))
+    );
+    const validCalculated = (Array.isArray(calculatedPoints) ? calculatedPoints : []).filter((p) =>
+      Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))
+    );
+    const validLower = (Array.isArray(lowerLimitPoints) ? lowerLimitPoints : []).filter((p) =>
+      Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))
+    );
+    const validUpper = (Array.isArray(upperLimitPoints) ? upperLimitPoints : []).filter((p) =>
+      Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y))
+    );
+    const legendItems = [];
+    if (validCalculated.length > 0) legendItems.push({ label: "Beregnet forlengelse", color: "rgba(139,185,61,.95)", width: 2, dash: [7, 5] });
+    if (validLower.length > 0) legendItems.push({ label: "Nedre grense", color: "rgba(96,215,166,.95)", width: 1.6, dash: [5, 4] });
+    if (validUpper.length > 0) legendItems.push({ label: "Ovre grense", color: "rgba(255,99,132,.95)", width: 1.6, dash: [2, 5] });
+    if (validMeasured.length > 0) legendItems.push({ label: "Malt forlengelse", color: "rgba(244,122,32,.95)", width: 2, dash: [] });
+
+    ctx.font = "11px system-ui";
+    const legendMinX = left;
+    const legendMaxX = Math.max(legendMinX + 1, cssWidth - right);
+    let legendRows = 0;
+    if (legendItems.length > 0) {
+      legendRows = 1;
+      let rowW = 0;
+      legendItems.forEach((item) => {
+        const textW = ctx.measureText(item.label).width;
+        const itemWidth = lineLen + 6 + textW + itemGap;
+        if (rowW > 0 && (legendMinX + rowW + itemWidth) > legendMaxX) {
+          legendRows += 1;
+          rowW = itemWidth;
+        } else {
+          rowW += itemWidth;
+        }
+      });
+    }
+
+    const bottom = legendRows > 0 ? (68 + ((legendRows - 1) * rowGap)) : 46;
+    const minPlotHeight = 130;
+    const cssHeight = Math.max(baseCssHeight, top + minPlotHeight + bottom);
+
+    canvas.style.height = Math.round(cssHeight) + "px";
+    canvas.width = Math.floor(cssWidth * dpr);
+    canvas.height = Math.floor(cssHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+    ctx.fillStyle = "rgba(16,26,47,.25)";
+    ctx.fillRect(0, 0, cssWidth, cssHeight);
+
+    const w = Math.max(1, cssWidth - left - right);
+    const h = Math.max(1, cssHeight - top - bottom);
+
+    ctx.strokeStyle = "rgba(255,255,255,.20)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(left, top);
+    ctx.lineTo(left, top + h);
+    ctx.lineTo(left + w, top + h);
+    ctx.lineTo(left + w, top);
+    ctx.stroke();
+
+    const validX = validMeasured.concat(validCalculated, validLower, validUpper);
+
+    const noData = validX.length === 0;
+    const xs = noData ? [0, 100] : validX.map((p) => Number(p.x));
+    const elongAll = validMeasured.concat(validCalculated, validLower, validUpper);
+    const elongYs = elongAll.length
+      ? elongAll.map((p) => Number(p.y))
+      : [0, 1];
+    const xMin = 0;
+    const xMax = Math.max(100, ...xs);
+    const elongMin = Math.min(0, ...elongYs);
+    const elongMax = Math.max(...elongYs);
+
+    const xSpan = Math.max(0.001, xMax - xMin);
+    const elongSpan = Math.max(0.001, elongMax - elongMin);
+
+    const xToPx = (x) => left + ((x - xMin) / xSpan) * w;
+    const elongToPx = (y) => top + h - ((y - elongMin) / elongSpan) * h;
+
+    ctx.strokeStyle = "rgba(255,255,255,.12)";
+    ctx.lineWidth = 1;
+    const xTicks = 5;
+    const yTicks = 5;
+    ctx.fillStyle = "rgba(183,195,230,.9)";
+    ctx.font = "11px system-ui";
+
+    for (let i = 0; i <= yTicks; i += 1) {
+      const gy = top + (i * h) / yTicks;
+      const elongVal = elongMax - (i * elongSpan) / yTicks;
+      ctx.beginPath();
+      ctx.moveTo(left, gy);
+      ctx.lineTo(left + w, gy);
+      ctx.stroke();
+      ctx.textAlign = "left";
+      ctx.fillText(fmtNum(elongVal, 2), left + w + 6, gy + 4);
+    }
+    for (let i = 0; i <= xTicks; i += 1) {
+      const gx = left + (i * w) / xTicks;
+      const xVal = xMin + (i * xSpan) / xTicks;
+      ctx.beginPath();
+      ctx.moveTo(gx, top);
+      ctx.lineTo(gx, top + h);
+      ctx.stroke();
+      ctx.textAlign = "center";
+      ctx.fillText(fmtNum(xVal, 0) + "%", gx, top + h + 16);
+    }
+
+    if (validCalculated.length > 0) {
+      const calculatedSeries = validCalculated.slice().sort((a, b) => Number(a.x) - Number(b.x));
+      ctx.strokeStyle = "rgba(139,185,61,.95)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([7, 5]);
+      ctx.beginPath();
+      calculatedSeries.forEach((p, idx) => {
+        const px = xToPx(Number(p.x));
+        const py = elongToPx(Number(p.y));
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "rgba(139,185,61,.95)";
+      calculatedSeries.forEach((p) => {
+        const px = xToPx(Number(p.x));
+        const py = elongToPx(Number(p.y));
+        ctx.beginPath();
+        ctx.arc(px, py, 2.8, 0, Math.PI * 2);
+        ctx.fill();
+        if (p.label) {
+          ctx.fillStyle = "rgba(183,195,230,.9)";
+          ctx.font = "10px system-ui";
+          ctx.textAlign = "right";
+          ctx.fillText(String(p.label), px - 5, py - 5);
+          ctx.fillStyle = "rgba(139,185,61,.95)";
+        }
+      });
+    }
+
+    if (validLower.length > 0) {
+      const lowerSeries = validLower.slice().sort((a, b) => Number(a.x) - Number(b.x));
+      ctx.strokeStyle = "rgba(96,215,166,.95)";
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      lowerSeries.forEach((p, idx) => {
+        const px = xToPx(Number(p.x));
+        const py = elongToPx(Number(p.y));
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    if (validUpper.length > 0) {
+      const upperSeries = validUpper.slice().sort((a, b) => Number(a.x) - Number(b.x));
+      ctx.strokeStyle = "rgba(255,99,132,.95)";
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([2, 5]);
+      ctx.beginPath();
+      upperSeries.forEach((p, idx) => {
+        const px = xToPx(Number(p.x));
+        const py = elongToPx(Number(p.y));
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    if (!noData && validMeasured.length > 0) {
+      const measuredSeries = validMeasured.slice().sort((a, b) => Number(a.x) - Number(b.x));
+      ctx.strokeStyle = "rgba(244,122,32,.9)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      measuredSeries.forEach((p, idx) => {
+        const px = xToPx(Number(p.x));
+        const py = elongToPx(Number(p.y));
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(244,122,32,.95)";
+      measuredSeries.forEach((p) => {
+        const px = xToPx(Number(p.x));
+        const py = elongToPx(Number(p.y));
+        ctx.beginPath();
+        ctx.arc(px, py, 3, 0, Math.PI * 2);
+        ctx.fill();
+        if (p.label) {
+          ctx.fillStyle = "rgba(183,195,230,.9)";
+          ctx.font = "10px system-ui";
+          ctx.textAlign = "left";
+          ctx.fillText(String(p.label), px + 5, py - 5);
+          ctx.fillStyle = "rgba(244,122,32,.95)";
+        }
+      });
+    } else if (noData) {
+      ctx.fillStyle = "rgba(183,195,230,.9)";
+      ctx.font = "12px system-ui";
+      ctx.textAlign = "left";
+      ctx.fillText("Registrer forskyvninger for graf.", left + 10, top + 24);
+    }
+
+    ctx.fillStyle = "rgba(183,195,230,.9)";
+    ctx.font = "12px system-ui";
+    ctx.textAlign = "center";
+    ctx.fillText("Last (%)", left + (w / 2), top + h + 34);
+    ctx.save();
+    ctx.translate(cssWidth - 14, top + h / 2);
+    ctx.rotate(Math.PI / 2);
+    ctx.fillText("Forlengelse (mm)", 0, 0);
+    ctx.restore();
+
+    if (legendItems.length > 0) {
+      let lx = legendMinX;
+      let ly = top + h + 52;
+
+      ctx.font = "11px system-ui";
+      ctx.textAlign = "left";
+      legendItems.forEach((item) => {
+        const textW = ctx.measureText(item.label).width;
+        const itemWidth = lineLen + 6 + textW + itemGap;
+        if (lx + itemWidth > legendMaxX && lx > legendMinX) {
+          lx = legendMinX;
+          ly += rowGap;
+        }
+
+        ctx.strokeStyle = item.color;
+        ctx.lineWidth = item.width;
+        ctx.setLineDash(item.dash || []);
+        ctx.beginPath();
+        ctx.moveTo(lx, ly);
+        ctx.lineTo(lx + lineLen, ly);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "rgba(183,195,230,.95)";
+        ctx.fillText(item.label, lx + lineLen + 6, ly + 4);
+        lx += itemWidth;
+      });
+    }
+  }
+
+  function computeChecks(){
+    const plan = activePlan();
+    if (!plan) {
+      $("calcLapp").textContent = "-";
+      $("calcLappLimit").textContent = "-";
+      $("calcLappStatus").textContent = "-";
+      drawPressureDispChart([], [], [], []);
+      return {
+        holdPass: null,
+        deltaPass: null,
+        delta: null,
+        lappPass: null,
+        lappM: null,
+        lappLowerM: null,
+        lappUpperM: null,
+        lappRefM: null,
+        jackAreaCm2: null,
+        jackFrictionPct: null,
+        pressureAtPpBar: null,
+        pressureAtP0Bar: null,
+        criteria: null,
+        ta: null,
+        tb: null,
+        sa: null,
+        sb: null,
+        deltaLimit: null
+      };
+    }
+
+    const jackCalc = resolveJackDataForPlan(plan);
+    const steps = gatherStepValues(plan);
+    const step0 = steps.find((s) => Number(s.step) === 0);
+    const step5 = steps.find((s) => Number(s.step) === 5);
+    const step6 = steps.find((s) => Number(s.step) === 6);
+    const pressureAtPp = step5 ? step5.targetPressureBar : null;
+    const pressureAtP0 = step6 ? step6.targetPressureBar : null;
+
+    const criteria = criteriaForSoil(plan.soilType);
+    const sPa = step0 ? Number(step0.endDispMm) : NaN;
+    const sPp = step5
+      ? (Number.isFinite(Number(step5.endDispAt5MinMm))
+          ? Number(step5.endDispAt5MinMm)
+          : Number(step5.endDispMm))
+      : NaN;
+    const sPp2 = step5 ? Number(step5.endDispAt2MinMm) : NaN;
+    const creepDeltaMm = Number.isFinite(sPp2) && Number.isFinite(sPp) ? Math.abs(sPp - sPp2) : null;
+    const deltaLimit = Number(criteria.deltaLimitMm);
+    const deltaPass = creepDeltaMm === null || !Number.isFinite(deltaLimit)
+      ? null
+      : creepDeltaMm <= deltaLimit;
+    const requires15 = deltaPass === false;
+    const deltaS = Number.isFinite(sPa) && Number.isFinite(sPp) ? Math.abs(sPp - sPa) : null;
+    const deltaF = step0 && step5 ? (Number(step5.targetLoadkN) - Number(step0.targetLoadkN)) : NaN;
+    const steelArea = Number(plan.steelAreaMm2);
+    const eModulusNPerMm2 = eModulusForPlan(plan);
+
+    let lappM = null;
+    if (
+      deltaS !== null &&
+      Number.isFinite(steelArea) &&
+      steelArea > 0 &&
+      Number.isFinite(deltaF) &&
+      deltaF > 0 &&
+      Number.isFinite(eModulusNPerMm2) &&
+      eModulusNPerMm2 > 0
+    ) {
+      const lappMm = (deltaS * steelArea * eModulusNPerMm2) / (deltaF * 1000);
+      lappM = lappMm / 1000;
+    }
+
+    const freeLengthM = Number(plan.freeLengthM);
+    const jackAnchorM = Number(plan.jackAnchorPointMm) / 1000;
+    const lappRefM = (Number.isFinite(freeLengthM) && freeLengthM >= 0 && Number.isFinite(jackAnchorM) && jackAnchorM >= 0)
+      ? freeLengthM + jackAnchorM
+      : null;
+    const lappLowerM = lappRefM === null ? null : lappRefM * LAPP_LOWER_FACTOR;
+    const lappUpperM = lappRefM === null ? null : lappRefM * LAPP_UPPER_FACTOR;
+    const lappPassByRange = (lappM !== null && lappLowerM !== null && lappUpperM !== null)
+      ? (lappM >= lappLowerM && lappM <= lappUpperM)
+      : null;
+    const lappPass = requires15 ? false : lappPassByRange;
+
+    $("calcLapp").textContent = lappM === null ? "-" : (fmtNum(lappM, 3) + " m");
+    $("calcLappLimit").textContent = (lappLowerM === null || lappUpperM === null)
+      ? "-"
+      : (fmtNum(lappLowerM, 3) + " - " + fmtNum(lappUpperM, 3));
+    if (requires15) {
+      $("calcLappStatus").innerHTML =
+        '<span class="status bad">Ikke akseptert: avvik ' +
+        escapeHtml(fmtNum(creepDeltaMm, 3)) +
+        " mm > " +
+        escapeHtml(fmtNum(deltaLimit, 2)) +
+        ' mm (15 min kreves)</span>';
+    } else if (lappPass === true) {
+      $("calcLappStatus").innerHTML = '<span class="status ok">OK</span>';
+    } else if (lappPass === false) {
+      $("calcLappStatus").innerHTML = '<span class="status bad">Ikke OK</span>';
+    } else {
+      $("calcLappStatus").innerHTML = '<span class="status neutral">Ufullstendig</span>';
+    }
+
+    const stepsForChart = chartStepsWithoutLockLoad(steps);
+    const lowerLimitPoints = chartLappLimitPointsFromSteps(stepsForChart, plan, LAPP_LOWER_FACTOR, "L");
+    const upperLimitPoints = chartLappLimitPointsFromSteps(stepsForChart, plan, LAPP_UPPER_FACTOR, "U");
+    drawPressureDispChart(
+      chartPointsFromSteps(stepsForChart),
+      chartCalculatedPointsFromSteps(stepsForChart),
+      lowerLimitPoints,
+      upperLimitPoints
+    );
+
+    return {
+      holdPass: null,
+      deltaPass,
+      delta: creepDeltaMm,
+      lappPass,
+      lappPassByRange,
+      requires15AtPp: requires15,
+      lappM,
+      lappLowerM,
+      lappUpperM,
+      lappRefM,
+      jackAreaCm2: jackCalc.areaCm2,
+      jackFrictionPct: jackCalc.frictionPct,
+      pressureAtPpBar: pressureAtPp,
+      pressureAtP0Bar: pressureAtP0,
+      criteria,
+      ta: 2,
+      tb: 5,
+      sa: Number.isFinite(sPp2) ? sPp2 : null,
+      sb: Number.isFinite(sPp) ? sPp : null,
+      deltaLimit: Number.isFinite(deltaLimit) ? deltaLimit : null
+    };
+  }
+
+	  function resetFieldForm(clearMessage){
+    if (clearMessage !== false) clearMsg($("fieldMsg"));
+    $("fieldForm").reset();
+    $("editingRecordId").value = "";
+    $("cancelRecordEditBtn").classList.add("hidden");
+
+    const plan = activePlan();
+    renderRunSelect(plan, "");
+	    if (plan) {
+	      renderStepRows(plan, null);
+	    }
+
+	    updateTemperatureWarning();
+	    computeChecks();
+	    updateStressingGate();
+	  }
+
+  function collectFieldRecord(completed){
+    const project = activeProject();
+    const plan = activePlan();
+
+    if (!project || !plan) return { error: "Velg prosjekt og plan forst." };
+
+	    const runLabel = $("runLabel").value.trim();
+	    const operatorName = $("operatorName").value.trim();
+	    const ambientRaw = $("ambientTempC").value.trim();
+
+	    if (!runLabel) return { error: "Run-ID er obligatorisk." };
+	    if (!operatorName) return { error: "Operator er obligatorisk." };
+
+	    const ambientTempC = ambientRaw === "" ? null : Number(ambientRaw);
+	    const lockOffAppliedkN = Number(plan.lockOffLoadP0);
+
+    if (ambientTempC !== null && (!Number.isFinite(ambientTempC))) {
+      return { error: "Temperatur maa vaere et gyldig tall." };
+    }
+    if (!Number.isFinite(lockOffAppliedkN) || lockOffAppliedkN <= 0) {
+      return { error: "Lock-off P0 mangler i planen. Oppdater TM1 plan." };
+    }
+
+    const steps = gatherStepValues(plan);
+    const jackCalc = resolveJackDataForPlan(plan);
+    const invalidStep = steps.find((s) => {
+      const dispOk = (s.endDispMm === null) || Number.isFinite(Number(s.endDispMm));
+      const disp1Ok = (s.endDispAt1MinMm === null) || Number.isFinite(Number(s.endDispAt1MinMm));
+      const disp2Ok = (s.endDispAt2MinMm === null) || Number.isFinite(Number(s.endDispAt2MinMm));
+      const disp5Ok = (s.endDispAt5MinMm === null) || Number.isFinite(Number(s.endDispAt5MinMm));
+      const disp15Ok = (s.endDispAt15MinMm === null) || Number.isFinite(Number(s.endDispAt15MinMm));
+      return !dispOk || !disp1Ok || !disp2Ok || !disp5Ok || !disp15Ok;
+    });
+    if (invalidStep) {
+      return { error: "Feltdata inneholder ugyldig tall i trinnregistreringen." };
+    }
+
+    const step5 = steps.find((s) => Number(s.step) === 5);
+    if (completed && step5) {
+      const criteria = criteriaForSoil(plan.soilType);
+      const deltaLimit = Number(criteria.deltaLimitMm);
+      const has1 = Number.isFinite(Number(step5.endDispAt1MinMm));
+      const has2 = Number.isFinite(Number(step5.endDispAt2MinMm));
+      const has5 = Number.isFinite(Number(step5.endDispAt5MinMm));
+      const has15 = Number.isFinite(Number(step5.endDispAt15MinMm));
+      if (!has1 || !has2 || !has5) {
+        return { error: "Trinn 1.00 Pp krever endeforskyvning ved 1, 2 og 5 min." };
+      }
+
+      const delta = Math.abs(Number(step5.endDispAt5MinMm) - Number(step5.endDispAt2MinMm));
+      const requires15 = Number.isFinite(deltaLimit) && delta > deltaLimit;
+      if (requires15 && !has15) {
+        return {
+          error:
+            "Trinn 1.00 Pp: avvik mellom 2 og 5 min er " +
+            fmtNum(delta, 3) +
+            " mm, som overstiger grensen " +
+            fmtNum(deltaLimit, 2) +
+            " mm. Registrer ogsa 15 min."
+        };
+      }
+    }
+
+    const checks = computeChecks();
+
+	    return {
+	      data: {
+	        projectId: project.id,
+	        planId: plan.id,
+	        jackId: plan.jackId || null,
+	        jackCode: plan.jackCode || "",
+	        jackAnchorPointMm: Number.isFinite(Number(plan.jackAnchorPointMm)) ? Number(plan.jackAnchorPointMm) : null,
+	        jackAreaCm2: Number.isFinite(Number(jackCalc.areaCm2)) ? Number(jackCalc.areaCm2) : null,
+	        jackFrictionPct: Number.isFinite(Number(jackCalc.frictionPct)) ? Number(jackCalc.frictionPct) : null,
+	        jackUsedId: "",
+	        concreteStrengthMpa: null,
+	        jackChecklist: null,
+	        runLabel,
+	        operatorName,
+	        ambientTempC,
+	        lockOffAppliedkN,
+	        steps,
+	        checks,
+	        comment: $("fieldComment").value.trim(),
+	        completed: !!completed
+	      }
+	    };
+  }
+
+  function saveFieldRecord(completed){
+    const result = collectFieldRecord(completed);
+    if (result.error) {
+      setMsg($("fieldMsg"), result.error, "error");
+      return;
+    }
+
+    const data = result.data;
+    const list = getProjects();
+    const pidx = list.findIndex((p) => p.id === data.projectId);
+    if (pidx < 0) {
+      setMsg($("fieldMsg"), "Prosjektet finnes ikke lenger.", "error");
+      return;
+    }
+
+    const project = list[pidx];
+    const { dev, tm1, plans, records } = tm1Block(project);
+    const plan = plans.find((p) => p.id === data.planId);
+    if (!plan) {
+      setMsg($("fieldMsg"), "TM1-plan finnes ikke lenger.", "error");
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const editingId = ($("editingRecordId").value || "").trim();
+
+    let savedId = "";
+    let message = "";
+
+    if (editingId) {
+      const ridx = records.findIndex((r) => r.id === editingId && r.planId === data.planId);
+      if (ridx < 0) {
+        setMsg($("fieldMsg"), "Fant ikke feltarket du redigerte.", "error");
+        return;
+      }
+
+      records[ridx] = {
+        ...records[ridx],
+        ...data,
+        updatedAt: now
+      };
+      savedId = records[ridx].id;
+      message = completed ? "Feltark oppdatert og markert fullfort." : "Feltark oppdatert som utkast.";
+    } else {
+      const created = {
+        id: uid("tm1_record"),
+        ...data,
+        createdAt: now,
+        updatedAt: now
+      };
+      records.push(created);
+      savedId = created.id;
+      message = completed ? "Feltark lagret og markert fullfort." : "Feltark lagret som utkast.";
+    }
+
+    list[pidx] = {
+      ...project,
+      stressingDev: {
+        ...dev,
+        tm1Acceptance: {
+          ...tm1,
+          plans,
+          records,
+          updatedAt: now
+        }
+      },
+      updatedAt: now
+    };
+
+    saveProjects(list);
+
+    const updatedProject = list[pidx];
+    if (completed) {
+      const nextPlan = nextUnfinishedPlan(updatedProject, data.planId);
+      refreshProjectSelect(updatedProject.id || "");
+      refreshPlanSelect(updatedProject.id || "", nextPlan ? (nextPlan.id || "") : "");
+
+	      if (nextPlan) {
+	        applyContext(updatedProject, nextPlan);
+	        $("operatorName").value = data.operatorName || "";
+	        updateStressingGate();
+	        setMsg(
+	          $("fieldMsg"),
+	          message + " Neste anker valgt: " + (nextPlan.anchorId || "-") + ". Du kan ogsa velge et annet utestaaende anker.",
+	          "ok"
+	        );
+      } else {
+        applyContext(updatedProject, null);
+        setMsg($("fieldMsg"), message + " Alle ankere i prosjektet er fullfort.", "ok");
+      }
+      return;
+    }
+
+    renderRecords(savedId);
+    setMsg($("fieldMsg"), message, "ok");
+    resetFieldForm(false);
+  }
+
+  function renderRecords(selectRecordId){
+    const rows = $("recordRows");
+    const msg = $("recordsMsg");
+    const project = activeProject();
+    const plan = activePlan();
+
+    if (!project || !plan) {
+      rows.innerHTML = "";
+      msg.textContent = "Velg plan for a vise feltark.";
+      return;
+    }
+
+    const records = tm1Block(project).records
+      .filter((r) => r.planId === plan.id)
+      .sort((a, b) => {
+        const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return bt - at;
+      });
+
+    if (records.length === 0) {
+      rows.innerHTML = "";
+      msg.textContent = "Ingen feltark registrert for valgt plan.";
+      return;
+    }
+
+	    rows.innerHTML = records.map((r) => {
+	      const lappPass = (r.checks && typeof r.checks.lappPass !== "undefined") ? r.checks.lappPass : null;
+
+      let lappTxt = "-";
+      if (lappPass === true) lappTxt = "OK";
+      else if (lappPass === false) lappTxt = "Ikke OK";
+      else lappTxt = "Ufullstendig";
+
+	      const completedLabel = r.completed ? "Fullfort" : "Utkast";
+	      const completedClass = r.completed ? "ok" : "neutral";
+
+	      return "<tr>" +
+	        "<td><strong>" + escapeHtml(r.runLabel || "-") + "</strong></td>" +
+	        "<td>" +
+	          escapeHtml(r.operatorName || "-") +
+	          "<br><span class=\"muted\">" + escapeHtml(fmtDate(r.updatedAt || r.createdAt)) + "</span>" +
+	        "</td>" +
+	        "<td><span class=\"status " + (lappPass === true ? "ok" : (lappPass === false ? "bad" : "neutral")) + "\">" + lappTxt + "</span></td>" +
+	        "<td><span class=\"status " + completedClass + "\">" + completedLabel + "</span></td>" +
+        "<td><div class=\"rowActions\">" +
+          "<button class=\"smallBtn\" type=\"button\" data-edit=\"" + escapeHtml(r.id) + "\">Rediger</button>" +
+          "<button class=\"smallBtn\" type=\"button\" data-remove=\"" + escapeHtml(r.id) + "\">Slett</button>" +
+        "</div></td>" +
+      "</tr>";
+    }).join("");
+
+    msg.textContent = "Viser " + records.length.toLocaleString("no-NO") + " feltark.";
+
+    rows.querySelectorAll("[data-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const recordId = btn.getAttribute("data-edit");
+        editRecord(recordId);
+      });
+    });
+
+    rows.querySelectorAll("[data-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const recordId = btn.getAttribute("data-remove");
+        removeRecord(recordId);
+      });
+    });
+
+    if (selectRecordId) {
+      const found = records.find((r) => r.id === selectRecordId);
+      if (found) {
+        setMsg($("fieldMsg"), "Feltark lagret.", "ok");
+      }
+    }
+  }
+
+  function editRecord(recordId){
+    const project = activeProject();
+    const plan = activePlan();
+    if (!project || !plan) return;
+
+    const record = tm1Block(project).records.find((r) => r.id === recordId && r.planId === plan.id);
+    if (!record) return;
+
+	    $("editingRecordId").value = record.id;
+	    renderRunSelect(plan, record.runLabel || "");
+	    $("operatorName").value = record.operatorName || "";
+	    $("ambientTempC").value = Number.isFinite(Number(record.ambientTempC)) ? String(record.ambientTempC) : "";
+	    updateTemperatureWarning();
+	    $("fieldComment").value = record.comment || "";
+
+	    renderStepRows(plan, record);
+
+	    $("cancelRecordEditBtn").classList.remove("hidden");
+	    computeChecks();
+	    updateStressingGate();
+    setMsg($("fieldMsg"), "Feltark lastet for redigering.", "ok");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function removeRecord(recordId){
+    const projectId = currentProjectId();
+    const planId = currentPlanId();
+    if (!projectId || !planId) return;
+
+    const list = getProjects();
+    const pidx = list.findIndex((p) => p.id === projectId);
+    if (pidx < 0) return;
+
+    const project = list[pidx];
+    const { dev, tm1, plans, records } = tm1Block(project);
+    const record = records.find((r) => r.id === recordId && r.planId === planId);
+    if (!record) return;
+
+    if (!confirm("Slette feltarket '" + (record.runLabel || record.id) + "'?")) return;
+
+    const nextRecords = records.filter((r) => r.id !== recordId);
+    const now = new Date().toISOString();
+
+    list[pidx] = {
+      ...project,
+      stressingDev: {
+        ...dev,
+        tm1Acceptance: {
+          ...tm1,
+          plans,
+          records: nextRecords,
+          updatedAt: now
+        }
+      },
+      updatedAt: now
+    };
+
+    saveProjects(list);
+
+    if (("" + $("editingRecordId").value) === recordId) {
+      resetFieldForm(false);
+    }
+
+    renderRecords();
+    setMsg($("fieldMsg"), "Feltark slettet.", "ok");
+  }
+
+  function showGuard(){
+    $("guardView").hidden = false;
+    $("appView").hidden = true;
+    $("guardActions").classList.add("hidden");
+
+    const msg = $("loginMsg");
+    clearMsg(msg);
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: getSession() });
+    }
+
+    const existing = getSession();
+    if (existing && existing.modules && !existing.modules.stressing) {
+      $("pmLoginForm").classList.add("hidden");
+      setMsg(
+        msg,
+        "Innlogget som " + (existing.companyName || "-") + " (" + tierLabel(existing.tier) + "). TM1 feltark krever Level 2.",
+        "error"
+      );
+      $("guardActions").classList.remove("hidden");
+      const logoutGuardBtn = $("guardLogoutBtn");
+      if (logoutGuardBtn) logoutGuardBtn.addEventListener("click", logout);
+      return;
+    }
+
+    $("pmLoginForm").classList.remove("hidden");
+    $("pmLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = $("pmUser").value.trim().toLowerCase();
+      const pass = $("pmPass").value;
+      if (!user || !pass) {
+        setMsg(msg, "Fyll ut e-post og passord.", "error");
+        return;
+      }
+      try {
+        const session = await loginViaApi(user, pass);
+        const confirmedSession = isLocalPreviewHost() ? (getSession() || session) : await refreshSessionFromApi();
+        if (!confirmedSession) {
+          throw new Error("Innlogging ble ikke bekreftet av server. Tillat cookies for etterspenning.no og prov igjen.");
+        }
+        location.reload();
+      } catch (err) {
+        setMsg(msg, "Innlogging feilet: " + (err?.message || "ukjent feil"), "error");
+      }
+    });
+  }
+
+  function showApp(){
+    $("guardView").hidden = true;
+    $("appView").hidden = false;
+    updateAccessUi();
+
+    if (isOnsiteUserSession(activeSession)) {
+      const planBtn = $("openPlanPageBtn");
+      if (planBtn) planBtn.style.display = "none";
+      document.querySelectorAll('a[href="software-prosjektstyring.html"]').forEach((link) => {
+        link.style.display = "none";
+      });
+    }
+
+	    $("logoutBtn").addEventListener("click", logout);
+	    $("loadContextBtn").addEventListener("click", loadContext);
+	    $("saveDraftBtn").addEventListener("click", () => saveFieldRecord(false));
+	    $("saveCompletedBtn").addEventListener("click", () => saveFieldRecord(true));
+	    $("ambientTempC").addEventListener("input", updateTemperatureWarning);
+
+    $("resetFieldBtn").addEventListener("click", () => {
+      resetFieldForm();
+      renderRecords();
+    });
+
+    $("cancelRecordEditBtn").addEventListener("click", () => {
+      resetFieldForm();
+      renderRecords();
+    });
+
+    window.addEventListener("resize", computeChecks);
+
+    $("projectSelect").addEventListener("change", () => {
+      const projectId = $("projectSelect").value;
+      refreshPlanSelect(projectId, "");
+      $("currentProjectId").value = "";
+      $("currentPlanId").value = "";
+      applyContext(null, null);
+      clearMsg($("fieldMsg"));
+    });
+
+    refreshProjectSelect("");
+    refreshPlanSelect("", "");
+    applyContext(null, null);
+    updateTemperatureWarning();
+
+    const urlProjectId = projectIdFromUrl();
+    const urlPlanId = planIdFromUrl();
+
+    if (urlProjectId) {
+      const project = projectListForPage().find((p) => p.id === urlProjectId);
+      if (project) {
+        refreshProjectSelect(project.id);
+        refreshPlanSelect(project.id, urlPlanId || "");
+
+        const requestedPlan = urlPlanId
+          ? tm1Block(project).plans.find((p) => p.id === urlPlanId)
+          : null;
+        const requestedPlanAllowed = requestedPlan && !isPlanFinished(project, requestedPlan.id)
+          ? requestedPlan
+          : null;
+        const plan = requestedPlanAllowed || nextUnfinishedPlan(project, requestedPlan ? requestedPlan.id : "");
+        refreshPlanSelect(project.id, plan ? (plan.id || "") : "");
+
+        if (plan) {
+          applyContext(project, plan);
+          if (requestedPlan && !requestedPlanAllowed) {
+            setMsg($("fieldMsg"), "Valgt plan i lenken var allerede fullfort. Neste utestaaende anker er lastet.", "warn");
+          } else {
+            setMsg($("fieldMsg"), "Plan lastet fra prosjektoversikten.", "ok");
+          }
+        } else {
+          applyContext(project, null);
+          setMsg($("fieldMsg"), "Prosjekt lastet, men ingen utestaaende TM1-plan gjenstar.", "ok");
+        }
+      } else if (isOnsiteUserSession(activeSession)) {
+        setMsg($("fieldMsg"), "Prosjektet i lenken er ikke tildelt din onsite-bruker.", "error");
+      }
+    }
+
+    window.addEventListener("storage", (ev) => {
+      if (ev.key === projectsStorageKey() || ev.key === STORAGE.projects) {
+        const pid = currentProjectId();
+        const plid = currentPlanId();
+
+        refreshProjectSelect(pid);
+        refreshPlanSelect(pid, plid);
+
+        const project = pid ? projectById(pid) : null;
+        if (project) {
+          const selectedPlan = plid && !isPlanFinished(project, plid)
+            ? (tm1Block(project).plans.find((p) => p.id === plid) || null)
+            : null;
+          const nextPlan = selectedPlan || nextUnfinishedPlan(project, plid || "");
+          refreshPlanSelect(pid, nextPlan ? (nextPlan.id || "") : "");
+          applyContext(project, nextPlan || null);
+        } else {
+          applyContext(null, null);
+        }
+      }
+
+      if (ev.key === jacksStorageKey() || ev.key === STORAGE.jacks) {
+        const project = activeProject();
+        const plan = activePlan();
+        if (project && plan) {
+          renderStepRows(plan, null);
+          computeChecks();
+        }
+      }
+
+      if (ev.key === STORAGE.auth) {
+        if (!hasPageAccess()) {
+          location.reload();
+        } else {
+          updateAccessUi();
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        updateAccessUi();
+      }
+    });
+  }
+
+  async function initAccessGate(){
+    await refreshSessionFromApi();
+    if (hasPageAccess()) {
+      showApp();
+    } else {
+      showGuard();
+    }
+  }
+
+  initAccessGate();
+</script>
+
+</body>
+</html>

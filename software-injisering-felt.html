@@ -1,0 +1,2107 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - Injisering Felt | Etterspenning.no</title>
+  <meta name="description" content="Feltregistrering for injisering: forbruk, tid og temperatur per anker." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --ok:#8bb93d;
+      --warn:#ffd36a;
+      --bad:#ff6b6b;
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky;top:0;z-index:30;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1200px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{
+      height:36px;
+      width:auto;
+      max-width:140px;
+      display:block;
+      border-radius:8px;
+      object-fit:contain;
+    }
+    .brandtitle{font-weight:900}
+    .brandsub{font-size:12px;color:var(--muted)}
+    .brandmini{font-size:11px;color:var(--muted)}
+    .top-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+    @media (max-width:760px){
+      .brand{min-width:auto}
+      .logo img{height:32px;max-width:120px}
+    }
+
+    .hero{padding:18px 0 10px}
+    .hero h1{margin:0 0 8px;font-size:clamp(24px,3.2vw,40px);line-height:1.08}
+    .hero p{margin:0;color:var(--muted);max-width:90ch;line-height:1.55;font-size:15px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.50);
+      color:var(--text);
+      padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color:rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background:linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color:rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn[disabled]{opacity:.45;cursor:not-allowed}
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:1fr;
+      margin-top:14px;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .row{display:grid;grid-template-columns:1fr auto;gap:10px}
+    @media (max-width:760px){.row{grid-template-columns:1fr}}
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{resize:vertical;min-height:92px}
+    input:focus, select:focus, textarea:focus{border-color:rgba(244,122,32,.55)}
+    input[readonly]{opacity:.9}
+
+    .hint{font-size:12px;color:var(--muted);line-height:1.45}
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+
+    .kpi{
+      margin-top:12px;
+      display:grid;gap:10px;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+    }
+    @media (max-width:980px){.kpi{grid-template-columns:repeat(2, minmax(0, 1fr));}}
+    @media (max-width:520px){.kpi{grid-template-columns:1fr;}}
+    .kpi .box{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;padding:10px;
+      background:rgba(7,11,20,.30);
+    }
+    .kpi .val{font-size:15px;font-weight:900;margin-top:5px}
+
+    .tableWrap{overflow:auto}
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      overflow:hidden;
+      background:rgba(7,11,20,.25);
+      min-width:980px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      padding:10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+    }
+    thead th:first-child,
+    tbody td:first-child{padding-right:6px}
+    thead th:nth-child(2),
+    tbody td:nth-child(2){padding-left:6px}
+    tbody tr:last-child td{border-bottom:none}
+
+    .status{
+      display:inline-flex;align-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800;
+    }
+    .status.pending{border-color:rgba(255,255,255,.25)}
+    .status.sent{border-color:rgba(244,122,32,.65);background:rgba(244,122,32,.14)}
+    .status.approved{border-color:rgba(139,185,61,.6);background:rgba(139,185,61,.12)}
+    .anchorCards{
+      display:grid;
+      gap:12px;
+    }
+    .anchorCard{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:rgba(7,11,20,.22);
+      padding:12px;
+    }
+    .anchorCardHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      padding-bottom:10px;
+      margin-bottom:10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .anchorCardTitle{
+      font-weight:900;
+      font-size:16px;
+      line-height:1.15;
+    }
+    .anchorCardGrid{
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+    }
+    @media (max-width:980px){
+      .anchorCardGrid{grid-template-columns:repeat(2, minmax(0, 1fr));}
+    }
+    @media (max-width:560px){
+      .anchorCardGrid{grid-template-columns:1fr;}
+    }
+    .fieldCell{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;
+      background:rgba(16,26,47,.22);
+      padding:10px;
+      display:grid;
+      gap:6px;
+      align-content:start;
+    }
+    .fieldValue{
+      font-weight:800;
+      line-height:1.2;
+    }
+    .anchorCardActions{
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .checkCol{display:grid;gap:6px;font-size:12px}
+    .checkLine{display:flex;align-items:center;gap:6px}
+    .checkLine input[type="checkbox"]{
+      width:auto;
+      margin:0;
+      flex:0 0 auto;
+    }
+    .checkGroup{
+      display:grid;
+      gap:8px;
+      max-width:340px;
+    }
+    .inlineField{
+      margin-top:10px;
+      display:grid;
+      gap:6px;
+      max-width:220px;
+    }
+    .spreadGrid{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(3, minmax(120px, 150px));
+      max-width:500px;
+    }
+    @media (max-width:760px){
+      .spreadGrid{grid-template-columns:1fr;}
+      .compactInput{width:100%}
+    }
+    .compactInput{
+      width:120px;
+      padding:8px 10px;
+    }
+    .hint.warn{color:#ffe39a}
+    .hint.error{color:#ffd3d3}
+    .hint.ok{color:#d8f0b3}
+    .controlsCell{vertical-align:middle}
+    .finishBlock{display:grid;gap:12px}
+    .finishActions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .dayStatus{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .dayStatus.warn{color:#ffe39a}
+    .dayStatus.ok{color:#d8f0b3}
+    .warnSign{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background:rgba(255,211,106,.18);
+      border:1px solid rgba(255,211,106,.35);
+      color:var(--warn);
+      font-size:12px;
+      line-height:1;
+      flex:0 0 auto;
+    }
+    .sectionCardGap{margin-top:14px}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+<body>
+<script>
+  (async function enforceCompanyAccess(){
+    const KEY = "esp_pm_auth_v1";
+    const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+    function parseEpochMs(value){
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string"){
+        const numeric = Number(value);
+        if (Number.isFinite(numeric)) return numeric;
+        const parsed = Date.parse(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return 0;
+    }
+    function normalizeSession(session){
+      if (!session || typeof session !== "object") return null;
+      const expiresAtMs = parseEpochMs(session.expiresAt);
+      if (!expiresAtMs || expiresAtMs < Date.now()) return null;
+
+      const rawCompanyId = session.companyId === undefined || session.companyId === null
+        ? ""
+        : String(session.companyId).trim();
+      const isLegacyPm = session.role === "project_manager" && rawCompanyId === "";
+      const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+      return {
+        ...session,
+        companyId: isLegacyPm ? "legacy-pm" : (rawCompanyId || session.companyId || ""),
+        modules: {
+          ...incomingModules,
+          ...(isLegacyPm ? { grouting: true } : {})
+        },
+        expiresAt: expiresAtMs
+      };
+    }
+    function readSession(){
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return null;
+        const parsed = normalizeSession(JSON.parse(raw));
+        if (!parsed) {
+          localStorage.removeItem(KEY);
+          return null;
+        }
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+    async function refreshSessionFromApi(){
+      try {
+        const res = await fetch(API_BASE + "/me.php", {
+          method: "GET",
+          credentials: "include"
+        });
+        let data = null;
+        try {
+          data = await res.json();
+        } catch (e) {}
+        if (!res.ok || !data || data.ok === false || !data.authenticated || !data.session) {
+          return null;
+        }
+        const normalized = normalizeSession(data.session);
+        if (!normalized) return null;
+        localStorage.setItem(KEY, JSON.stringify(normalized));
+        return normalized;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    let session = readSession();
+    if (!session) {
+      session = await refreshSessionFromApi();
+    }
+    const hasGrouting = !!(session && session.modules && session.modules.grouting);
+    if (!hasGrouting) {
+      const pageName = (window.location.pathname.split("/").pop() || "software-injisering-felt.html");
+      const next = pageName + window.location.search + window.location.hash;
+      window.location.href = "software.html?next=" + encodeURIComponent(next);
+    }
+  })();
+</script>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - Injisering felt</div>
+        <div class="brandmini" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+      <a class="btn" id="openInjiseringPlanTop" href="software-injisering.html">Injisering plan</a>
+      <button class="btn" id="logoutBtnTop" type="button">Logg ut</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Injisering - Feltregistrering</h1>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Prosjektvalg</h2>
+          <small>Velg prosjekt sendt fra prosjektleder</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="row">
+          <label>
+            <span class="lab">Prosjekt</span>
+            <select id="projectSelect">
+              <option value="">Velg prosjekt...</option>
+            </select>
+          </label>
+          <div class="actions" style="margin-top:22px">
+            <button class="btn secondary" id="loadProjectBtn" type="button">Hent prosjekt</button>
+            <button class="btn secondary" id="refreshProjectsBtn" type="button">Oppdater prosjekter</button>
+            <a class="btn" id="openInjiseringPlanBtn" href="software-injisering.html">Aapne injisering plan</a>
+            <button class="btn" id="logoutBtn" type="button">Logg ut</button>
+          </div>
+        </div>
+        <div class="hint" id="projectInfo" style="margin-top:8px">Prosjektleder ma sende ankerlisten til felt for at den skal vises her.</div>
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Status</div>
+            <div class="val" id="workflowStatus">-</div>
+          </div>
+          <div class="box">
+            <div class="lab">Totalt anker</div>
+            <div class="val" id="kpiTotal">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Venter felt</div>
+            <div class="val" id="kpiPending">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Til/godkjent</div>
+            <div class="val" id="kpiSentApproved">0</div>
+          </div>
+        </div>
+        <div class="msg" id="msgBox">Velg prosjekt og hent data.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Anker for registrering</h2>
+          <small>Kun feltverdier er redigerbare</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="anchorCards" id="fieldRows" aria-label="Injisering feltregistrering"></div>
+        <div class="hint" id="fieldInfo" style="margin-top:8px">Ingen prosjekt valgt.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card sectionCardGap">
+    <div class="cardhead">
+      <div>
+        <h2>Ferdig for dagen</h2>
+        <small>Send melding til prosjektleder</small>
+      </div>
+    </div>
+    <div class="cardbody">
+      <div class="finishBlock">
+        <label>
+          <span class="lab">Kommentar til prosjektleder</span>
+          <textarea id="dayFinishComment" rows="3" placeholder="f.eks. stoppet pga. vaer, tilgang, materialer eller fortsetter i morgen"></textarea>
+        </label>
+        <div class="finishActions">
+          <div class="dayStatus" id="dayFinishStatus">Velg prosjekt for a sende status.</div>
+          <button class="btn secondary" id="finishDayBtn" type="button" disabled>Meld ferdig for i dag</button>
+        </div>
+        <div class="hint" id="dayFinishMeta">Ingen melding sendt ennå.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Injisering felt (lukket). Ingen markedsforing-cookies.
+  </footer>
+</div>
+
+<script src="company-branding.js"></script>
+<script>
+  function $(id){ return document.getElementById(id); }
+  function num(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
+  function clampMin(v, min){ return v < min ? min : v; }
+  function ceilInt(v){ return Number.isFinite(Number(v)) ? Math.ceil(Number(v)) : 0; }
+  function fmt(n, dec){
+    const v = Number(n);
+    if (!Number.isFinite(v)) return "-";
+    return v.toLocaleString("no-NO", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+  function areaFromDiameter_m2(dMm){
+    const dM = clampMin(num(dMm), 0) / 1000;
+    const r = dM / 2;
+    return Math.PI * r * r;
+  }
+  function areaFromDiameter_mm2(dMm){
+    const d = clampMin(num(dMm), 0);
+    const r = d / 2;
+    return Math.PI * r * r;
+  }
+  function pad2(v){ return String(v).padStart(2, "0"); }
+  function toDateTimeLocalValue(value){
+    if (!value) return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    return (
+      d.getFullYear() + "-" +
+      pad2(d.getMonth() + 1) + "-" +
+      pad2(d.getDate()) + "T" +
+      pad2(d.getHours()) + ":" +
+      pad2(d.getMinutes())
+    );
+  }
+  function parseDateInputValue(value){
+    if (!value) return null;
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  function durationMinutes(startValue, stopValue){
+    const start = parseDateInputValue(startValue);
+    const stop = parseDateInputValue(stopValue);
+    if (!start || !stop) return null;
+    const diffMs = stop.getTime() - start.getTime();
+    if (!Number.isFinite(diffMs) || diffMs <= 0) return null;
+    return Math.max(1, Math.round(diffMs / 60000));
+  }
+  function getGroutingPlan(project){
+    return project && project.groutingData && typeof project.groutingData === "object"
+      ? project.groutingData
+      : null;
+  }
+  function steelAreaFromGroutingPlan_m2(plan){
+    if (!plan) return 0;
+    if (plan.anchorType === "bar") {
+      return areaFromDiameter_mm2(plan.barDia) / 1e6;
+    }
+    const strandCount = clampMin(num(plan.strandCount), 0);
+    const strandArea = clampMin(num(plan.strandArea), 0);
+    return (strandCount * strandArea) / 1e6;
+  }
+  function calcAnchorGroutingRecommendation(project, anchor){
+    const plan = getGroutingPlan(project);
+    const result = {
+      liters: null,
+      bags: null,
+      yieldPerBag: 0
+    };
+    if (!plan || !anchor) return result;
+
+    const dBore = clampMin(num(plan.dBore), 0);
+    const dCasing = clampMin(num(plan.dCasing), 0);
+    const wastePct = clampMin(num(plan.wastePct), 0);
+    const yieldPerBag = clampMin(num(plan.yieldPerBag), 0);
+    result.yieldPerBag = yieldPerBag;
+    if (dBore <= 0) return result;
+
+    const areaBore = areaFromDiameter_m2(dBore);
+    const areaCasing = areaFromDiameter_m2(dCasing);
+    const steelArea = steelAreaFromGroutingPlan_m2(plan);
+
+    const lCasing = clampMin(num(anchor.lCasing), 0);
+    const lBore = clampMin(num(anchor.lBore), 0);
+    const lFree = clampMin(num(anchor.lFree), 0);
+    const lBond = clampMin(num(anchor.lBond), 0);
+    const lTotal = lCasing + lBore;
+    const lAnchor = lFree + lBond;
+
+    const vBoreM3 = areaBore * lTotal;
+    const vDiffM3 = Math.max(0, (areaCasing - areaBore)) * lCasing;
+    const lSteel = Math.min(lAnchor, lTotal);
+    const vSteelM3 = steelArea * lSteel;
+    const vRowL = Math.max(0, (vBoreM3 + vDiffM3) - vSteelM3) * 1000;
+    const vRecL = vRowL * (1 + wastePct / 100);
+
+    result.liters = vRecL;
+    result.bags = (yieldPerBag > 0 && vRecL > 0) ? ceilInt(vRecL / yieldPerBag) : null;
+    return result;
+  }
+
+  const STORAGE = {
+    auth: "esp_pm_auth_v1",
+    projects: "esp_pm_projects_v1"
+  };
+  const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+  const drafts = {};
+  const dayFinishDrafts = {};
+
+  function readJson(key, fallback){
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function companyScopeId(){
+    const session = getSession();
+    const raw = session && session.companyId !== undefined && session.companyId !== null
+      ? String(session.companyId).trim()
+      : "";
+    return raw || "no_company";
+  }
+
+  function projectsStorageKey(){
+    return STORAGE.projects + "__company_" + companyScopeId();
+  }
+
+  function isLegacyCompanyScope(){
+    return companyScopeId() === "legacy-pm";
+  }
+
+  function migrateScopedProjectsIfNeeded(scopedKey){
+    if (!isLegacyCompanyScope()) return;
+    if (localStorage.getItem(scopedKey) !== null) return;
+
+    const markerKey = STORAGE.projects + "__scoped_v1_migrated";
+    if (localStorage.getItem(markerKey) === "1") return;
+
+    const legacyProjects = readJson(STORAGE.projects, null);
+    if (Array.isArray(legacyProjects)) {
+      writeJson(scopedKey, legacyProjects);
+      localStorage.setItem(markerKey, "1");
+    }
+  }
+
+  function normalizeProjectListForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const normalized = [];
+    let changed = !Array.isArray(list);
+
+    source.forEach((project) => {
+      if (!project || typeof project !== "object") {
+        changed = true;
+        return;
+      }
+
+      const rawProjectCompanyId = project.companyId;
+      const projectCompanyId = rawProjectCompanyId === undefined || rawProjectCompanyId === null
+        ? ""
+        : String(rawProjectCompanyId).trim();
+
+      if (projectCompanyId === "") {
+        if (!isLegacyCompanyScope()) {
+          changed = true;
+          return;
+        }
+      } else if (projectCompanyId !== companyId) {
+        changed = true;
+        return;
+      }
+
+      const hasWorkflow = !!(
+        project.groutingWorkflow &&
+        Array.isArray(project.groutingWorkflow.anchors) &&
+        project.groutingWorkflow.anchors.some((anchor) => anchor && typeof anchor === "object")
+      );
+      const fallbackWorkflow = hasWorkflow ? null : buildFallbackFieldWorkflow(project);
+
+      normalized.push({
+        ...project,
+        companyId,
+        groutingWorkflow: fallbackWorkflow || project.groutingWorkflow || null
+      });
+
+      if (projectCompanyId !== companyId || !!fallbackWorkflow) {
+        changed = true;
+      }
+    });
+
+    return { normalized, changed };
+  }
+
+  let projectsCache = null;
+  let projectsHydratePromise = null;
+  let projectsSaveChain = Promise.resolve();
+
+  function cloneProjectsList(list){
+    try {
+      return JSON.parse(JSON.stringify(Array.isArray(list) ? list : []));
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function scopedProjectsForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    return source
+      .filter((project) => project && typeof project === "object")
+      .map((project) => ({
+        ...project,
+        companyId
+      }));
+  }
+
+  function readLocalProjectsFallback(){
+    const key = projectsStorageKey();
+    migrateScopedProjectsIfNeeded(key);
+    const parsed = readJson(key, []);
+    const normalizedResult = normalizeProjectListForCompany(parsed);
+    return normalizedResult.normalized;
+  }
+
+  function projectFreshnessMs(project){
+    if (!project || typeof project !== "object") return 0;
+    return Math.max(
+      parseEpochMs(project.updatedAt),
+      parseEpochMs(project.createdAt),
+      parseEpochMs(project.startedAt),
+      parseEpochMs(project.finishedAt)
+    );
+  }
+
+  function pickPreferredProjectVersion(existingProject, candidateProject){
+    const existingStamp = projectFreshnessMs(existingProject);
+    const candidateStamp = projectFreshnessMs(candidateProject);
+    if (candidateStamp > existingStamp) return candidateProject;
+    if (candidateStamp < existingStamp) return existingProject;
+
+    const existingHasWorkflow = hasFieldWorkflow(existingProject);
+    const candidateHasWorkflow = hasFieldWorkflow(candidateProject);
+    if (candidateHasWorkflow && !existingHasWorkflow) return candidateProject;
+    if (existingHasWorkflow && !candidateHasWorkflow) return existingProject;
+    return existingProject;
+  }
+
+  function mergeProjectListsPreferLatest(remoteList, localList){
+    const merged = [];
+    const indexById = new Map();
+    let adoptedLocalVersion = false;
+
+    function upsert(project, source){
+      if (!project || typeof project !== "object") return;
+      const id = normProjectId(project.id);
+      if (!id) return;
+
+      if (!indexById.has(id)) {
+        indexById.set(id, merged.length);
+        merged.push(project);
+        if (source === "local") adoptedLocalVersion = true;
+        return;
+      }
+
+      const idx = indexById.get(id);
+      const current = merged[idx];
+      const preferred = pickPreferredProjectVersion(current, project);
+      if (preferred !== current) {
+        merged[idx] = preferred;
+        if (source === "local") adoptedLocalVersion = true;
+      }
+    }
+
+    (Array.isArray(remoteList) ? remoteList : []).forEach((project) => upsert(project, "remote"));
+    (Array.isArray(localList) ? localList : []).forEach((project) => upsert(project, "local"));
+    return { merged, adoptedLocalVersion };
+  }
+
+  async function hydrateProjectsFromServer(){
+    if (projectsHydratePromise) return projectsHydratePromise;
+
+    projectsHydratePromise = (async () => {
+      const data = await requestApi("projects.php", { method: "GET" });
+      const remoteList = Array.isArray(data && data.projects) ? data.projects : [];
+      const normalizedRemote = normalizeProjectListForCompany(remoteList).normalized;
+      const localFallback = readLocalProjectsFallback();
+      const mergeResult = mergeProjectListsPreferLatest(normalizedRemote, localFallback);
+      const mergedProjects = mergeResult.merged;
+
+      if (mergedProjects.length > 0) {
+        const scopedMerged = scopedProjectsForCompany(mergedProjects);
+        projectsCache = cloneProjectsList(scopedMerged);
+        writeJson(projectsStorageKey(), scopedMerged);
+
+        if (normalizedRemote.length === 0 || mergeResult.adoptedLocalVersion) {
+          await requestApi("projects.php", {
+            method: "POST",
+            body: JSON.stringify({ projects: scopedMerged })
+          });
+        }
+
+        return getProjects();
+      }
+
+      projectsCache = [];
+      writeJson(projectsStorageKey(), []);
+      return [];
+    })().finally(() => {
+      projectsHydratePromise = null;
+    });
+
+    return projectsHydratePromise;
+  }
+
+  function getProjects(){
+    if (!Array.isArray(projectsCache)) {
+      projectsCache = [];
+    }
+    return cloneProjectsList(projectsCache);
+  }
+
+  function saveProjects(list){
+    const scopedProjects = scopedProjectsForCompany(list);
+    projectsCache = cloneProjectsList(scopedProjects);
+    const snapshot = cloneProjectsList(scopedProjects);
+    writeJson(projectsStorageKey(), snapshot);
+
+    projectsSaveChain = projectsSaveChain
+      .catch(() => {})
+      .then(() => requestApi("projects.php", {
+        method: "POST",
+        body: JSON.stringify({ projects: snapshot })
+      }));
+
+    projectsSaveChain.catch((err) => {
+      try { console.error("projects sync failed (injisering-felt)", err); } catch (e) {}
+    });
+
+    return projectsSaveChain;
+  }
+
+  async function flushProjectsSave(){
+    await projectsSaveChain;
+  }
+
+  function parseEpochMs(value){
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string"){
+      const numeric = Number(value);
+      if (Number.isFinite(numeric)) return numeric;
+      const parsed = Date.parse(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  function normalizeEmailValue(value){
+    return (value || "").toString().trim().toLowerCase();
+  }
+
+  function getSession(){
+    const raw = readJson(STORAGE.auth, null);
+    if (!raw || typeof raw !== "object") return null;
+    const expiresAt = parseEpochMs(raw.expiresAt);
+    if (!expiresAt || expiresAt < Date.now()) return null;
+
+    const isLegacyPm = raw.role === "project_manager" &&
+      (raw.companyId === undefined || raw.companyId === null || String(raw.companyId).trim() === "");
+    if (isLegacyPm) {
+      return {
+        ...raw,
+        companyId: "legacy-pm",
+        modules: {
+          ...(raw.modules && typeof raw.modules === "object" ? raw.modules : {}),
+          grouting: true
+        },
+        expiresAt
+      };
+    }
+
+    return {
+      ...raw,
+      expiresAt
+    };
+  }
+
+  function isOnsiteUserSession(session){
+    return !!(session && session.role === "onsite_user");
+  }
+
+  function groutingAssignedEmailForProject(project){
+    return normalizeEmailValue(
+      project && (
+        project.groutingAssignedEmail ||
+        project.siteEmail ||
+        ""
+      )
+    );
+  }
+
+  function canCurrentUserAccessGroutingProject(project){
+    const session = getSession();
+    if (!session) return false;
+    if (!isOnsiteUserSession(session)) return true;
+
+    const userEmail = normalizeEmailValue(session.email || "");
+    if (!userEmail) return false;
+    return groutingAssignedEmailForProject(project) === userEmail;
+  }
+
+  function actorLabel(){
+    const s = getSession();
+    if (!s) return "";
+    return (s.email || s.name || "").toString();
+  }
+
+  function apiUrl(path){
+    return API_BASE + "/" + path.replace(/^\/+/, "");
+  }
+
+  async function requestApi(path, options){
+    const opts = options || {};
+    const headers = {};
+    if (opts.body) headers["Content-Type"] = "application/json";
+
+    const res = await fetch(apiUrl(path), {
+      method: opts.method || "GET",
+      credentials: "include",
+      headers,
+      body: opts.body
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {}
+
+    if (!res.ok || !data || data.ok === false) {
+      const msg = (data && (data.error || data.message))
+        ? (data.error || data.message)
+        : ("HTTP " + res.status);
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  async function logoutAndRedirect(){
+    try {
+      await requestApi("logout.php", { method: "POST", body: "{}" });
+    } catch (e) {}
+    localStorage.removeItem(STORAGE.auth);
+    window.location.href = "software.html";
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function setMsg(text, type){
+    const box = $("msgBox");
+    if (!box) return;
+    box.textContent = text || "";
+    box.classList.remove("ok", "error");
+    if (type) box.classList.add(type);
+  }
+
+  function fmtDateTime(iso){
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+  }
+
+  function boolText(v){
+    return v ? "Ja" : "Nei";
+  }
+
+  function normalizeAnchorNo(value, idx){
+    const raw = (value || "").toString().trim();
+    return raw || ("A" + (idx + 1));
+  }
+
+  function buildFallbackFieldWorkflow(project){
+    const rows = (project && project.groutingData && Array.isArray(project.groutingData.rows))
+      ? project.groutingData.rows
+      : [];
+    if (rows.length === 0) return null;
+
+    const stamp = Date.now().toString(36);
+    const anchors = rows.map((row, idx) => ({
+      id: "grout_anchor_" + stamp + "_" + idx.toString(36) + "_" + Math.random().toString(36).slice(2, 7),
+      anchorNo: normalizeAnchorNo(row && row.anchorNo, idx),
+      lCasing: clampMin(num(row && row.lCasing), 0),
+      lBore: clampMin(num(row && row.lBore), 0),
+      lFree: clampMin(num(row && row.lFree), 0),
+      lBond: clampMin(num(row && row.lBond), 0),
+      status: "pending",
+      siteData: null,
+      approvedAt: null
+    }));
+
+    const now = new Date().toISOString();
+    return {
+      sentToSiteAt: now,
+      sentToSiteBy: actorLabel(),
+      updatedAt: now,
+      status: workflowStatusFromAnchors(anchors),
+      anchors
+    };
+  }
+
+  function workflowStatusFromAnchors(anchors){
+    const list = (Array.isArray(anchors) ? anchors : []).filter((a) => a && typeof a === "object");
+    if (list.length === 0) return "draft";
+    const pending = list.filter((a) => a.status === "pending").length;
+    const sent = list.filter((a) => a.status === "sent_for_approval").length;
+    const approved = list.filter((a) => a.status === "approved").length;
+    if (approved === list.length) return "approved";
+    if (sent > 0 && approved === 0) return "for_approval";
+    if (sent > 0 || approved > 0) return "partly_approved";
+    if (pending === list.length) return "sent_to_site";
+    return "draft";
+  }
+
+  function workflowStatusLabel(status){
+    if (status === "approved") return "Godkjent";
+    if (status === "partly_approved") return "Delvis godkjent";
+    if (status === "for_approval") return "Til godkjenning";
+    if (status === "sent_to_site") return "Sendt til felt";
+    return "Utkast";
+  }
+
+  function projectOptionLabel(project){
+    const name = (project.name || "Uten navn").toString();
+    const number = (project.number || "").toString().trim();
+    const workflow = project.groutingWorkflow;
+    const anchors = (workflow && Array.isArray(workflow.anchors)) ? workflow.anchors : [];
+    const status = workflowStatusLabel(workflowStatusFromAnchors(anchors));
+    return number ? (name + " (" + number + ") - " + status) : (name + " - " + status);
+  }
+
+  function hasFieldWorkflow(project){
+    const anchors = project && project.groutingWorkflow && Array.isArray(project.groutingWorkflow.anchors)
+      ? project.groutingWorkflow.anchors
+      : [];
+    return !!(
+      project &&
+      project.groutingWorkflow &&
+      Array.isArray(project.groutingWorkflow.anchors) &&
+      anchors.some((anchor) => anchor && typeof anchor === "object")
+    );
+  }
+
+  function projectListForPage(){
+    return getProjects()
+      .filter((project) => hasFieldWorkflow(project))
+      .filter((project) => canCurrentUserAccessGroutingProject(project));
+  }
+
+  function projectIdFromUrl(){
+    const qp = new URLSearchParams(window.location.search);
+    return (qp.get("projectId") || "").trim();
+  }
+
+  function normProjectId(value){
+    if (value === undefined || value === null) return "";
+    return String(value).trim();
+  }
+
+  function refreshProjectSelect(selectedId){
+    const select = $("projectSelect");
+    if (!select) return;
+
+    const projects = projectListForPage()
+      .sort((a, b) => {
+        const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return bt - at;
+      });
+
+    const current = normProjectId(selectedId !== undefined ? selectedId : (select.value || ""));
+    let html = '<option value="">Velg prosjekt...</option>';
+    html += projects
+      .map((project) => {
+        const id = normProjectId(project && project.id);
+        if (!id) return "";
+        return '<option value="' + escapeHtml(id) + '">' + escapeHtml(projectOptionLabel(project)) + "</option>";
+      })
+      .join("");
+    select.innerHTML = html;
+
+    if (current && projects.some((project) => normProjectId(project && project.id) === current)) {
+      select.value = current;
+    }
+  }
+
+  let projectsRefreshPromise = null;
+
+  async function refreshProjectsFromServer(options){
+    if (projectsRefreshPromise) return projectsRefreshPromise;
+    const opts = options || {};
+    const selectedId = normProjectId(
+      opts.selectedId !== undefined
+        ? opts.selectedId
+        : activeProjectId()
+    );
+    const silent = !!opts.silent;
+
+    projectsRefreshPromise = (async () => {
+      await hydrateProjectsFromServer();
+      refreshProjectSelect(selectedId);
+
+      const select = $("projectSelect");
+      if (selectedId && select) {
+        select.value = selectedId;
+      }
+
+      const project = activeProject();
+      if (project) {
+        renderSelectedProjectSafely(project, "server-refresh");
+      } else if (opts.renderEmptyOnMissing) {
+        renderSelectedProjectSafely(null, "server-refresh-empty");
+      }
+
+      if (!silent) {
+        setMsg("Prosjektliste oppdatert fra server.", "ok");
+      }
+
+      return getProjects();
+    })()
+      .catch((err) => {
+        if (!silent) {
+          setMsg("Kunne ikke oppdatere prosjekter fra server: " + ((err && err.message) ? err.message : "ukjent feil"), "error");
+        }
+        throw err;
+      })
+      .finally(() => {
+        projectsRefreshPromise = null;
+      });
+
+    return projectsRefreshPromise;
+  }
+
+  function activeProjectId(){
+    return (($("projectSelect") && $("projectSelect").value) || "").trim();
+  }
+
+  function activeProject(){
+    const id = activeProjectId();
+    if (!id) return null;
+    return projectListForPage().find((p) => normProjectId(p && p.id) === id) || null;
+  }
+
+  function updateOpenPlanLinks(project){
+    const base = "software-injisering.html";
+    const href = project && project.id ? (base + "?projectId=" + encodeURIComponent(project.id)) : base;
+    const a = $("openInjiseringPlanBtn");
+    if (a) a.href = href;
+    const b = $("openInjiseringPlanTop");
+    if (b) b.href = href;
+  }
+
+  function workflowAnchors(project){
+    const workflow = project && project.groutingWorkflow;
+    return (workflow && Array.isArray(workflow.anchors)) ? workflow.anchors : [];
+  }
+
+  function pendingAnchorCount(anchors){
+    return (Array.isArray(anchors) ? anchors : []).filter((a) => a && a.status === "pending").length;
+  }
+
+  function dayFinishReportFromWorkflow(workflow){
+    const report = workflow && workflow.siteDayReport;
+    if (!report || typeof report !== "object") return null;
+    return report;
+  }
+
+  function renderDayFinishCard(project){
+    const commentEl = $("dayFinishComment");
+    const statusEl = $("dayFinishStatus");
+    const metaEl = $("dayFinishMeta");
+    const btn = $("finishDayBtn");
+    if (!commentEl || !statusEl || !metaEl || !btn) return;
+
+    if (!project || !hasFieldWorkflow(project)) {
+      commentEl.value = "";
+      commentEl.disabled = true;
+      btn.disabled = true;
+      statusEl.classList.remove("warn", "ok");
+      statusEl.textContent = "Velg prosjekt for a sende status.";
+      metaEl.textContent = "Ingen melding sendt ennå.";
+      return;
+    }
+
+    const workflow = project.groutingWorkflow || {};
+    const anchors = workflowAnchors(project);
+    const pending = pendingAnchorCount(anchors);
+    const total = anchors.length;
+    const savedReport = dayFinishReportFromWorkflow(workflow);
+    const projectId = (project.id || "").toString();
+    const hasDraft = Object.prototype.hasOwnProperty.call(dayFinishDrafts, projectId);
+    const savedComment = savedReport && savedReport.comment !== undefined && savedReport.comment !== null
+      ? String(savedReport.comment)
+      : "";
+
+    commentEl.disabled = false;
+    btn.disabled = false;
+    commentEl.value = hasDraft ? String(dayFinishDrafts[projectId] || "") : savedComment;
+
+    statusEl.classList.remove("warn", "ok");
+    if (pending > 0) {
+      statusEl.classList.add("warn");
+      statusEl.innerHTML =
+        '<span class="warnSign" aria-hidden="true">&#9888;</span>' +
+        "Ikke alle anker er ferdige (" +
+        (total - pending).toLocaleString("no-NO") + " av " +
+        total.toLocaleString("no-NO") + "). Du kan likevel melde ferdig for i dag.";
+    } else {
+      statusEl.classList.add("ok");
+      statusEl.textContent = "Alle anker er registrert/sendt. Klar for dagsmelding.";
+    }
+
+    if (savedReport && savedReport.finishedAt) {
+      const pendingAtReport = Number(savedReport.pendingAnchors);
+      const pendingText = Number.isFinite(pendingAtReport)
+        ? (" | Gjensto da: " + pendingAtReport.toLocaleString("no-NO"))
+        : "";
+      const byText = savedReport.finishedBy ? (" | Av: " + String(savedReport.finishedBy)) : "";
+      metaEl.textContent = "Sist meldt ferdig for dagen: " + fmtDateTime(savedReport.finishedAt) + pendingText + byText;
+    } else {
+      metaEl.textContent = "Ingen melding sendt ennå.";
+    }
+  }
+
+  function renderProjectContext(project){
+    const info = $("projectInfo");
+    const workflowStatusEl = $("workflowStatus");
+    const kpiTotal = $("kpiTotal");
+    const kpiPending = $("kpiPending");
+    const kpiSentApproved = $("kpiSentApproved");
+
+    if (!project || !hasFieldWorkflow(project)) {
+      const allProjects = getProjects();
+      const sentProjects = allProjects.filter((p) => hasFieldWorkflow(p));
+      if (info) {
+        if (allProjects.length > 0 && sentProjects.length === 0) {
+          info.textContent = "Fant " + allProjects.length.toLocaleString("no-NO") + " prosjekt, men ingen er sendt til felt ennå. Aapne injisering plan og trykk «Send til feltpersonell».";
+        } else {
+          info.textContent = "Prosjektleder ma sende ankerlisten til felt for at den skal vises her.";
+        }
+      }
+      if (workflowStatusEl) workflowStatusEl.textContent = "-";
+      if (kpiTotal) kpiTotal.textContent = "0";
+      if (kpiPending) kpiPending.textContent = "0";
+      if (kpiSentApproved) kpiSentApproved.textContent = "0";
+      updateOpenPlanLinks(null);
+      renderDayFinishCard(null);
+      return;
+    }
+
+    const workflow = project.groutingWorkflow;
+    const anchorsRaw = Array.isArray(workflow.anchors) ? workflow.anchors : [];
+    const anchors = anchorsRaw.filter((a) => a && typeof a === "object");
+    const pending = anchors.filter((a) => a.status === "pending").length;
+    const sent = anchors.filter((a) => a.status === "sent_for_approval").length;
+    const approved = anchors.filter((a) => a.status === "approved").length;
+    const status = workflowStatusFromAnchors(anchors);
+    const number = (project.number || "").toString().trim();
+
+    if (info) {
+      info.textContent =
+        "Prosjekt: " + (project.name || "Uten navn") +
+        (number ? (" (" + number + ")") : "") +
+        ". Sendt til felt: " + fmtDateTime(workflow.sentToSiteAt) + ".";
+    }
+    if (workflowStatusEl) workflowStatusEl.textContent = workflowStatusLabel(status);
+    if (kpiTotal) kpiTotal.textContent = anchors.length.toLocaleString("no-NO");
+    if (kpiPending) kpiPending.textContent = pending.toLocaleString("no-NO");
+    if (kpiSentApproved) kpiSentApproved.textContent = (sent + approved).toLocaleString("no-NO");
+    updateOpenPlanLinks(project);
+    renderDayFinishCard(project);
+  }
+
+  function statusClass(status){
+    if (status === "approved") return "approved";
+    if (status === "sent_for_approval") return "sent";
+    return "pending";
+  }
+
+  function statusText(status){
+    if (status === "approved") return "Godkjent";
+    if (status === "sent_for_approval") return "Til godkjenning";
+    return "Venter felt";
+  }
+
+  function defaultDraft(anchor){
+    const site = anchor && anchor.siteData ? anchor.siteData : {};
+    return {
+      bagsUsed: site && site.bagsUsed !== undefined ? num(site.bagsUsed) : 0,
+      timeUsedMin: site && site.timeUsedMin !== undefined
+        ? num(site.timeUsedMin)
+        : durationMinutes(site && site.groutingStartAt, site && site.groutingStopAt),
+      returnMassQualityConfirmed: !!(site && site.returnMassQualityConfirmed)
+    };
+  }
+
+  function getDraft(anchor){
+    if (!anchor || !anchor.id) return defaultDraft(anchor);
+    if (!drafts[anchor.id]) drafts[anchor.id] = defaultDraft(anchor);
+    return drafts[anchor.id];
+  }
+
+  function clearDraft(anchorId){
+    if (!anchorId) return;
+    delete drafts[anchorId];
+  }
+
+  function validateDraft(draft){
+    if (!Number.isFinite(Number(draft.bagsUsed)) || Number(draft.bagsUsed) <= 0) {
+      return "Sement brukt ma vare > 0 sekker.";
+    }
+    const timeUsedMin = Number(draft.timeUsedMin);
+    if (!Number.isFinite(timeUsedMin) || timeUsedMin <= 0) {
+      return "Tid brukt ma vare > 0 min (stoppeklokke).";
+    }
+    if (!draft.returnMassQualityConfirmed) {
+      return "Bekreft at masse ut av forankring har samme kvalitet som inn.";
+    }
+    return "";
+  }
+
+  function normalizeSpreadMm(value){
+    if (value === null || value === undefined || value === "") return null;
+    const normalized = typeof value === "string" ? value.trim().replace(",", ".") : value;
+    const n = Number(normalized);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function normalizedPreStartChecks(raw){
+    const src = raw && typeof raw === "object" ? raw : {};
+    return {
+      test3hDone: !!src.test3hDone,
+      oneLiterWeightOk: !!src.oneLiterWeightOk,
+      oneLiterWeightValue: normalizeSpreadMm(src.oneLiterWeightValue),
+      sieveTestOk: !!src.sieveTestOk,
+      spreadTest1Mm: normalizeSpreadMm(src.spreadTest1Mm),
+      spreadTest2Mm: normalizeSpreadMm(src.spreadTest2Mm),
+      spreadTest3Mm: normalizeSpreadMm(src.spreadTest3Mm)
+    };
+  }
+
+  function spreadLimitsFromFirst(firstMm){
+    const first = Number(firstMm);
+    if (!Number.isFinite(first)) return null;
+    return {
+      min: first * 0.9,
+      max: first * 1.1
+    };
+  }
+
+  function spreadValidation(checks){
+    const pre = normalizedPreStartChecks(checks);
+    const t1 = pre.spreadTest1Mm;
+    const t2 = pre.spreadTest2Mm;
+    const t3 = pre.spreadTest3Mm;
+
+    const messages = [];
+    let hasMissing = false;
+
+    if (t1 === null) {
+      messages.push("Spread test 1 mangler.");
+      hasMissing = true;
+    }
+    if (t2 === null) {
+      messages.push("Spread test 2 mangler.");
+      hasMissing = true;
+    }
+    if (t3 === null) {
+      messages.push("Spread test 3 mangler.");
+      hasMissing = true;
+    }
+
+    if (t1 !== null && t1 <= 140) {
+      messages.push("Spread test 1 ma vare > 140 mm.");
+    }
+
+    const limits = t1 !== null ? spreadLimitsFromFirst(t1) : null;
+    if (t2 !== null) {
+      if (t2 <= 140) {
+        messages.push("Spread test 2 ma vare > 140 mm.");
+      } else if (limits && (t2 < limits.min || t2 > limits.max)) {
+        messages.push("Spread test 2 ma vare innenfor +/- 10% av test 1 (" + fmt(limits.min, 1) + " - " + fmt(limits.max, 1) + " mm).");
+      }
+    }
+
+    if (t3 !== null) {
+      if (t3 <= 140) {
+        messages.push("Spread test 3 ma vare > 140 mm.");
+      } else if (limits && (t3 < limits.min || t3 > limits.max)) {
+        messages.push("Spread test 3 ma vare innenfor +/- 10% av test 1 (" + fmt(limits.min, 1) + " - " + fmt(limits.max, 1) + " mm).");
+      }
+    }
+
+    if (t1 !== null && !limits) {
+      messages.push("Ugyldig spread test 1.");
+    }
+
+    if (messages.length > 0) {
+      return {
+        ok: false,
+        type: hasMissing ? "missing" : "rules",
+        messages,
+        message: messages.join(" ")
+      };
+    }
+
+    return {
+      ok: true,
+      type: "ok",
+      messages: [],
+      message: "Spread test OK. Test 2 og 3 er innenfor +/- 10% av test 1."
+    };
+  }
+
+  function spreadValidationMessageForSend(checks){
+    const validation = spreadValidation(checks);
+    if (validation.ok) return "";
+    if (Array.isArray(validation.messages) && validation.messages.length > 0) {
+      return validation.messages.join(" ");
+    }
+    return validation.message || "Spread test er ugyldig.";
+  }
+
+  function derivePreStartChecksFromAnchors(workflow){
+    const anchors = workflow && Array.isArray(workflow.anchors) ? workflow.anchors : [];
+    for (let i = 0; i < anchors.length; i += 1) {
+      const site = anchors[i] && anchors[i].siteData;
+      if (!site || typeof site !== "object") continue;
+      const hasAny =
+        Object.prototype.hasOwnProperty.call(site, "test3hDone") ||
+        Object.prototype.hasOwnProperty.call(site, "oneLiterWeightOk") ||
+        Object.prototype.hasOwnProperty.call(site, "oneLiterWeightValue") ||
+        Object.prototype.hasOwnProperty.call(site, "sieveTestOk") ||
+        Object.prototype.hasOwnProperty.call(site, "spreadTest1Mm") ||
+        Object.prototype.hasOwnProperty.call(site, "spreadTest2Mm") ||
+        Object.prototype.hasOwnProperty.call(site, "spreadTest3Mm");
+      if (!hasAny) continue;
+      return normalizedPreStartChecks(site);
+    }
+    return normalizedPreStartChecks(null);
+  }
+
+  function workflowPreStartChecks(workflow){
+    if (workflow && workflow.preStartChecks && typeof workflow.preStartChecks === "object") {
+      return normalizedPreStartChecks(workflow.preStartChecks);
+    }
+    return derivePreStartChecksFromAnchors(workflow);
+  }
+
+  function renderPreStartChecks(project){
+    const info = $("preStartInfo");
+    const box = $("preStartChecksBox");
+    const input3h = $("preCheck3h");
+    const input1l = $("preCheck1l");
+    const oneLiterWeightValue = $("oneLiterWeightValue");
+    const inputSieve = $("preCheckSieve");
+    const spread1 = $("spreadTest1Mm");
+    const spread2 = $("spreadTest2Mm");
+    const spread3 = $("spreadTest3Mm");
+    const spreadInfo = $("spreadTestInfo");
+    if (!info || !box || !input3h || !input1l || !oneLiterWeightValue || !inputSieve || !spread1 || !spread2 || !spread3 || !spreadInfo) return;
+
+    const disable = !project || !hasFieldWorkflow(project);
+    const checks = disable
+      ? normalizedPreStartChecks(null)
+      : workflowPreStartChecks(project.groutingWorkflow);
+
+    input3h.checked = !!checks.test3hDone;
+    input1l.checked = !!checks.oneLiterWeightOk;
+    inputSieve.checked = !!checks.sieveTestOk;
+    input3h.disabled = disable;
+    input1l.disabled = disable;
+    oneLiterWeightValue.value = checks.oneLiterWeightValue === null ? "" : String(checks.oneLiterWeightValue);
+    oneLiterWeightValue.disabled = disable;
+    inputSieve.disabled = disable;
+    spread1.value = checks.spreadTest1Mm === null ? "" : String(checks.spreadTest1Mm);
+    spread2.value = checks.spreadTest2Mm === null ? "" : String(checks.spreadTest2Mm);
+    spread3.value = checks.spreadTest3Mm === null ? "" : String(checks.spreadTest3Mm);
+    spread1.disabled = disable;
+    spread2.disabled = disable;
+    spread3.disabled = disable;
+    box.setAttribute("aria-disabled", disable ? "true" : "false");
+    spreadInfo.classList.remove("warn", "error", "ok");
+
+    if (disable) {
+      spreadInfo.textContent = "Krav: Test 1 ma vare > 140 mm. Test 2 og 3 ma vare > 140 mm og innenfor +/- 10% av test 1.";
+      info.textContent = "Velg prosjekt for a registrere oppstartskontroller.";
+      return;
+    }
+
+    const validation = spreadValidation(checks);
+    if (validation.ok) {
+      spreadInfo.textContent = validation.message;
+      spreadInfo.classList.add("ok");
+    } else if (validation.type === "missing") {
+      spreadInfo.textContent = validation.message;
+      spreadInfo.classList.add("warn");
+    } else {
+      spreadInfo.textContent = validation.message;
+      spreadInfo.classList.add("error");
+    }
+
+    info.textContent = "Disse kontrollene gjelder hele prosjektet og brukes pa alle anker.";
+  }
+
+  async function applyPreStartChecksToProject(patch){
+    if (!patch || typeof patch !== "object") return;
+
+    const normalizedPatch = {};
+    if (Object.prototype.hasOwnProperty.call(patch, "test3hDone")) normalizedPatch.test3hDone = !!patch.test3hDone;
+    if (Object.prototype.hasOwnProperty.call(patch, "oneLiterWeightOk")) normalizedPatch.oneLiterWeightOk = !!patch.oneLiterWeightOk;
+    if (Object.prototype.hasOwnProperty.call(patch, "oneLiterWeightValue")) normalizedPatch.oneLiterWeightValue = normalizeSpreadMm(patch.oneLiterWeightValue);
+    if (Object.prototype.hasOwnProperty.call(patch, "sieveTestOk")) normalizedPatch.sieveTestOk = !!patch.sieveTestOk;
+    if (Object.prototype.hasOwnProperty.call(patch, "spreadTest1Mm")) normalizedPatch.spreadTest1Mm = normalizeSpreadMm(patch.spreadTest1Mm);
+    if (Object.prototype.hasOwnProperty.call(patch, "spreadTest2Mm")) normalizedPatch.spreadTest2Mm = normalizeSpreadMm(patch.spreadTest2Mm);
+    if (Object.prototype.hasOwnProperty.call(patch, "spreadTest3Mm")) normalizedPatch.spreadTest3Mm = normalizeSpreadMm(patch.spreadTest3Mm);
+    if (Object.keys(normalizedPatch).length === 0) return;
+
+    const project = activeProject();
+    if (!project || !project.id || !hasFieldWorkflow(project)) {
+      setMsg("Velg prosjekt for du oppdaterer kontroll.", "error");
+      return;
+    }
+
+    const projects = getProjects();
+    const projectIdx = projects.findIndex((p) => p.id === project.id);
+    if (projectIdx < 0) {
+      setMsg("Prosjekt ikke funnet.", "error");
+      return;
+    }
+
+    const current = projects[projectIdx];
+    const workflow = current.groutingWorkflow;
+    if (!workflow || !Array.isArray(workflow.anchors)) {
+      setMsg("Mangler feltflyt pa prosjektet.", "error");
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const nextChecks = {
+      ...workflowPreStartChecks(workflow),
+      ...normalizedPatch,
+      updatedAt: now,
+      updatedBy: actorLabel()
+    };
+
+    workflow.preStartChecks = nextChecks;
+    workflow.anchors = workflow.anchors.map((anchor) => {
+      if (!anchor || !anchor.siteData) return anchor;
+      return {
+        ...anchor,
+        siteData: {
+          ...anchor.siteData,
+          test3hDone: !!nextChecks.test3hDone,
+          oneLiterWeightOk: !!nextChecks.oneLiterWeightOk,
+          oneLiterWeightValue: nextChecks.oneLiterWeightValue,
+          sieveTestOk: !!nextChecks.sieveTestOk,
+          spreadTest1Mm: nextChecks.spreadTest1Mm,
+          spreadTest2Mm: nextChecks.spreadTest2Mm,
+          spreadTest3Mm: nextChecks.spreadTest3Mm
+        }
+      };
+    });
+    workflow.updatedAt = now;
+
+    projects[projectIdx] = {
+      ...current,
+      groutingWorkflow: workflow,
+      updatedAt: now
+    };
+
+    saveProjects(projects);
+    try {
+      await flushProjectsSave();
+    } catch (err) {
+      setMsg("Kunne ikke lagre oppstartskontroller til server: " + ((err && err.message) ? err.message : "ukjent feil"), "error");
+      return;
+    }
+    renderProjectContext(projects[projectIdx]);
+    renderFieldRows(projects[projectIdx]);
+    setMsg("Oppstartskontroller oppdatert.", "ok");
+  }
+
+  function renderFieldRows(project){
+    const container = $("fieldRows");
+    const info = $("fieldInfo");
+    if (!container || !info) return;
+
+    if (!project || !hasFieldWorkflow(project)) {
+      container.innerHTML = "";
+      info.textContent = "Ingen prosjekt valgt.";
+      return;
+    }
+
+    const workflow = project.groutingWorkflow;
+    const anchorsRaw = Array.isArray(workflow.anchors) ? workflow.anchors : [];
+    const anchors = anchorsRaw.filter((anchor) => anchor && typeof anchor === "object");
+    if (anchors.length === 0) {
+      container.innerHTML = "";
+      info.textContent = anchorsRaw.length > 0
+        ? "Prosjektets feltflyt inneholder ugyldige ankerdata. Send prosjektet til felt pa nytt fra injisering plan."
+        : "Prosjektet har ingen anker i feltflyten.";
+      return;
+    }
+    let skippedInvalidAnchors = 0;
+    const htmlParts = [];
+
+    anchors.forEach((anchor) => {
+      try {
+        const draft = getDraft(anchor);
+        const locked = anchor.status !== "pending";
+        const site = anchor.siteData || {};
+        const recommendation = calcAnchorGroutingRecommendation(project, anchor);
+        const yieldPerBag = clampMin(num(recommendation.yieldPerBag), 0);
+
+        const bagsUsed = locked
+          ? (site.bagsUsed !== undefined && site.bagsUsed !== null && site.bagsUsed !== ""
+              ? num(site.bagsUsed)
+              : (yieldPerBag > 0 ? (num(site.groutUsedL) / yieldPerBag) : 0))
+          : num(draft.bagsUsed);
+        const timeUsed = locked
+          ? (num(site.timeUsedMin) > 0 ? num(site.timeUsedMin) : durationMinutes(site.groutingStartAt, site.groutingStopAt))
+          : num(draft.timeUsedMin);
+        const returnMassQualityConfirmed = locked ? !!site.returnMassQualityConfirmed : !!draft.returnMassQualityConfirmed;
+        const totalLockedLength =
+          num(anchor.lCasing) +
+          num(anchor.lBore) +
+          num(anchor.lFree) +
+          num(anchor.lBond);
+        const calcBagsText = Number.isFinite(recommendation.bags) ? fmt(recommendation.bags, 0) : "-";
+        const calcLitersText = Number.isFinite(recommendation.liters) ? fmt(recommendation.liters, 1) : "-";
+        const calcHintText = Number.isFinite(recommendation.liters)
+          ? ("Ca. " + calcLitersText + " L grout")
+          : "Mangler beregningsdata fra injisering plan.";
+        const durationText = Number.isFinite(timeUsed) && timeUsed > 0 ? String(timeUsed) : "";
+
+        const sendAction = locked
+          ? '<span class="hint">' + (anchor.status === "approved" ? "Laast (godkjent)" : "Laast (sendt)") + "</span>"
+          : '<button class="btn primary" type="button" data-send-anchor="' + escapeHtml(anchor.id || "") + '">Send</button>';
+
+        htmlParts.push([
+          '<div class="anchorCard">',
+          '  <div class="anchorCardHead">',
+          '    <div>',
+          '      <div class="lab">Anker</div>',
+          '      <div class="anchorCardTitle">' + escapeHtml(anchor.anchorNo || "-") + "</div>",
+          "    </div>",
+          '    <span class="status ' + statusClass(anchor.status) + '">' + escapeHtml(statusText(anchor.status)) + "</span>",
+          "  </div>",
+          '  <div class="anchorCardGrid">',
+          '    <div class="fieldCell">',
+          '      <div class="lab">Total lengde (m)</div>',
+          '      <div class="fieldValue">' + fmt(totalLockedLength, 2) + "</div>",
+          "    </div>",
+          '    <div class="fieldCell">',
+          '      <div class="lab">Beregnet sement (sekker)</div>',
+          '      <div class="fieldValue">' + calcBagsText + "</div>",
+          '      <div class="hint">' + calcHintText + "</div>",
+          "    </div>",
+          '    <label class="fieldCell">',
+          '      <span class="lab">Sement brukt (sekker)</span>',
+          '      <input type="number" min="0" step="0.1" data-anchor-id="' + escapeHtml(anchor.id || "") + '" data-k="bagsUsed" value="' + escapeHtml(String(bagsUsed || "")) + '"' + (locked ? " readonly" : "") + ">",
+          "    </label>",
+          '    <label class="fieldCell">',
+          '      <span class="lab">Stoppeklokke (min)</span>',
+          '      <input type="number" min="1" step="1" data-anchor-id="' + escapeHtml(anchor.id || "") + '" data-k="timeUsedMin" value="' + escapeHtml(durationText) + '"' + (locked ? " readonly" : "") + ">",
+          '      <span class="hint">Systemet registrerer dato automatisk ved sending.</span>',
+          "    </label>",
+          '    <label class="fieldCell">',
+          '      <span class="lab">Kvalitetskontroll masse ut</span>',
+          '      <span class="checkLine"><input type="checkbox" data-anchor-id="' + escapeHtml(anchor.id || "") + '" data-k="returnMassQualityConfirmed"' + (returnMassQualityConfirmed ? " checked" : "") + (locked ? " disabled" : "") + '><span>Masse ut av forankring av samme kvalitet som inn</span></span>',
+          "    </label>",
+          "  </div>",
+          '  <div class="anchorCardActions">' + sendAction + "</div>",
+          "</div>"
+        ].join(""));
+      } catch (err) {
+        skippedInvalidAnchors += 1;
+      }
+    });
+
+    container.innerHTML = htmlParts.join("");
+
+    if (htmlParts.length === 0) {
+      info.textContent = "Kunne ikke vise ankerdata. Send prosjektet til felt pa nytt fra injisering plan.";
+      return;
+    }
+
+    info.textContent = skippedInvalidAnchors > 0
+      ? ("Viser " + htmlParts.length.toLocaleString("no-NO") + " anker. " + skippedInvalidAnchors.toLocaleString("no-NO") + " anker kunne ikke vises (ugyldige data).")
+      : "Anker sendt til godkjenning eller godkjent er laast.";
+
+    container.querySelectorAll("input[data-anchor-id]").forEach((el) => {
+      const anchorId = el.getAttribute("data-anchor-id") || "";
+      const key = el.getAttribute("data-k") || "";
+      if (!anchorId || !key) return;
+
+      if (el.type === "checkbox") {
+        el.addEventListener("change", () => {
+          if (!drafts[anchorId]) drafts[anchorId] = {};
+          drafts[anchorId][key] = !!el.checked;
+        });
+      } else {
+        el.addEventListener("input", () => {
+          if (!drafts[anchorId]) drafts[anchorId] = {};
+          drafts[anchorId][key] = el.value;
+        });
+      }
+    });
+
+    container.querySelectorAll("[data-send-anchor]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const anchorId = btn.getAttribute("data-send-anchor") || "";
+        await submitAnchorForApproval(anchorId);
+      });
+    });
+  }
+
+  function renderSelectedProjectSafely(project, sourceLabel){
+    try {
+      renderProjectContext(project);
+      renderFieldRows(project);
+      return true;
+    } catch (err) {
+      const msg = (err && err.message) ? err.message : String(err || "Ukjent feil");
+      const info = $("fieldInfo");
+      if (info) {
+        info.textContent = "Feil ved visning av feltdata (" + (sourceLabel || "ukjent") + "): " + msg;
+      }
+      setMsg("Feil ved visning av prosjektdata: " + msg, "error");
+      try { console.error("Field render error", sourceLabel, err); } catch (e) {}
+      return false;
+    }
+  }
+
+  async function submitFinishedForDay(){
+    const project = activeProject();
+    const activeId = normProjectId(project && project.id);
+    if (!project || !activeId || !hasFieldWorkflow(project)) {
+      setMsg("Velg prosjekt for a sende dagsmelding.", "error");
+      return;
+    }
+
+    const projects = getProjects();
+    const projectIdx = projects.findIndex((p) => normProjectId(p && p.id) === activeId);
+    if (projectIdx < 0) {
+      setMsg("Prosjekt ikke funnet.", "error");
+      return;
+    }
+
+    const current = projects[projectIdx];
+    const workflow = current.groutingWorkflow;
+    if (!workflow || !Array.isArray(workflow.anchors)) {
+      setMsg("Mangler feltflyt pa prosjektet.", "error");
+      return;
+    }
+
+    const anchors = workflow.anchors;
+    const pending = pendingAnchorCount(anchors);
+    const total = anchors.length;
+    if (pending > 0) {
+      const proceed = window.confirm(
+        "Det gjenstar " + pending.toLocaleString("no-NO") + " av " + total.toLocaleString("no-NO") +
+        " anker. Vil du likevel melde ferdig for i dag?"
+      );
+      if (!proceed) return;
+    }
+
+    const commentEl = $("dayFinishComment");
+    const comment = commentEl ? (commentEl.value || "").toString().trim() : "";
+    const now = new Date().toISOString();
+    const projectId = (current.id || "").toString();
+
+    workflow.siteDayReport = {
+      comment,
+      finishedAt: now,
+      finishedBy: actorLabel(),
+      pendingAnchors: pending,
+      totalAnchors: total,
+      allAnchorsDone: pending === 0
+    };
+    workflow.updatedAt = now;
+
+    projects[projectIdx] = {
+      ...current,
+      groutingWorkflow: workflow,
+      updatedAt: now
+    };
+
+    dayFinishDrafts[projectId] = comment;
+    saveProjects(projects);
+    try {
+      await flushProjectsSave();
+    } catch (err) {
+      setMsg("Kunne ikke sende dagsmelding til server: " + ((err && err.message) ? err.message : "ukjent feil"), "error");
+      return;
+    }
+    renderProjectContext(projects[projectIdx]);
+    renderFieldRows(projects[projectIdx]);
+
+    if (pending > 0) {
+      setMsg("Dagsmelding sendt til prosjektleder med advarsel om gjenstaende anker.", "ok");
+    } else {
+      setMsg("Dagsmelding sendt til prosjektleder.", "ok");
+    }
+  }
+
+  async function submitAnchorForApproval(anchorId){
+    if (!anchorId) return;
+    const project = activeProject();
+    const activeId = normProjectId(project && project.id);
+    if (!project || !activeId || !hasFieldWorkflow(project)) {
+      setMsg("Velg prosjekt for du sender anker.", "error");
+      return;
+    }
+
+    const projects = getProjects();
+    const projectIdx = projects.findIndex((p) => normProjectId(p && p.id) === activeId);
+    if (projectIdx < 0) {
+      setMsg("Prosjekt ikke funnet.", "error");
+      return;
+    }
+
+    const current = projects[projectIdx];
+    const workflow = current.groutingWorkflow;
+    if (!workflow || !Array.isArray(workflow.anchors)) {
+      setMsg("Mangler feltflyt pa prosjektet.", "error");
+      return;
+    }
+
+    const anchorIdx = workflow.anchors.findIndex((a) => a.id === anchorId);
+    if (anchorIdx < 0) {
+      setMsg("Anker ikke funnet.", "error");
+      return;
+    }
+
+    const anchor = workflow.anchors[anchorIdx];
+    if (anchor.status !== "pending") {
+      setMsg("Dette ankeret er allerede sendt/laast.", "error");
+      return;
+    }
+
+    const draft = getDraft(anchor);
+    const validationError = validateDraft(draft);
+    if (validationError) {
+      setMsg(validationError, "error");
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const timeUsedMin = clampMin(num(draft.timeUsedMin), 0);
+    const bagsUsed = clampMin(num(draft.bagsUsed), 0);
+    const plan = getGroutingPlan(current);
+    const yieldPerBag = clampMin(num(plan && plan.yieldPerBag), 0);
+    const groutUsedL = yieldPerBag > 0 ? (bagsUsed * yieldPerBag) : 0;
+
+    workflow.anchors[anchorIdx] = {
+      ...anchor,
+      status: "sent_for_approval",
+      siteData: {
+        bagsUsed,
+        groutUsedL,
+        timeUsedMin,
+        returnMassQualityConfirmed: !!draft.returnMassQualityConfirmed,
+        sentAt: now,
+        sentBy: actorLabel()
+      }
+    };
+    workflow.updatedAt = now;
+    workflow.status = workflowStatusFromAnchors(workflow.anchors);
+
+    projects[projectIdx] = {
+      ...current,
+      groutingWorkflow: workflow,
+      updatedAt: now
+    };
+    saveProjects(projects);
+    try {
+      await flushProjectsSave();
+    } catch (err) {
+      setMsg("Kunne ikke lagre ankerdata til server: " + ((err && err.message) ? err.message : "ukjent feil"), "error");
+      return;
+    }
+    clearDraft(anchorId);
+    renderProjectContext(projects[projectIdx]);
+    renderFieldRows(projects[projectIdx]);
+    setMsg("Anker " + (anchor.anchorNo || "-") + " sendt til prosjektleder for godkjenning.", "ok");
+  }
+
+  function loadSelectedProject(){
+    const project = activeProject();
+    if (!project) {
+      renderSelectedProjectSafely(null, "load-empty");
+      setMsg("Velg et prosjekt forst.", "error");
+      return;
+    }
+    renderSelectedProjectSafely(project, "load-btn");
+    setMsg("Prosjekt lastet.", "ok");
+  }
+
+  async function init(){
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: getSession() });
+    }
+
+    const session = getSession();
+    const isOnsite = isOnsiteUserSession(session);
+    if (isOnsite) {
+      const planBtn = $("openInjiseringPlanBtn");
+      const planTopBtn = $("openInjiseringPlanTop");
+      if (planBtn) planBtn.style.display = "none";
+      if (planTopBtn) planTopBtn.style.display = "none";
+    }
+
+    const projectSelectEl = $("projectSelect");
+    const refreshProjectsBtn = $("refreshProjectsBtn");
+
+    $("loadProjectBtn").addEventListener("click", loadSelectedProject);
+    $("logoutBtn").addEventListener("click", () => logoutAndRedirect());
+    $("logoutBtnTop").addEventListener("click", () => logoutAndRedirect());
+
+    if (projectSelectEl) {
+      projectSelectEl.addEventListener("change", () => {
+        const project = activeProject();
+        renderSelectedProjectSafely(project, "select-change");
+        setMsg("Trykk «Hent prosjekt» for bekreftet last.", "");
+      });
+
+      projectSelectEl.addEventListener("focus", () => {
+        void refreshProjectsFromServer({ silent: true }).catch(() => {});
+      });
+    }
+
+    if (refreshProjectsBtn) {
+      refreshProjectsBtn.addEventListener("click", () => {
+        void refreshProjectsFromServer({ silent: false }).catch(() => {});
+      });
+    }
+
+    window.addEventListener("focus", () => {
+      void refreshProjectsFromServer({ silent: true }).catch(() => {});
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        void refreshProjectsFromServer({ silent: true }).catch(() => {});
+      }
+    });
+    window.setInterval(() => {
+      if (!document.hidden) {
+        void refreshProjectsFromServer({ silent: true }).catch(() => {});
+      }
+    }, 45000);
+
+    const dayFinishCommentEl = $("dayFinishComment");
+    if (dayFinishCommentEl) {
+      dayFinishCommentEl.addEventListener("input", () => {
+        const projectId = activeProjectId();
+        if (!projectId) return;
+        dayFinishDrafts[projectId] = dayFinishCommentEl.value;
+      });
+    }
+
+    const finishDayBtn = $("finishDayBtn");
+    if (finishDayBtn) {
+      finishDayBtn.addEventListener("click", submitFinishedForDay);
+    }
+
+    const preCheckMap = [
+      { id: "preCheck3h", key: "test3hDone" },
+      { id: "preCheck1l", key: "oneLiterWeightOk" },
+      { id: "preCheckSieve", key: "sieveTestOk" }
+    ];
+    preCheckMap.forEach((entry) => {
+      const el = $(entry.id);
+      if (!el) return;
+      el.addEventListener("change", () => {
+        applyPreStartChecksToProject({ [entry.key]: !!el.checked });
+      });
+    });
+
+    const oneLiterWeightEl = $("oneLiterWeightValue");
+    if (oneLiterWeightEl) {
+      oneLiterWeightEl.addEventListener("change", () => {
+        const raw = (oneLiterWeightEl.value || "").trim();
+        applyPreStartChecksToProject({ oneLiterWeightValue: raw === "" ? null : raw });
+      });
+    }
+
+    const spreadInputMap = [
+      { id: "spreadTest1Mm", key: "spreadTest1Mm" },
+      { id: "spreadTest2Mm", key: "spreadTest2Mm" },
+      { id: "spreadTest3Mm", key: "spreadTest3Mm" }
+    ];
+    spreadInputMap.forEach((entry) => {
+      const el = $(entry.id);
+      if (!el) return;
+      el.addEventListener("change", () => {
+        const raw = (el.value || "").trim();
+        applyPreStartChecksToProject({ [entry.key]: raw === "" ? null : raw });
+      });
+    });
+
+    window.addEventListener("storage", (ev) => {
+      if (ev.key === projectsStorageKey() || ev.key === STORAGE.projects) {
+        const currentId = activeProjectId();
+        refreshProjectSelect(currentId);
+        const project = activeProject();
+        renderSelectedProjectSafely(project, "storage");
+      }
+      if (ev.key === STORAGE.auth) {
+        const session = getSession();
+        const hasGrouting = !!(session && session.modules && session.modules.grouting);
+        if (!hasGrouting) {
+          const pageName = (window.location.pathname.split("/").pop() || "software-injisering-felt.html");
+          const next = pageName + window.location.search + window.location.hash;
+          window.location.href = "software.html?next=" + encodeURIComponent(next);
+        }
+        if (hasGrouting && window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+          window.CompanyBranding.apply({ session });
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+          window.CompanyBranding.apply({ session: getSession() });
+        }
+      }
+    });
+
+    try {
+      await refreshProjectsFromServer({ silent: true, selectedId: projectIdFromUrl() || "" });
+    } catch (err) {
+      setMsg("Kunne ikke hente prosjekter fra server: " + ((err && err.message) ? err.message : "ukjent feil"), "error");
+    }
+
+    const fromUrl = projectIdFromUrl();
+    refreshProjectSelect(fromUrl || "");
+    if (fromUrl) {
+      const project = projectListForPage().find((p) => normProjectId(p && p.id) === normProjectId(fromUrl)) || null;
+      if (project && hasFieldWorkflow(project)) {
+        $("projectSelect").value = normProjectId(fromUrl);
+        renderSelectedProjectSafely(project, "url");
+        setMsg("Prosjekt lastet fra lenke.", "ok");
+        return;
+      }
+      const existingProject = getProjects().find((p) => normProjectId(p && p.id) === normProjectId(fromUrl)) || null;
+      if (existingProject && !hasFieldWorkflow(existingProject)) {
+        setMsg("Prosjektet er ikke sendt til felt enda.", "error");
+      } else if (existingProject && isOnsite) {
+        setMsg("Prosjektet er ikke tildelt din onsite-bruker.", "error");
+      }
+    }
+
+    renderSelectedProjectSafely(null, "init-empty");
+  }
+
+  init();
+</script>
+</body>
+</html>

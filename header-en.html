@@ -1,0 +1,56 @@
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <!-- Replaced old "E" box with image logo -->
+      <div class="logo">
+        <a href="index-en.html" aria-label="Back to homepage">
+          <img src="Logo.jpeg" alt="Etterspenning – logo">
+        </a>
+      </div>
+      <div>
+        <div style="font-weight:900;letter-spacing:.2px">Etterspenning.no</div>
+        <div style="font-size:12px;color:var(--muted)">Practical technical info for post-tensioning and anchors</div>
+      </div>
+    </div>
+
+    <!-- Language -->
+    <button class="lang-btn" id="langBtn" aria-label="Language" title="Language">
+      🇳🇴 NO
+    </button>
+
+    <!-- Hamburger (mobile) -->
+    <button class="menu-btn" id="openMenu" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <!-- Desktop menu -->
+    <nav class="primary" aria-label="Main menu">
+      <a class="navlink active" href="index-en.html">Home</a>
+      <a class="navlink" href="forankringer-en.html">Anchors</a>
+      <a class="navlink" href="verktoy-en.html">Tools</a>
+      <a class="navlink" href="software-en.html">Software</a>
+      <a class="navlink" href="data-en.html">Data</a>
+      <a class="navlink" href="bilder-en.html">Photos</a>
+      <a class="navlink" href="kontakt-en.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Overlay + Drawer -->
+<div class="overlay" id="overlay" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Menu" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Menu</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Close menu">Close</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Mobile main menu">
+    <a class="active" href="index-en.html">Home</a>
+    <a href="forankringer-en.html">Anchors</a>
+    <a href="verktoy-en.html">Tools</a>
+    <a href="software-en.html">Software</a>
+    <a href="data-en.html">Data</a>
+    <a href="bilder-en.html">Photos</a>
+    <a href="kontakt-en.html">Contact</a>
+  </nav>
+</aside>

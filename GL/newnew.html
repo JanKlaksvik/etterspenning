@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Etterspenning.no – Forankring: krav, produksjon, installasjon, injeksjon og oppspenning</title>
+  <meta name="description" content="Praktisk oversikt over hva som kreves for å få en forankring prosjektert, produsert, installert, injisert og oppspent – med standarder, dokumentasjon og kontrollpunkter." />
+
+  <style>
+    :root{
+      --blue:#204f85;
+      --green:#8bb93d;
+      --orange:#f47a20;
+      --text:#123;
+      --muted:#5a6a7a;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --border:#dbe4ef;
+      --shadow: 0 10px 25px rgba(10,30,60,.08);
+      --radius: 16px;
+      --max: 1120px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:linear-gradient(180deg, #ffffff 0%, var(--bg) 55%, #ffffff 100%);
+      line-height:1.5;
+    }
+    a{color:var(--blue); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px}
+
+    /* Header */
+    .siteHeader{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:saturate(140%) blur(10px);
+      background:rgba(255,255,255,.88);
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{
+      display:grid;
+      grid-template-columns: 1fr 2fr 1.2fr;
+      gap:14px;
+      align-items:center;
+      padding:12px 0;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--blue), #1a3c63);
+      color:#fff;
+      box-shadow: 0 10px 25px rgba(32,79,133,.25);
+      font-weight:700;
+      letter-spacing:.5px;
+      flex:0 0 auto;
+    }
+    .brandText h1{margin:0; font-size:14px; line-height:1.2; font-weight:650}
+    .brandText p{margin:0; font-size:12px; color:var(--muted)}
+
+    .mainNav ul{
+      list-style:none; margin:0; padding:0;
+      display:flex; gap:10px; flex-wrap:wrap;
+      justify-content:center;
+    }
+    .mainNav a{
+      display:inline-block;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid transparent;
+      color:var(--text);
+      font-size:14px;
+      white-space:nowrap;
+    }
+    .mainNav a:hover{
+      border-color:var(--border);
+      background:#fff;
+      text-decoration:none;
+    }
+
+    .headerRight{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .metaBox{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow: 0 6px 14px rgba(10,30,60,.06);
+      min-width:170px;
+    }
+    .metaRow{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      color:var(--muted);
+      padding:2px 0;
+    }
+    .metaValue{color:var(--text); font-weight:650}
+
+    .cta{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .btn{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-weight:600;
+      font-size:14px;
+      box-shadow: 0 6px 14px rgba(10,30,60,.06);
+    }
+    .btn:hover{transform: translateY(-1px); text-decoration:none}
+    .btn.primary{
+      border-color:transparent;
+      background: linear-gradient(135deg, var(--orange), #ff9a49);
+      color:#1b140c;
+    }
+    .btn.secondary{
+      border-color:transparent;
+      background: linear-gradient(135deg, var(--green), #b9e06a);
+      color:#0f1b08;
+    }
+
+    /* Top banner / hero */
+    main{padding:18px 0 40px}
+    section{scroll-margin-top:95px}
+    .topBanner{padding:18px 0 10px}
+    .bannerCard{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .bannerCard::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(700px 240px at -10% -20%, rgba(32,79,133,.12), transparent 60%),
+        radial-gradient(700px 240px at 115% 0%, rgba(139,185,61,.12), transparent 55%),
+        radial-gradient(700px 280px at 35% 140%, rgba(244,122,32,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .bannerCard > *{position:relative}
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: var(--green);
+      box-shadow:0 0 0 4px rgba(139,185,61,.18);
+    }
+    .bannerCard h2{
+      margin:10px 0 10px;
+      font-size:30px;
+      line-height:1.12;
+      letter-spacing:-.3px;
+    }
+    .bannerCard p{margin:0; color:var(--muted); max-width:78ch}
+
+    .bannerActions{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      font-size:13px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      display:inline-block;
+    }
+    .pill b{font-weight:650}
+    .bannerMeta{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .callout{
+      margin-top:14px;
+      border:1px dashed rgba(32,79,133,.35);
+      background: rgba(32,79,133,.05);
+      border-radius: 14px;
+      padding:12px 12px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* Content cards */
+    .sectionTitle{
+      margin:30px 0 10px;
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+    }
+    .sectionTitle h2{margin:0; font-size:20px}
+    .sectionTitle p{margin:0; color:var(--muted); font-size:14px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .card{
+      grid-column: span 6;
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: 0 8px 20px rgba(10,30,60,.06);
+    }
+    .card h3{margin:0 0 10px; font-size:16px; letter-spacing:-.1px}
+    .card p{margin:0; color:var(--muted)}
+    .tagrow{margin-top:12px; display:flex; gap:8px; flex-wrap:wrap}
+    .tag{
+      font-size:12px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+    }
+    .tag.blue{border-color:rgba(32,79,133,.25); background:rgba(32,79,133,.06)}
+    .tag.green{border-color:rgba(139,185,61,.3); background:rgba(139,185,61,.08)}
+    .tag.orange{border-color:rgba(244,122,32,.28); background:rgba(244,122,32,.08)}
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:10px;
+    }
+    .mini{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: 0 8px 20px rgba(10,30,60,.06);
+    }
+    .mini h3{margin:0 0 8px; font-size:16px}
+    .mini ul{margin:0; padding-left:18px; color:var(--muted)}
+    .mini li{margin:7px 0}
+
+    .steps{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:10px;
+    }
+    .step{
+      grid-column: span 6;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: 0 8px 20px rgba(10,30,60,.06);
+      position:relative;
+      overflow:hidden;
+    }
+    .step::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(600px 200px at -20% -20%, rgba(32,79,133,.12), transparent 60%),
+        radial-gradient(600px 200px at 110% 0%, rgba(139,185,61,.12), transparent 55%),
+        radial-gradient(600px 260px at 30% 130%, rgba(244,122,32,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .step > *{position:relative}
+    .num{
+      display:inline-grid; place-items:center;
+      width:34px; height:34px;
+      border-radius:12px;
+      background:#fff;
+      border:1px solid var(--border);
+      font-weight:750;
+      color:var(--blue);
+      box-shadow: 0 8px 16px rgba(10,30,60,.06);
+    }
+    .step h3{margin:10px 0 8px; font-size:16px}
+    .step ul{margin:0; padding-left:18px; color:var(--muted)}
+    .step li{margin:7px 0}
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--border);
+      background:#fff;
+      padding:18px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .footergrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:start;
+    }
+    .smalllinks a{margin-right:10px}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size:12px;
+      padding:2px 6px;
+      border:1px solid var(--border);
+      border-bottom-color:#cbd6e4;
+      border-radius:8px;
+      background:#fff;
+      color:var(--text);
+      white-space:nowrap;
+    }
+
+    @media (max-width: 980px){
+      .topbar{grid-template-columns:1fr; justify-items:stretch}
+      .mainNav ul{justify-content:flex-start}
+      .headerRight{justify-content:flex-start}
+      .metaBox{min-width:unset}
+      .twoCol{grid-template-columns:1fr}
+      .card{grid-column: span 12}
+      .step{grid-column: span 12}
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="siteHeader">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">E</div>
+        <div class="brandText">
+          <h1>Etterspenning.no</h1>
+          <p>Praktisk kunnskap om forankring og etterspenning</p>
+        </div>
+      </div>
+
+      <nav class="mainNav" aria-label="Hovedmeny">
+        <ul>
+          <!-- Endre filnavn/URL-er her slik at de matcher din faktiske struktur -->
+          <li><a href="/forankringer.html">Forankringer</a></li>
+          <li><a href="/verktoy.html">Verktøy</a></li>
+          <li><a href="/software.html">Software</a></li>
+          <li><a href="/data.html">Data</a></li>
+          <li><a href="/bilder.html">Bilder</a></li>
+          <li><a href="/kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="headerRight">
+        <div class="metaBox" aria-label="Sideinformasjon">
+          <div class="metaRow">
+            <span class="metaLabel">Versjon</span>
+            <span class="metaValue">1.0</span>
+          </div>
+          <div class="metaRow">
+            <span class="metaLabel">Oppdatert</span>
+            <span class="metaValue">2026-01-15</span>
+          </div>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#prosess">Se prosessen</a>
+          <a class="btn secondary" href="/kontakt.html">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="topBanner" id="oversikt">
+    <div class="wrap">
+      <div class="bannerCard">
+        <div class="kicker">
+          <span class="dot" aria-hidden="true"></span>
+          Fra kravstilling til ferdig forankring
+        </div>
+
+        <h2>Hva som kreves for å få en forankring produsert, installert, injisert og oppspent</h2>
+
+        <p>
+          En gjennomføringsorientert oversikt over krav, standarder, kontrollpunkter og dokumentasjon –
+          slik at prosjektering, produksjon og utførelse henger sammen i én sporbar leveranse.
+        </p>
+
+        <div class="bannerActions">
+          <a class="btn primary" href="#prosess">Start med prosessen</a>
+          <a class="btn" href="#dokumentasjon">Se dokumentpakken</a>
+          <a class="btn" href="#kontroll">Se kontrollpunkter</a>
+        </div>
+
+        <div class="bannerMeta">
+          <span class="pill"><b>Fokus:</b> standarder + utførelse + sporbarhet</span>
+          <span class="pill"><b>Målgruppe:</b> prosjekterende, entreprenør, kontroll</span>
+          <span class="pill"><b>Resultat:</b> revisjonssikker dokumentasjon</span>
+        </div>
+
+        <div class="callout">
+          Merk: Prosjektspesifikke krav kan være strengere enn standard minimum. Bruk alltid prosjektets
+          konkurransegrunnlag, kontrollplan og risikovurderinger som primærkilde.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <div class="grid">
+      <div class="card">
+        <h3>Hvorfor dette er viktig</h3>
+        <p>
+          Forankringer er ofte skjulte konstruksjoner. Kvalitet må bygges inn gjennom kravstilling,
+          kontrollpunkter og dokumentasjon – ikke “etterpå”.
+        </p>
+        <div class="tagrow">
+          <span class="tag blue">Sikkerhet</span>
+          <span class="tag green">Levetid</span>
+          <span class="tag orange">Kost/kvalitet</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Hva som ofte går galt</h3>
+        <p>
+          Uklare krav til korrosjonsbeskyttelse, manglende sporbarhet, feil injeksjonslogikk,
+          utilstrekkelig rengjøring av borehull, eller uklare toleranser på oppspenning.
+        </p>
+        <div class="tagrow">
+          <span class="tag">Design gap</span>
+          <span class="tag">Metodeavvik</span>
+          <span class="tag">Dokumentasjonsmangel</span>
+        </div>
+      </div>
+    </div>
+
+    <section id="standarder">
+      <div class="sectionTitle">
+        <h2>Standarder og regelverk (typisk)</h2>
+        <p>Hvilke referanser som normalt inngår i kravstilling</p>
+      </div>
+
+      <div class="twoCol">
+        <div class="mini">
+          <h3>Tekniske standarder (vanlige referanser)</h3>
+          <ul>
+            <li><b>NS-EN 1537</b> – utførelse og prøving av grunnankre</li>
+            <li><b>Eurokode 7 (EN 1997)</b> – geoteknisk prosjektering og verifikasjon</li>
+            <li><b>EN ISO 22477-serien</b> – prøving/utførelse i grunn (relevant del avhenger av metode)</li>
+            <li><b>NS-EN 445/446/447</b> – injeksjonsmasser og injeksjonsutførelse (typisk for grout)</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>Kontrakts- og myndighetskrav (typisk)</h3>
+          <ul>
+            <li>Prosjektets konkurransegrunnlag: beskrivelser, tegninger, kontrollplan og ITP</li>
+            <li>HMS-krav: risikovurdering (SJA), avviksbehandling og kompetansekrav</li>
+            <li>Dokumentasjon: materialsertifikat, sporbarhet, kalibrering, protokoller</li>
+            <li>Eventuelle krav til uavhengig kontroll/inspeksjon</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="prosess">
+      <div class="sectionTitle">
+        <h2>Prosess – fra kravstilling til ferdig forankring</h2>
+        <p>Trinnvis oversikt med typiske leveranser</p>
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div class="num">1</div>
+          <h3>Kravstilling og prosjektering</h3>
+          <ul>
+            <li>Formål: midlertidig/permanent, levetid og miljø</li>
+            <li>Laster og akseptkriterier (prøving/ytelse)</li>
+            <li>Geologi/jord: grunnundersøkelser og metodevalg</li>
+            <li>Valg av forankringstype, lengder og hodedetaljer</li>
+            <li>Kontrollplan (ITP) med hold points</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="num">2</div>
+          <h3>Materialer og produksjon (sporbarhet)</h3>
+          <ul>
+            <li>Spennstål/komponenter: sertifikater og batch/varmenummer</li>
+            <li>Korrosjonsbeskyttelse: rør, tetting, hodekappe (etter krav)</li>
+            <li>Merking/ID som følger forankringen gjennom hele løpet</li>
+            <li>Mottakskontroll og lagringskrav (tørt, beskyttet)</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="num">3</div>
+          <h3>Installering (boring, rengjøring, innføring)</h3>
+          <ul>
+            <li>Boring etter metode med toleranser på posisjon/vinkel/dybde</li>
+            <li>Rengjøring av borehull til definert aksept</li>
+            <li>Innføring uten skade på korrosjonsbeskyttelse</li>
+            <li>Sentralisatorer og korrekt plassering i hull</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="num">4</div>
+          <h3>Injeksjon – blanding, pumping, kontroll</h3>
+          <ul>
+            <li>Godkjent resept og blandetid (w/c, tilsetninger)</li>
+            <li>Kontroll av fersk masse (flyt/viskositet, densitet, temperatur)</li>
+            <li>Kontinuerlig injeksjon og kontroll av retur</li>
+            <li>Loggføring: trykk/volum/tid og batch</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="num">5</div>
+          <h3>Oppspenning og prøving</h3>
+          <ul>
+            <li>Forutsetninger: herdetid og inspeksjon før stressing</li>
+            <li>Kalibrert utstyr (jegg/pumpe/måling)</li>
+            <li>Spennprogram med trinn, holdetider og toleranser</li>
+            <li>Protokoll: kraft/forlengelse/set og aksept</li>
+          </ul>
+        </article>
+
+        <article class="step">
+          <div class="num">6</div>
+          <h3>Avslutning og overlevering</h3>
+          <ul>
+            <li>Hodebeskyttelse, tetting og merking</li>
+            <li>As-built: plassering, lengder, dato, testresultater</li>
+            <li>Samlet dokumentpakke: revisjonssikker mappe</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="callout">
+        Praktisk anbefaling: Sørg for at alle protokoller bruker samme forankrings-ID (entydig), og at ID følger
+        forankringen fra produksjon til ferdig låst hode.
+      </div>
+    </section>
+
+    <section id="dokumentasjon">
+      <div class="sectionTitle">
+        <h2>Dokumentasjon – typisk sjekkliste</h2>
+        <p>Hva som normalt bør inngå i dokumentpakken</p>
+      </div>
+
+      <div class="twoCol">
+        <div class="mini">
+          <h3>Før oppstart</h3>
+          <ul>
+            <li>Godkjente tegninger, metodebeskrivelse og kontrollplan (ITP)</li>
+            <li>Kompetansekrav og HMS/SJA</li>
+            <li>Kalibreringsbevis for utstyr</li>
+            <li>Mottakskontrollskjema og sporbarhetslogg</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>Under/etter utførelse</h3>
+          <ul>
+            <li>Borelogg (metode, dybde, avvik, vann, observasjoner)</li>
+            <li>Injeksjonsprotokoll (resept/batch, volum, trykk, tid, test)</li>
+            <li>Oppspenningsprotokoll (trinn, holdetid, kraft/forlengelse, låsing)</li>
+            <li>Prøverapporter iht. krav + as-built liste</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontroll">
+      <div class="sectionTitle">
+        <h2>Kontrollpunkter (typiske hold points)</h2>
+        <p>Eksempler på punkter som ofte krever sign-off</p>
+      </div>
+
+      <div class="twoCol">
+        <div class="mini">
+          <h3>Før injeksjon</h3>
+          <ul>
+            <li>Hull ferdig og rengjort iht. kriterier</li>
+            <li>Tendon inspisert og korrekt posisjonert</li>
+            <li>Utstyr klart, tett og riktig konfigurert</li>
+            <li>Resept og testutstyr bekreftet</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>Før oppspenning</h3>
+          <ul>
+            <li>Herdetid/temperatur tilfredsstilt</li>
+            <li>Ankerhode og sone kontrollert</li>
+            <li>Spennprogram bekreftet (mål/toleranser)</li>
+            <li>Målegrunnlag etablert og protokoll klar</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        Legg inn en tydelig beslutningsregel i ITP for hva som skjer ved avvik (stopp/fortsett), og hvem som kan godkjenne
+        avvik og korrigerende tiltak.
+      </div>
+    </section>
+
+    <section id="kontakt">
+      <div class="sectionTitle">
+        <h2>Kontakt</h2>
+        <p>Oppdater kontaktinfo og lenker slik det passer ditt oppsett</p>
+      </div>
+
+      <div class="twoCol">
+        <div class="mini">
+          <h3>Kontaktinformasjon (eksempel)</h3>
+          <ul>
+            <li>E-post: <span class="kbd">din.epost@domene.no</span></li>
+            <li>Telefon: <span class="kbd">+47 00 00 00 00</span></li>
+            <li>Sted: <span class="kbd">Norge / Skandinavia</span></li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>Hva kan du bruke denne siden til?</h3>
+          <ul>
+            <li>Som sjekkliste før mobilisering</li>
+            <li>Som struktur for ITP og dokumentpakke</li>
+            <li>Som “rød tråd” mellom prosjektering og utførelse</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footergrid">
+      <div>
+        <b style="color:var(--text); font-weight:650;">Etterspenning.no</b><br />
+        <span>
+          Innholdet er ment som generell faglig orientering og sjekklister. Prosjektspesifikke krav og
+          prosjekterendes spesifikasjoner gjelder alltid foran generelle beskrivelser.
+        </span>
+        <div class="smalllinks" style="margin-top:8px;">
+          <a href="#oversikt">Til toppen</a>
+          <a href="#prosess">Prosess</a>
+          <a href="#dokumentasjon">Dokumentasjon</a>
+          <a href="#kontroll">Kontrollpunkter</a>
+        </div>
+      </div>
+
+      <div style="text-align:right;">
+        <span class="kbd">Versjon: 1.0</span>
+        <span class="kbd">Oppdatér dato: 2026-01-15</span>
+        <div style="margin-top:8px;">© <span id="year"></span> Etterspenning.no</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</footer>
+
+</body>
+</html>

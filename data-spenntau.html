@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Etterspenning.no | Spenntau – kapasitet</title>
+  <meta name="description" content="Spenntau-beregning: bruddlast, flytelast, prøvekraft (Pp) og låsekraft (Po) iht. Publikasjon nr. 14:2016." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+
+      --ok-bg: rgba(139,185,61,.14);
+      --ok-br: rgba(139,185,61,.45);
+
+      --warn-bg: rgba(244,122,32,.14);
+      --warn-br: rgba(244,122,32,.55);
+
+      --danger-bg: rgba(255, 77, 109, .12);
+      --danger-br: rgba(255, 77, 109, .55);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      padding:0;
+      line-height:1;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity:1;pointer-events:auto;}
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    .hero{padding:34px 0 10px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:90ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1fr 1fr;
+      align-items:stretch;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .form{
+      display:grid;
+      gap:12px;
+      grid-template-columns: 1fr 1fr;
+      margin-top:8px;
+    }
+    @media (max-width: 620px){ .form{grid-template-columns:1fr} }
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(7,11,20,.35);
+      color: var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{
+      border-color: rgba(244,122,32,.55);
+      box-shadow: 0 0 0 3px rgba(244,122,32,.12);
+    }
+
+    .hint{
+      margin-top:10px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .results{display:grid;gap:10px;margin-top:8px;}
+    .row{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+    }
+    .k{color:var(--muted);font-size:12px}
+    .v{font-weight:900}
+
+    .tag{
+      font-size:12px;
+      color: var(--muted);
+      margin-left:8px;
+      font-weight:800;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      white-space:nowrap;
+    }
+    .tag.ok{background: var(--ok-bg); border-color: var(--ok-br); color: var(--text);}
+    .tag.warn{background: var(--warn-bg); border-color: var(--warn-br); color: var(--text);}
+    .tag.danger{background: var(--danger-bg); border-color: var(--danger-br); color: var(--text);}
+
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+
+    /* Tydelig advarsel (ingen lenker) */
+    .alert{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      overflow:hidden;
+      display:none;
+    }
+    .alert.show{display:block;}
+    .alert-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .alert-title{
+      font-weight:950;
+      letter-spacing:.2px;
+      font-size:13px;
+    }
+    .alert-body{
+      padding:12px 12px 14px;
+      color: var(--text);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .alert.warn{border-color: var(--warn-br); background: var(--warn-bg);}
+    .alert.danger{border-color: var(--danger-br); background: var(--danger-bg);}
+    .alert .meta{
+      color: var(--muted);
+      font-size:12px;
+      margin-top:8px;
+    }
+
+    .figure{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.20);
+      padding:12px;
+    }
+    .figure img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+    }
+    .caption{
+      margin-top:10px;
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" alt="Etterspenning – logo">
+        </a>
+      </div>
+      <div>
+        <div style="font-weight:900;letter-spacing:.2px">Etterspenning.no</div>
+        <div style="font-size:12px;color:var(--muted)">Praktisk faginfo for etterspenning og forankringer</div>
+      </div>
+    </div>
+
+    <button class="lang-btn" id="langBtn" aria-label="Språk" title="Språk">
+      🇳🇴
+    </button>
+
+    <button class="menu-btn" id="openMenu" aria-label="Åpne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktøy</a>
+      <a class="navlink" href="software.html">Software</a>
+      <a class="navlink active" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html">Software</a>
+    <a class="active" href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Spenntau – kapasitet & laster</h1>
+    <p>
+      Velg antall spenntau og tverrsnitt per tau. Siden beregner brudd- og flytelast (kN),
+      samt anbefalt prøvekraft <strong>P<sub>p</sub></strong> og låsekraft <strong>P<sub>o</sub></strong>
+      iht. Publikasjon nr. 14:2016. I tillegg vises et tydelig varsel dersom <strong>P<sub>o</sub> &lt; 30% av F<sub>pk</sub></strong>.
+    </p>
+  </section>
+
+  <div class="grid">
+
+    <!-- INNDATA -->
+    <section class="card" aria-label="Inndata">
+      <div class="cardhead">
+        <div>
+          <h2>Inndata</h2>
+          <small>Antall tau og tverrsnitt per tau</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+        <div class="form">
+          <div>
+            <label for="nStrands">Antall spenntau</label>
+            <input id="nStrands" type="number" inputmode="numeric" min="1" step="1" value="4" />
+          </div>
+
+          <div>
+            <label for="areaPerStrand">Tverrsnitt per tau (mm²)</label>
+            <select id="areaPerStrand">
+              <option value="140">140 mm²</option>
+              <option value="150" selected>150 mm²</option>
+              <option value="165">165 mm²</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TYDELIG ADVARSEL (kun når den trigges) -->
+        <div class="alert" id="alertBox" role="status" aria-live="polite">
+          <div class="alert-head">
+            <div class="alert-title" id="alertTitle">Advarsel</div>
+            <span class="tag danger" id="alertTag">Krav</span>
+          </div>
+          <div class="alert-body" id="alertBody">
+            –
+            <div class="meta" id="alertMeta">–</div>
+          </div>
+        </div>
+
+        <div class="hint">
+          <strong>Forutsetninger</strong><br>
+          • f<sub>pk</sub> = 1860 MPa, f<sub>p0,1k</sub> = 1640 MPa (spennstål).<br>
+          • 1 MPa = 1 N/mm² → Kraft (kN) = Spenning (MPa) × Areal (mm²) / 1000.<br>
+          • Anbefalt prøvekraft P<sub>p</sub> (Publikasjon nr. 14:2016): 0.80·f<sub>p0,1k</sub> = 1312 MPa.<br>
+          • Anbefalt låsekraft P<sub>o</sub> (Publikasjon nr. 14:2016): 0.73·f<sub>p0,1k</sub> = 1197 MPa.<br>
+          • Tilleggskrav (Publikasjon nr. 14:2016): hvis P<sub>o</sub> &lt; 30% av F<sub>pk</sub> → bruk kilesikringsskive.
+        </div>
+
+        <div class="btnrow">
+          <button class="btn primary" id="copySummary" type="button">Kopier resultat</button>
+          <button class="btn" id="reset" type="button">Nullstill</button>
+        </div>
+
+        <div class="hint" id="copyMsg" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- RESULTATER -->
+    <section class="card" aria-label="Resultater">
+      <div class="cardhead">
+        <div>
+          <h2>Resultater</h2>
+          <small>Kapasiteter og anbefalte laster</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+        <div class="results" aria-live="polite">
+          <div class="row">
+            <div class="k">Total areal A<sub>p</sub></div>
+            <div class="v"><span id="Ap">–</span> <span class="k">mm²</span></div>
+          </div>
+
+          <div class="row">
+            <div class="k">Flytelast F<sub>p0,1k</sub> (1640 MPa)</div>
+            <div class="v"><span id="Fp01">–</span> <span class="k">kN</span></div>
+          </div>
+
+          <div class="row">
+            <div class="k">Bruddlast F<sub>pk</sub> (1860 MPa)</div>
+            <div class="v"><span id="Fpk">–</span> <span class="k">kN</span></div>
+          </div>
+
+          <div class="row">
+            <div class="k">Prøvekraft P<sub>p</sub> (0.80·f<sub>p0,1k</sub> = 1312 MPa)</div>
+            <div class="v">
+              <span id="Pp">–</span> <span class="k">kN</span>
+              <span class="tag ok" title="Publ. 14:2016">P<sub>p</sub></span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="k">Låsekraft P<sub>o</sub> (0.73·f<sub>p0,1k</sub> = 1197 MPa)</div>
+            <div class="v">
+              <span id="Po">–</span> <span class="k">kN</span>
+              <span class="tag warn" title="Publ. 14:2016">P<sub>o</sub></span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="k">Kontroll: P<sub>o</sub> / F<sub>pk</sub></div>
+            <div class="v">
+              <span id="ratio">–</span> <span class="k">%</span>
+              <span class="tag" id="ratioTag">–</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hint" style="margin-top:12px">
+          <strong>Merk</strong><br>
+          Dette er en enkel beregning basert på karakteristiske materialverdier og anbefalinger i Publikasjon nr. 14:2016.
+          Prosjektspesifikke krav (system, tap, prosedyre, kontrollnivå osv.) kan gi andre laster.
+        </div>
+      </div>
+    </section>
+
+    <!-- FIGUR (TA2020-skisse) -->
+    <section class="card" aria-label="Figur – kraft over tid">
+      <div class="cardhead">
+        <div>
+          <h2>Figur: kraft over tid</h2>
+          <small>Eksempel på lastutvikling i forankring (TA2020)</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="figure">
+          <!-- LAST OPP BILDET PÅ SERVEREN OG BRUK SAMME FILNAVN HER -->
+          <img src="img/ta2020-spunt-kraft-over-tid.png" alt="Skisse: lastutvikling over tid for spuntveggforankring (TA2020)">
+          <div class="caption">
+            Skisse som illustrerer hvordan kraftnivå kan variere over tid ved spunt/forankring gjennom faser i prosjektet
+            (oppspenning, andre arbeider, jordarbeider, konstruksjonsfase). Bildet er lagt inn som referansefigur (TA2020).
+          </div>
+          <div class="caption">
+            <strong>Label:</strong><br>
+            1. Installasjon av stagforankring<br>
+            2. Utførelse av øvrige arbeider<br>
+            3. Masseuttak / utgraving<br>
+            4. Oppstart konstruksjon<br>
+            5. Ferdigstilt konstruksjon<br>
+            6. Byggefase / konstruksjonsarbeid
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMLER -->
+    <section class="card" aria-label="Formler">
+      <div class="cardhead">
+        <div>
+          <h2>Formler</h2>
+          <small>Hva som regnes ut</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="hint" style="margin-top:0">
+          • A<sub>p</sub> = n · A<sub>pi</sub><br>
+          • F<sub>pk</sub> = f<sub>pk</sub> · A<sub>p</sub> / 1000<br>
+          • F<sub>p0,1k</sub> = f<sub>p0,1k</sub> · A<sub>p</sub> / 1000<br>
+          • P<sub>p</sub> = (0.80·f<sub>p0,1k</sub>) · A<sub>p</sub> / 1000<br>
+          • P<sub>o</sub> = (0.73·f<sub>p0,1k</sub>) · A<sub>p</sub> / 1000<br>
+          • Kontroll: P<sub>o</sub> / F<sub>pk</sub>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Denne nettsiden bruker Google Analytics for anonym trafikkstatistikk. Ingen informasjonskapsler brukes til markedsføring. Ingen cookies.
+  </footer>
+
+</div>
+
+<script>
+  // Off-canvas menu (robust)
+  (function () {
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.addEventListener("click", () => {
+        alert("Språkvalg kommer senere (NO/EN/SV/DA).");
+      });
+    }
+  })();
+
+  // Calculator
+  document.addEventListener('DOMContentLoaded', () => {
+    const nStrands = document.getElementById('nStrands');
+    const areaPerStrand = document.getElementById('areaPerStrand');
+
+    const outAp = document.getElementById('Ap');
+    const outFp01 = document.getElementById('Fp01');
+    const outFpk = document.getElementById('Fpk');
+    const outPp = document.getElementById('Pp');
+    const outPo = document.getElementById('Po');
+
+    const outRatio = document.getElementById('ratio');
+    const outRatioTag = document.getElementById('ratioTag');
+
+    const alertBox = document.getElementById('alertBox');
+    const alertTitle = document.getElementById('alertTitle');
+    const alertTag = document.getElementById('alertTag');
+    const alertBody = document.getElementById('alertBody');
+    const alertMeta = document.getElementById('alertMeta');
+
+    const btnReset = document.getElementById('reset');
+    const btnCopy = document.getElementById('copySummary');
+    const copyMsg = document.getElementById('copyMsg');
+
+    const must = [nStrands, areaPerStrand, outAp, outFp01, outFpk, outPp, outPo, outRatio, outRatioTag,
+                  alertBox, alertTitle, alertTag, alertBody, alertMeta, btnReset, btnCopy, copyMsg];
+    if (must.some(x => !x)) return;
+
+    // Materialverdier (MPa = N/mm²)
+    const fpk = 1860;
+    const fp01k = 1640;
+
+    // Publikasjon nr. 14:2016 (dine regler)
+    const sigma_pp = 0.80 * fp01k; // 1312 MPa
+    const sigma_po = 0.73 * fp01k; // 1197.2 MPa
+
+    function clampInt(v, min, max){
+      const x = Math.round(Number(v));
+      if (!Number.isFinite(x)) return min;
+      return Math.max(min, Math.min(max, x));
+    }
+
+    function fmtKN(x){
+      if (!Number.isFinite(x)) return '–';
+      return x.toFixed(1).replace('.', ',');
+    }
+
+    function fmtPct(x){
+      if (!Number.isFinite(x)) return '–';
+      return (x*100).toFixed(1).replace('.', ',');
+    }
+
+    function setAlert(show, mode, title, body, meta){
+      if (!show){
+        alertBox.classList.remove('show','warn','danger');
+        alertBox.style.display = 'none';
+        return;
+      }
+      alertBox.style.display = 'block';
+      alertBox.classList.add('show');
+      alertBox.classList.remove('warn','danger');
+      alertBox.classList.add(mode);
+
+      alertTitle.textContent = title;
+      alertBody.textContent = body;
+      alertMeta.textContent = meta;
+
+      if (mode === 'danger'){
+        alertTag.textContent = 'Krav';
+        alertTag.className = 'tag danger';
+      } else {
+        alertTag.textContent = 'Obs';
+        alertTag.className = 'tag warn';
+      }
+    }
+
+    function showCopyMessage(text, ok=true){
+      copyMsg.style.display = 'block';
+      copyMsg.style.borderColor = ok ? 'rgba(139,185,61,.45)' : 'rgba(244,122,32,.55)';
+      copyMsg.style.background = ok ? 'rgba(139,185,61,.12)' : 'rgba(244,122,32,.10)';
+      copyMsg.textContent = text;
+      setTimeout(() => { copyMsg.style.display = 'none'; }, 3800);
+    }
+
+    function calc(){
+      const n = clampInt(nStrands.value, 1, 999);
+      if (String(n) !== String(nStrands.value)) nStrands.value = n;
+
+      const a = Number(areaPerStrand.value);
+      const Ap = n * a; // mm²
+
+      const Fpk = fpk * Ap / 1000;       // kN
+      const Fp01 = fp01k * Ap / 1000;    // kN
+      const Pp = sigma_pp * Ap / 1000;   // kN
+      const Po = sigma_po * Ap / 1000;   // kN
+
+      outAp.textContent = Ap.toString();
+      outFpk.textContent = fmtKN(Fpk);
+      outFp01.textContent = fmtKN(Fp01);
+      outPp.textContent = fmtKN(Pp);
+      outPo.textContent = fmtKN(Po);
+
+      // Kontroll: Po/Fpk
+      const ratio = (Fpk > 0) ? (Po / Fpk) : NaN;
+      outRatio.textContent = fmtPct(ratio);
+
+      // Tag + tydelig advarselsboks iht. Publ. 14
+      if (Number.isFinite(ratio) && ratio < 0.30){
+        outRatioTag.textContent = 'kilesikringsskive';
+        outRatioTag.className = 'tag danger';
+
+        setAlert(
+          true,
+          'danger',
+          'Kilesikringsskive påkrevd',
+          'Publikasjon nr. 14:2016: Når låsekraft P_o er mindre enn 30% av bruddlast F_pk skal det brukes kilesikringsskive.',
+          `Beregnet: P_o/F_pk = ${(ratio*100).toFixed(1).replace('.', ',')}%`
+        );
+      } else if (Number.isFinite(ratio)){
+        outRatioTag.textContent = 'OK';
+        outRatioTag.className = 'tag ok';
+
+        // Skjul boksen når alt er OK (som du ønsket: kun tydelig varsel når det trengs)
+        setAlert(false);
+      } else {
+        outRatioTag.textContent = '–';
+        outRatioTag.className = 'tag';
+        setAlert(false);
+      }
+
+      return { n, a, Ap, Fpk, Fp01, Pp, Po, ratio };
+    }
+
+    nStrands.addEventListener('input', calc);
+    areaPerStrand.addEventListener('change', calc);
+
+    btnReset.addEventListener('click', () => {
+      nStrands.value = 4;
+      areaPerStrand.value = 150;
+      calc();
+      showCopyMessage('Nullstilt til 4 tau og 150 mm² per tau.');
+    });
+
+    btnCopy.addEventListener('click', async () => {
+      const r = calc();
+      const wedgeReq = (Number.isFinite(r.ratio) && r.ratio < 0.30) ? 'Påkrevd (kilesikringsskive)' : 'Ikke påkrevd';
+
+      const txt =
+`Spenntau-beregning (Publikasjon nr. 14:2016)
+Antall tau: ${r.n}
+Areal per tau: ${r.a} mm²
+Total areal Ap: ${r.Ap} mm²
+
+Flytelast Fp0,1k (1640 MPa): ${fmtKN(r.Fp01)} kN
+Bruddlast  Fpk   (1860 MPa): ${fmtKN(r.Fpk)} kN
+
+Prøvekraft Pp (0.80·fp0,1k): ${fmtKN(r.Pp)} kN
+Låsekraft Po (0.73·fp0,1k): ${fmtKN(r.Po)} kN
+
+Kontroll Po/Fpk: ${fmtPct(r.ratio)} %
+Krav ved Po < 30% av Fpk: ${wedgeReq}`;
+
+      try{
+        await navigator.clipboard.writeText(txt);
+        showCopyMessage('Resultat kopiert til utklippstavle.');
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = txt;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try{
+          document.execCommand('copy');
+          showCopyMessage('Resultat kopiert til utklippstavle.');
+        }catch(err){
+          showCopyMessage('Klarte ikke å kopiere automatisk. Marker og kopier manuelt.', false);
+        }
+        document.body.removeChild(ta);
+      }
+    });
+
+    // init
+    calc();
+  });
+</script>
+
+</body>
+</html>

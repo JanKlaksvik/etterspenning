@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software | Etterspenning.no</title>
+  <meta name="description" content="Programvare og digitale verktøy for etterspenning og forankringer: protokoller, grouting, sporbarhet, kvalitet og dokumentasjon." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    /* ===== HEADER + NAV + DRAWER (samme som index.html) ===== */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    /* Brand (left) */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
+    }
+
+    /* New: image logo */
+    .logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .logo img{
+      height: 38px;
+      width: auto;
+      display:block;
+      border-radius: 10px;
+    }
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger button (hidden on desktop) */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Overlay + off-canvas */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    /* Mobile: show hamburger, hide desktop nav */
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* Språk-knapp (samme som index) */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    /* ===== Sideinnhold (uendret) ===== */
+    .hero{padding:28px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:84ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1.15fr .85fr;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 6px;font-size:14px;letter-spacing:-0.01em}
+    .section p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+
+    .tiles{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width:720px){
+      .tiles{grid-template-columns:1fr;}
+    }
+
+    .tile{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      min-width:0;
+    }
+    .tile .t{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      min-width:0;
+    }
+    .tile .title{
+      font-weight:900;
+      min-width:0;
+      overflow-wrap:anywhere;
+    }
+    .tile .badge{
+      font-size:11px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:normal;
+      overflow-wrap:anywhere;
+      max-width:100%;
+    }
+    .tile .desc{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.5}
+
+    ul{margin:10px 0 0 18px;color:var(--muted);font-size:13px;line-height:1.55}
+    li{margin:6px 0}
+
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:700;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media (max-width:620px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:13px;font-weight:900;margin-top:6px}
+
+    /* Inputs (used in access/login card) */
+    .input{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      width:100%;
+    }
+    .help{
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+
+<!-- Header lastes fra samme kilde som index.html -->
+<div id="site-header"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Software</h1>
+    <p>
+      Målet er enkelt: gjøre dokumentasjon og kontroll <strong>lett å gjøre riktig</strong> i felt – med struktur, sporbarhet
+      og revisjonsspor. Programvaren er tenkt som et praktisk supplement til rutiner, ikke en erstatning for faglig vurdering.
+    </p>
+
+    <div class="pillrow">
+      <div class="pill">Protokoller (stressing)</div>
+      <div class="pill">Grouting (EN 445/446/447)</div>
+      <div class="pill">Sporbarhet og revisjonsspor</div>
+      <div class="pill">Roller og tilgang</div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- HOVEDINNHOLD -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Digitale verktøy</h2>
+          <small>Moduler som støtter hele kjeden fra input til ferdig protokoll</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section">
+          <h3>Hvorfor programvare i etterspenningsarbeid?</h3>
+          <p>
+            I praksis oppstår avvik ofte i grensesnittet mellom plan og utførelse: utydelige tegninger, feil feltdata,
+            manglende sporbarhet, eller protokoller som fylles ut for sent. Riktig designet programvare kan:
+          </p>
+          <ul>
+            <li>tvinge frem minimumsdata (slik at en protokoll faktisk blir komplett),</li>
+            <li>redusere manuelle feil (format, enheter, avrunding),</li>
+            <li>gi bedre historikk (hvem gjorde hva og når),</li>
+            <li>gjøre overlevering enklere (PDF/rapport med vedlegg).</li>
+          </ul>
+        </div>
+
+        <div class="tiles">
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Injisering</div>
+              <div class="badge">EN 445/446/447/206</div>
+            </div>
+            <div class="desc">
+              Registrering av prosjekt, hull- og lengdedata, blanding (vannmengde/tid), parameter og prøving.
+              Målet er stabil kvalitet og sporbar logg som kan eksporteres.
+            </div>
+            <ul>
+              <li>Prosjektdata: navn, nr., antall ankere, type (stang/spenntau)</li>
+              <li>Hull-/geometridata: lengder/diametre, stålrør/foringsrør</li>
+              <li>Logg: temperatur, konsistens, tid, volum/trykk (der relevant)</li>
+            </ul>
+          </div>
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Oppspenning / protokoll</div>
+              <div class="badge">Utførelse</div>
+            </div>
+            <div class="desc">
+              Oppspenningsprotokoll i h.t. standard, som kobler kraft, trinn, forlengelse og kontrollpunkter.
+              Data kan hentes fra grunnlag og kompletteres i felt.
+            </div>
+            <ul>
+              <li>Trinnvis last og akseptgrenser</li>
+              <li>ΔL-måling og avvikslogg</li>
+              <li>Kalibreringsreferanse (jekk/manometer/måleinstrument)</li>
+              <li>Valg av jekk (bibliotek) + QR-verifisering på anlegg</li>
+            </ul>
+          </div>
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Kompetanse og opplæring</div>
+              <div class="badge">Lav terskel</div>
+            </div>
+            <div class="desc">
+              Korte leksjoner og tester som støtter kompetanseheving internt – uten å fremstå som sertifisering.
+            </div>
+            <ul>
+              <li>Oppgaver og kontrollpunkter per rolle</li>
+              <li>Korte tester (4 svaralternativ) og historikk</li>
+              <li>Kan knyttes til prosjekter/utstyr (relevant opplæring)</li>
+            </ul>
+          </div>
+
+          <div class="tile">
+            <div class="t">
+              <div class="title">Avvik og forbedring</div>
+              <div class="badge">Revisjonsspor</div>
+            </div>
+            <div class="desc">
+              En enkel måte å registrere avvik i felt (tekst/bilde), sende til ansvarlig og følge opp tiltak.
+            </div>
+            <ul>
+              <li>Registrer hendelse med bilde + kort beskrivelse</li>
+              <li>Varsling til admin/kvalitetsansvarlig</li>
+              <li>Status, ansvar, tiltak og lukking</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="btnrow">
+          <a class="btn primary" href="data.html">Data & beregninger</a>
+          <a class="btn secondary" href="verktoy.html">Verktøy</a>
+          <a class="btn" href="kontakt.html">Kontakt</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDEPANEL -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Tilgang, roller og sporbarhet</h2>
+          <small>Enkelt oppsett som fungerer i praksis</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section" id="tilgang">
+          <h3>Lukket verktøyområde</h3>
+          <p>
+            Verktøyene krever tilgang. Prosjektleder kan invitere montører til prosjekter, og registreringer får revisjonsspor.
+          </p>
+
+          <div class="sep"></div>
+
+          <h3 style="margin-top:0">Logg inn</h3>
+          <p style="margin-bottom:10px">
+            Innlogging gir tilgang etter firmaets aktive avtale. Har dere ikke konto ennå, bruk "Be om adgang" under.
+          </p>
+
+          <form id="loginForm" autocomplete="on" style="display:grid;gap:10px">
+            <label style="display:grid;gap:6px">
+              <span class="help">E-post</span>
+              <input class="input" name="email" type="email" required>
+            </label>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Passord</span>
+              <input class="input" name="password" type="password" required>
+            </label>
+
+            <label class="help" style="display:flex;align-items:center;gap:8px">
+              <input id="showPasswordToggle" type="checkbox">
+              Vis passord
+            </label>
+
+            <button class="btn" type="submit" style="justify-content:center">Logg inn</button>
+            <div class="help" id="loginInfo" style="display:none"></div>
+            <div class="btnrow" id="loginLinks" style="display:none;margin-top:0">
+              <a class="btn secondary" href="software-prosjektstyring.html">Gå til Prosjektstyring</a>
+              <a class="btn" href="software-injisering.html">Gå til Injisering</a>
+              <a class="btn secondary" id="groutingFieldLinkAfterLogin" href="software-injisering-felt.html">Gå til Injisering felt</a>
+              <a class="btn" id="jackLinkAfterLogin" href="software-jekk.html">Gå til Jekk kontroll</a>
+              <a class="btn secondary" id="adminUsersLinkAfterLogin" href="software-personell.html" style="display:none">Personell admin</a>
+              <button class="btn" id="logoutBtn" type="button">Logg ut</button>
+            </div>
+          </form>
+
+          <div class="sep"></div>
+
+          <h3 style="margin-top:0">Be om adgang</h3>
+          <p style="margin-bottom:10px">
+            Send en forespørsel med ønskede moduler. Du bestemmer hvem som får tilgang.
+          </p>
+
+          <form id="accessForm" style="display:grid;gap:10px">
+            <label style="display:grid;gap:6px">
+              <span class="help">Navn</span>
+              <input class="input" name="name" type="text" required>
+            </label>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Firma</span>
+              <input class="input" name="company" type="text" required>
+            </label>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">E-post</span>
+              <input class="input" name="email" type="email" required>
+            </label>
+
+            <div style="display:grid;gap:8px">
+              <div class="help">Tilgangspakke</div>
+              <div class="help">
+                <strong>Standard:</strong> Prosjektstyring + Injisering + Oppspenning + Jekk kontroll.
+              </div>
+              <input type="hidden" name="accessLevel" value="level2">
+              <div class="help">
+                Gratis verktøy finnes under <a href="data.html">Data & beregninger</a>.
+              </div>
+            </div>
+
+            <label style="display:grid;gap:6px">
+              <span class="help">Kommentar (valgfritt)</span>
+              <textarea class="input" name="comment" rows="3"></textarea>
+            </label>
+
+            <button class="btn primary" type="submit" style="justify-content:center">Send forespørsel</button>
+
+            <div class="help">
+              Send forespørsel med ønske om tillgang.
+            </div>
+          </form>
+        </div>
+
+        <div class="section">
+          <h3>Revisjonsspor</h3>
+          <p>
+            For hver registrering er det nyttig å lagre: hvem, når, hvilken enhet/bruker, og hva som ble endret.
+            Dette gir bedre “revisorsikkerhet” og enklere internkontroll.
+          </p>
+        </div>
+
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Mål</div>
+            <div class="val">Færre avvik, mindre etterarbeid, bedre overlevering</div>
+          </div>
+          <div class="box">
+            <div class="lab">Prinsipp</div>
+            <div class="val">Minst mulig friksjon i felt, mest mulig verdi i dokumentasjon</div>
+          </div>
+          <div class="box">
+            <div class="lab">Eksport</div>
+            <div class="val">PDF-rapport + vedlegg (bilder/logg) per prosjekt/anker</div>
+          </div>
+          <div class="box">
+            <div class="lab">Integrasjon</div>
+            <div class="val">Kan kobles opp mot utleie/kalibrering og prosjektregister</div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Software. Denne nettsiden bruker Google Analytics for anonym trafikkstatistikk. Ingen informasjonskapsler brukes til markedsføring. Ingen cookies.
+  </footer>
+
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇬🇧 EN";
+      langBtn.setAttribute("aria-label", "Switch to English");
+      langBtn.setAttribute("title", "Switch to English");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "software-en.html";
+      });
+    }
+  }
+
+  // Inkluder header.html og sett riktig "active" automatisk (desktop + mobil)
+  (async function () {
+    const mount = document.getElementById("site-header");
+    if (!mount) return;
+
+    try{
+      const res = await fetch("header.html", { cache: "no-cache" });
+      if (!res.ok) return;
+      mount.innerHTML = await res.text();
+      initHeaderUi();
+
+      const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+
+      // Desktop
+      mount.querySelectorAll("nav.primary a.navlink").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+
+      // Mobil
+      mount.querySelectorAll(".drawer-nav a").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+    }catch(e){
+      console.warn("Kunne ikke laste header.html", e);
+    }
+  })();
+</script>
+
+<script>
+  // ====== SOFTWARE: login + tilgangsnivå per firma ======
+  (function initSoftwareAccess(){
+    const STORAGE_AUTH_KEY = "esp_pm_auth_v1";
+    // Optional override: set window.ESP_API_BASE = "/api" before this script loads.
+    const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+
+    const loginForm = document.getElementById("loginForm");
+    const loginInfo = document.getElementById("loginInfo");
+    const loginLinks = document.getElementById("loginLinks");
+    const groutingFieldLinkAfterLogin = document.getElementById("groutingFieldLinkAfterLogin");
+    const jackLinkAfterLogin = document.getElementById("jackLinkAfterLogin");
+    const adminUsersLinkAfterLogin = document.getElementById("adminUsersLinkAfterLogin");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const accessForm = document.getElementById("accessForm");
+    const showPasswordToggle = document.getElementById("showPasswordToggle");
+    const passwordInput = loginForm ? loginForm.querySelector('input[name="password"]') : null;
+
+    function tierLabel(){
+      return "Standard";
+    }
+
+    function apiUrl(path){
+      return API_BASE + "/" + path.replace(/^\/+/, "");
+    }
+
+    function normalizeNextTarget(rawValue){
+      const raw = (rawValue || "").toString().trim();
+      if (!raw) return "";
+      try {
+        const parsed = new URL(raw, window.location.href);
+        if (parsed.origin !== window.location.origin) return "";
+        const fileName = (parsed.pathname.split("/").pop() || "").toLowerCase();
+        if (!/^software-[a-z0-9-]+\.html$/.test(fileName)) return "";
+        const relativePath = parsed.pathname.split("/").pop() || "";
+        return relativePath + parsed.search + parsed.hash;
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function requestedNextTarget(){
+      const qp = new URLSearchParams(window.location.search);
+      return normalizeNextTarget(qp.get("next"));
+    }
+
+    const nextAfterLogin = requestedNextTarget();
+
+    function postLoginTarget(session){
+      const activeSession = session || readSession();
+      if (activeSession && activeSession.role === "admin") {
+        return "software-personell.html";
+      }
+      if (activeSession && activeSession.role === "onsite_user") {
+        return "software-onsite.html";
+      }
+      return nextAfterLogin || "software-prosjektstyring.html";
+    }
+
+    function redirectAfterLogin(session){
+      window.location.href = postLoginTarget(session);
+    }
+
+    function parseEpochMs(value){
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string"){
+        const parsed = Date.parse(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return 0;
+    }
+
+    function normalizeSession(session){
+      if (!session || typeof session !== "object") return null;
+
+      const tier = "level2";
+      const expiresAtMs = parseEpochMs(session.expiresAt);
+      if (!expiresAtMs) return null;
+
+      const baseModules = {
+        projectHandling: true,
+        grouting: true,
+        stressing: true,
+        jackData: true,
+        jackControl: true
+      };
+      const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+      return {
+        ...session,
+        tier,
+        modules: {
+          ...baseModules,
+          ...incomingModules,
+          projectHandling: true,
+          grouting: true
+        },
+        loginAt: session.loginAt || new Date().toISOString(),
+        expiresAt: expiresAtMs
+      };
+    }
+
+    function readSession(){
+      try {
+        const raw = localStorage.getItem(STORAGE_AUTH_KEY);
+        if (!raw) return null;
+        const parsed = normalizeSession(JSON.parse(raw));
+        if (!parsed || parsed.expiresAt < Date.now()) {
+          localStorage.removeItem(STORAGE_AUTH_KEY);
+          return null;
+        }
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeSession(session){
+      const normalized = normalizeSession(session);
+      if (!normalized) return null;
+      localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(normalized));
+      return normalized;
+    }
+
+    function clearSession(){
+      localStorage.removeItem(STORAGE_AUTH_KEY);
+    }
+
+    async function requestApi(path, options){
+      const opts = options || {};
+      const headers = {};
+      if (opts.body) headers["Content-Type"] = "application/json";
+
+      const res = await fetch(apiUrl(path), {
+        method: opts.method || "GET",
+        credentials: "include",
+        headers,
+        body: opts.body
+      });
+
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (e) {}
+
+      if (!res.ok || !data || data.ok === false) {
+        const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ("HTTP " + res.status);
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    async function backendHealthHint(){
+      try {
+        const data = await requestApi("health.php");
+        const checks = (data && typeof data === "object" && data.checks && typeof data.checks === "object")
+          ? data.checks
+          : null;
+        if (!checks) return "";
+        const pdoOk = checks.pdo_mysql === true;
+        const dbOk = checks.db === true;
+        const sessionOk = checks.session === true;
+        if (pdoOk && dbOk && sessionOk) return "";
+        return " [Systemsjekk: pdo_mysql=" + (pdoOk ? "OK" : "FEIL") + ", db=" + (dbOk ? "OK" : "FEIL") + ", session=" + (sessionOk ? "OK" : "FEIL") + "]";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function isLocalPreviewHost(){
+      const host = (window.location.hostname || "").toLowerCase();
+      if (window.location.protocol === "file:") return true;
+      if (!host) return true;
+      if (host === "etterspenning.no" || host.endsWith(".etterspenning.no")) return false;
+      return true;
+    }
+
+    function previewFallbackSession(email){
+      const nowIso = new Date().toISOString();
+      return {
+        type: "company_access",
+        userId: 0,
+        name: "Preview bruker",
+        fullName: "Preview bruker",
+        email: (email || "preview@local").toString().trim().toLowerCase(),
+        role: "admin",
+        companyId: "preview-local",
+        companyName: "Preview firma",
+        companyLogo: "",
+        tier: "level2",
+        tierLabel: "Level 2",
+        modules: {
+          projectHandling: true,
+          grouting: true,
+          stressing: true,
+          jackData: true,
+          jackControl: true
+        },
+        previewMode: true,
+        loginAt: nowIso,
+        expiresAt: Date.now() + (12 * 60 * 60 * 1000)
+      };
+    }
+
+    async function loginViaApi(email, password){
+      try {
+        const data = await requestApi("login.php", {
+          method: "POST",
+          body: JSON.stringify({ email, password })
+        });
+        const session = writeSession(data.session);
+        if (!session) throw new Error("Ugyldig sesjon fra server.");
+        return { session, fallback: false };
+      } catch (err) {
+        if (!isLocalPreviewHost()) throw err;
+        const session = writeSession(previewFallbackSession(email));
+        if (!session) throw err;
+        return { session, fallback: true };
+      }
+    }
+
+    function updateLoginUi(session){
+      if (!loginInfo || !loginLinks || !jackLinkAfterLogin) return;
+      if (!session){
+        loginInfo.style.display = "none";
+        loginInfo.textContent = "";
+        loginLinks.style.display = "none";
+        return;
+      }
+
+      loginInfo.style.display = "";
+      loginLinks.style.display = "";
+      if (groutingFieldLinkAfterLogin) {
+        const fieldTarget = nextAfterLogin && nextAfterLogin.toLowerCase().startsWith("software-injisering-felt.html")
+          ? nextAfterLogin
+          : "software-injisering-felt.html";
+        groutingFieldLinkAfterLogin.href = fieldTarget;
+        groutingFieldLinkAfterLogin.style.display = session.modules?.grouting ? "" : "none";
+      }
+      jackLinkAfterLogin.style.display = session.modules?.jackData ? "" : "none";
+      if (adminUsersLinkAfterLogin) {
+        adminUsersLinkAfterLogin.style.display = session.role === "admin" ? "" : "none";
+      }
+      const roleLabel = session.role === "onsite_user" ? "Onsite-personell" : (session.role === "admin" ? "Admin" : "Prosjektleder");
+      loginInfo.textContent =
+        "Innlogget: " + (session.companyName || "-") +
+        " (" + tierLabel(session.tier) + "). Rolle: " + roleLabel + ".";
+    }
+
+    async function refreshSessionFromApi(){
+      try {
+        const data = await requestApi("me.php");
+        if (!data.authenticated || !data.session){
+          clearSession();
+          updateLoginUi(null);
+          return null;
+        }
+        const session = writeSession(data.session);
+        updateLoginUi(session);
+        if (session && (nextAfterLogin || session.role === "admin" || session.role === "onsite_user")) {
+          window.location.href = postLoginTarget(session);
+        }
+        return session;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function confirmSessionAfterLogin(attempts){
+      const maxAttempts = Number.isInteger(attempts) && attempts > 0 ? attempts : 3;
+      for (let i = 0; i < maxAttempts; i += 1) {
+        const session = await refreshSessionFromApi();
+        if (session) return session;
+        if (i < maxAttempts - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 250 * (i + 1)));
+        }
+      }
+      return null;
+    }
+
+    function showProtectedPageHint(){
+      if (!nextAfterLogin || !loginInfo) return;
+      loginInfo.style.display = "";
+      loginInfo.textContent = "Logg inn for å åpne siden du ble sendt fra.";
+    }
+
+    if (showPasswordToggle && passwordInput) {
+      showPasswordToggle.addEventListener("change", () => {
+        passwordInput.type = showPasswordToggle.checked ? "text" : "password";
+      });
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fd = new FormData(loginForm);
+        const email = (fd.get("email") || "").toString().trim().toLowerCase();
+        const password = (fd.get("password") || "").toString();
+
+        if (!email || !password){
+          if (loginInfo){
+            loginInfo.style.display = "";
+            loginInfo.textContent = "Fyll ut e-post og passord.";
+          }
+          if (loginLinks) loginLinks.style.display = "none";
+          return;
+        }
+
+        try {
+          const outcome = await loginViaApi(email, password);
+          const confirmedSession = outcome.fallback ? outcome.session : await confirmSessionAfterLogin(3);
+          if (!confirmedSession) {
+            throw new Error("Innlogging ble ikke bekreftet av server. Tillat cookies for etterspenning.no og prov igjen.");
+          }
+          updateLoginUi(confirmedSession);
+          if (outcome.fallback && loginInfo) {
+            loginInfo.style.display = "";
+            loginInfo.textContent = "Preview-innlogging aktiv: API var utilgjengelig, lokal sesjon er brukt.";
+          }
+          redirectAfterLogin(confirmedSession);
+        } catch (err) {
+          if (loginInfo){
+            loginInfo.style.display = "";
+            const rawMessage = (err?.message || "ukjent feil").toString();
+            const healthHint = await backendHealthHint();
+            loginInfo.textContent =
+              rawMessage === "Login failed"
+                ? ("Innlogging feilet: backend-feil. Sjekk DB/PHP-oppsett og serverlogg." + healthHint)
+                : ("Innlogging feilet: " + rawMessage + healthHint);
+          }
+          if (loginLinks) loginLinks.style.display = "none";
+        }
+      });
+    }
+
+    if (logoutBtn){
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await requestApi("logout.php", { method: "POST", body: "{}" });
+        } catch (e) {}
+        clearSession();
+        updateLoginUi(null);
+      });
+    }
+
+    const existingSession = readSession();
+    updateLoginUi(existingSession);
+    if (existingSession && (nextAfterLogin || existingSession.role === "admin" || existingSession.role === "onsite_user")) {
+      redirectAfterLogin(existingSession);
+    } else {
+      showProtectedPageHint();
+      refreshSessionFromApi();
+    }
+
+    if (accessForm) {
+      accessForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const YOUR_EMAIL = "jan@etterspenning.no";
+
+        const fd = new FormData(accessForm);
+        const name = (fd.get("name") || "").toString().trim();
+        const company = (fd.get("company") || "").toString().trim();
+        const email = (fd.get("email") || "").toString().trim();
+        const comment = (fd.get("comment") || "").toString().trim();
+
+        const selectedLevel = "level2";
+        const requestedModules = ["Prosjektstyring", "Injisering", "Oppspenning", "Jekk kontroll"];
+
+        const subject = `Forespørsel om tilgang – ${company || "Ukjent firma"}`;
+        const bodyLines = [
+          "Forespørsel om tilgang til Etterspenning.no – Software",
+          "",
+          `Navn: ${name}`,
+          `Firma: ${company}`,
+          `E-post: ${email}`,
+          `Ønsket nivå: ${selectedLevel === "level2" ? "Full tilgang" : "Ikke valgt"}`,
+          `Ønskede moduler: ${requestedModules.length ? requestedModules.join(", ") : "Ikke valgt"}`,
+          "",
+          "Tilgangspakke:",
+          "- Full tilgang = Prosjektstyring + Injisering + Oppspenning + Jekk kontroll",
+          "",
+          "Kommentar:",
+          comment ? comment : "-",
+          "",
+          "Ønsket rolle:",
+          "- Prosjektleder eller Montør (angi i svar)",
+          "",
+          "Merk:",
+          "- Prosjektleder oppretter økter (injisering/oppspenning/lift-off) og kan invitere montører.",
+          "- Montør kan kun registrere i tildelte økter (ingen endring av masterdata)."
+        ];
+
+        const mailto =
+          `mailto:${encodeURIComponent(YOUR_EMAIL)}` +
+          `?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+
+        window.location.href = mailto;
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

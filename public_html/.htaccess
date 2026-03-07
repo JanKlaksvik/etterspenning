@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+RedirectMatch 403 ^/inc/
+RedirectMatch 403 ^/cron/
+RedirectMatch 403 ^/schema\.sql$

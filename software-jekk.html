@@ -1,0 +1,2214 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - Jack Page | Etterspenning.no</title>
+  <meta name="description" content="Lukket jack-register for prosjektleder: legg til, rediger og fjern jack-data for oppspenning." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --danger:#ff6b6b;
+      --ok:#8bb93d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 620px at 12% -10%, rgba(244,122,32,.28), transparent 62%),
+                  radial-gradient(920px 560px at 88% 8%, rgba(46,130,120,.24), transparent 58%),
+                  linear-gradient(180deg, #101722, #090d16 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1180px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+    .brandtitle{font-weight:900;letter-spacing:.2px}
+    .brandsub{font-size:12px;color:var(--muted)}
+
+    nav.primary{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;left:0;right:0;height:2px;background:var(--text);border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity:1;pointer-events:auto}
+
+    .drawer{
+      position: fixed; top:0; right:0;
+      height:100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{background: rgba(244,122,32,.12);border-color: rgba(244,122,32,.45)}
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    .hero{padding:24px 0 10px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(24px, 3.2vw, 40px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:92ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1fr 1fr;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width: 1080px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 8px;font-size:14px;letter-spacing:-0.01em}
+
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns: 1fr 1fr 1fr;gap:10px}
+    @media (max-width: 780px){
+      .row{grid-template-columns:1fr}
+      .row3{grid-template-columns:1fr}
+    }
+
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      outline:none;
+      width:100%;
+      max-width:100%;
+    }
+    textarea{resize:vertical; min-height: 42px;}
+    input:focus, select:focus, textarea:focus{border-color: rgba(244,122,32,.55)}
+
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
+    .muted{color:var(--muted)}
+    .calWarn{
+      display:block;
+      margin-top:6px;
+      font-size:11px;
+      line-height:1.35;
+      color:#ffd3d3;
+    }
+    .calWarn.due{color:#ffd9b0}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.ghost{background: rgba(16,26,47,.28)}
+    .btn.danger{
+      background: rgba(255,90,90,.12);
+      border-color: rgba(255,90,90,.35);
+    }
+
+    .kpi{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+      margin-top:8px;
+    }
+    @media (max-width:900px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:10px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:16px;font-weight:900;margin-top:4px}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      margin-top:8px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color: var(--muted);
+      font-weight:900;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+      font-size:13px;
+    }
+    tbody tr:last-child td{border-bottom:none}
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.5);
+      font-weight:700;
+    }
+    .badge.active{border-color:rgba(139,185,61,.6);background:rgba(139,185,61,.12)}
+    .badge.inactive{border-color:rgba(255,107,107,.6);background:rgba(255,107,107,.12)}
+    .badge.valid{border-color:rgba(139,185,61,.6);background:rgba(139,185,61,.12)}
+    .badge.due{border-color:rgba(244,122,32,.6);background:rgba(244,122,32,.14)}
+    .badge.overdue{border-color:rgba(255,107,107,.6);background:rgba(255,107,107,.16)}
+    .badge.unknown{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.08)}
+
+    .rowActions{display:flex;flex-wrap:wrap;gap:8px}
+    .smallBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.45);
+      color:var(--text);
+      border-radius:10px;
+      padding:6px 9px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .smallBtn:hover{border-color:rgba(255,255,255,.18)}
+
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      color: var(--muted);
+      font-size:13px;
+    }
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+
+    .importInput{display:none}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    .hidden{display:none !important}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - Jekk data</div>
+        <div class="brandsub" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="openMenu" aria-label="Apne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktoy</a>
+      <a class="navlink active" href="software.html">Software</a>
+      <a class="navlink" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktoy</a>
+    <a class="active" href="software.html">Software</a>
+    <a href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap" id="guardView">
+  <section class="hero">
+    <h1>Firma-innlogging</h1>
+    <p>
+      Jekk data krever Level 2. Logg inn med firma-konto for a sjekke tilgang.
+    </p>
+  </section>
+
+  <div class="card" style="max-width:560px">
+    <div class="cardhead">
+      <div>
+        <h2>Innlogging</h2>
+        <small>Tilgang etter betalt nivaa</small>
+      </div>
+    </div>
+    <div class="cardbody">
+      <form id="pmLoginForm" style="display:grid;gap:10px" autocomplete="off">
+        <label>
+          <span class="lab">E-post</span>
+          <input id="pmUser" type="email" required placeholder="pm@firma.no">
+        </label>
+        <label>
+          <span class="lab">Passord</span>
+          <input id="pmPass" type="password" required placeholder="********">
+        </label>
+        <button class="btn primary" type="submit" style="justify-content:center">Logg inn</button>
+      </form>
+
+      <div class="hint" style="margin-top:10px">
+        Innlogging styres av backend/API og tilgangsnivaa per firma.
+      </div>
+      <div class="hint">
+        Level 1: prosjekthandtering + injisering. Level 2: Level 1 + stressing + jekk data.
+      </div>
+      <div id="loginMsg" class="msg hidden"></div>
+      <div class="actions hidden" id="guardActions">
+        <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+        <a class="btn secondary" href="software-injisering.html">Injisering</a>
+        <button class="btn" id="guardLogoutBtn" type="button">Logg ut</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Jekk data (lukket). Ingen markedsforing-cookies.
+  </footer>
+</div>
+
+<div class="wrap" id="appView" hidden>
+  <section class="hero">
+    <h1>Jekk data</h1>
+    <p>
+      Operativt register for jack data i stressing: masterdata, kalibrering, verifiseringslenker (QR) og backup/import.
+    </p>
+    <div class="hint" id="accessInfo"></div>
+    <div class="actions">
+      <a class="btn secondary" href="software-prosjektstyring.html">Prosjektstyring</a>
+      <button class="btn ghost" id="logoutBtn" type="button">Logg ut</button>
+    </div>
+  </section>
+
+  <div class="section hidden" id="verifyPanel"></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Legg til / rediger jack</h2>
+          <small id="formMode">Ny jack</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <form id="jackForm">
+          <div class="section">
+            <div class="row3">
+              <label>
+                <span class="lab">Jack ID *</span>
+                <input id="jackCode" type="text" required placeholder="f.eks. M1800-01">
+              </label>
+              <label>
+                <span class="lab">Jack Name *</span>
+                <input id="jackModel" type="text" required placeholder="f.eks. Multi TTM 1800 kN">
+              </label>
+              <label>
+                <span class="lab">Type</span>
+                <select id="jackType">
+                  <option value="multi">Multi-strand</option>
+                  <option value="mono">Mono-strand</option>
+                  <option value="bar">Bar/stang</option>
+                  <option value="special">Special</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Serienummer *</span>
+                <input id="jackSerial" type="text" required placeholder="f.eks. SN-24-0081">
+              </label>
+              <label>
+                <span class="lab">Strands (maks for multi-strand)</span>
+                <input id="jackStrands" type="number" min="0" step="1" placeholder="f.eks. 12">
+              </label>
+              <label>
+                <span class="lab">Area (cm2)</span>
+                <input id="jackAreaCm2" type="number" min="0" step="0.01" placeholder="f.eks. 18.60">
+              </label>
+            </div>
+            <div class="hint">
+              For multi-strand jacks er "Strands" maks antall strands jekken kan brukes pa. Eksempel: 7 betyr at jekken ikke kan brukes pa anker med mer enn 7 strands.
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Max kN</span>
+                <input id="jackCapacity" type="number" min="0" step="1" placeholder="f.eks. 1800">
+              </label>
+              <label>
+                <span class="lab">Max Bar</span>
+                <input id="jackMaxPressure" type="number" min="0" step="1" placeholder="f.eks. 700">
+              </label>
+              <label>
+                <span class="lab">Weight (kg)</span>
+                <input id="jackWeightKg" type="number" min="0" step="0.1" placeholder="f.eks. 68.5">
+              </label>
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Stroke (mm)</span>
+                <input id="jackStroke" type="number" min="0" step="1" placeholder="f.eks. 200">
+              </label>
+              <label>
+                <span class="lab">Tensioning extension (mm)</span>
+                <input id="jackTensioningExtensionMm" type="number" min="0" step="1" placeholder="f.eks. 350">
+              </label>
+              <label>
+                <span class="lab">&Oslash;A (mm, bakside)</span>
+                <input id="jackRearDiameterAMm" type="number" min="0" step="1" placeholder="f.eks. 145">
+              </label>
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Ankerpunkt i jekk (mm)</span>
+                <input id="jackAnchorPointMm" type="number" min="0" step="1" placeholder="f.eks. 950">
+              </label>
+              <label>
+                <span class="lab">Produsent</span>
+                <input id="jackManufacturer" type="text" placeholder="f.eks. Freyssinet">
+              </label>
+              <label>
+                <span class="lab">Status</span>
+                <select id="jackStatus">
+                  <option value="active">Aktiv</option>
+                  <option value="inactive">Inaktiv</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Sist kalibrert</span>
+                <input id="jackCalibratedAt" type="date">
+              </label>
+              <label>
+                <span class="lab">Kalibreringsintervall (mnd, fast)</span>
+                <input id="jackCalibrationInterval" type="number" min="1" step="1" value="12" readonly>
+              </label>
+              <label>
+                <span class="lab">Neste kalibrering</span>
+                <input id="jackNextCalibration" type="date" readonly>
+              </label>
+            </div>
+            <div class="hint" style="margin-top:6px">
+              Neste kalibrering beregnes automatisk til 12 mnd etter sist kalibrert.
+            </div>
+
+            <div class="row3" style="margin-top:10px">
+              <label>
+                <span class="lab">Friksjon (%)</span>
+                <input id="jackFrictionPct" type="number" min="0" step="0.01" placeholder="f.eks. 5.00">
+              </label>
+              <label>
+                <span class="lab">Certificate PDF (url)</span>
+                <input id="jackCertificateUrl" type="url" placeholder="f.eks. cert/Jack-M1800-01.pdf">
+              </label>
+              <label>
+                <span class="lab">Manometer / gauge ID</span>
+                <input id="jackGaugeId" type="text" placeholder="f.eks. G-105">
+              </label>
+              <label>
+                <span class="lab">Kalibreringssertifikat nr.</span>
+                <input id="jackCertNo" type="text" placeholder="f.eks. CAL-2026-0191">
+              </label>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <label>
+                <span class="lab">Last opp kalibreringssertifikat (PDF/bilde)</span>
+                <input id="jackCertificateFile" type="file" accept="application/pdf,image/*">
+              </label>
+              <div>
+                <span class="lab">Vedlagt fil</span>
+                <div id="jackCertificateFileInfo" class="hint" style="margin-top:6px">Ingen fil lastet opp.</div>
+                <button class="smallBtn hidden" id="clearJackCertificateFileBtn" type="button" style="margin-top:8px">Fjern vedlegg</button>
+              </div>
+            </div>
+            <label style="margin-top:10px">
+              <span class="lab">Kommentar</span>
+              <input id="jackNote" type="text" placeholder="f.eks. Ny tetning byttet 2026-02-01">
+            </label>
+          </div>
+
+          <input id="editingId" type="hidden">
+
+          <div class="actions">
+            <button class="btn primary" id="saveJackBtn" type="submit">Lagre jack</button>
+            <button class="btn" id="resetFormBtn" type="button">Nullstill</button>
+            <button class="btn danger hidden" id="cancelEditBtn" type="button">Avbryt redigering</button>
+          </div>
+
+          <div id="formMsg" class="msg hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Jekk registeret</h2>
+          <small>Data brukes i stressing/prosjektstyring</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Totalt</div>
+            <div class="val" id="kpiTotal">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Aktive</div>
+            <div class="val" id="kpiActive">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Inaktive</div>
+            <div class="val" id="kpiInactive">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Forfaller ≤ 30 dager</div>
+            <div class="val" id="kpiDueSoon">0</div>
+          </div>
+          <div class="box">
+            <div class="lab">Overtid kalibrering</div>
+            <div class="val" id="kpiOverdue">0</div>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top:10px">
+          <div class="row3">
+            <label>
+              <span class="lab">Filter</span>
+              <select id="statusFilter">
+                <option value="all">Alle</option>
+                <option value="active">Aktive</option>
+                <option value="inactive">Inaktive</option>
+                <option value="dueSoon">Forfaller snart (≤ 30 dager)</option>
+                <option value="overdue">Overtid kalibrering</option>
+              </select>
+            </label>
+            <label style="grid-column: span 2">
+              <span class="lab">Sok</span>
+              <input id="searchInput" type="text" placeholder="Sok etter Jack ID, Jekk navn eller serienummer">
+            </label>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:10px">
+          <button class="btn" id="exportBtn" type="button">Eksporter JSON</button>
+          <label class="btn" for="importInput">Importer JSON</label>
+          <input class="importInput" id="importInput" type="file" accept="application/json">
+        </div>
+        <div class="hint" style="margin-top:6px">
+          Bruk eksport/import for backup eller flytting av jack-register mellom enheter.
+        </div>
+
+        <table aria-label="Jekk registeret">
+          <thead>
+            <tr>
+              <th>Jack ID</th>
+              <th>Jekk navn</th>
+              <th>Spenntau</th>
+              <th>Area (cm2)</th>
+              <th>Maks kN</th>
+              <th>Calibration expiry</th>
+              <th>Certificate (pdf)</th>
+            </tr>
+          </thead>
+          <tbody id="jackRows"></tbody>
+        </table>
+
+        <div id="listMsg" class="msg" style="margin-top:10px">Ingen jacks registrert ennå.</div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Jekk data (firma-tilgang).
+  </footer>
+</div>
+
+<script>
+  (function initMenu(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+  })();
+</script>
+
+<script src="company-branding.js"></script>
+<script>
+  const STORAGE = {
+    auth: "esp_pm_auth_v1",
+    projects: "esp_pm_projects_v1",
+    jacks: "esp_pm_jacks_v1"
+  };
+
+  const ACCESS_CONFIG = {
+    hours: 12
+  };
+  const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+  const CALIBRATION_INTERVAL_MONTHS = 12;
+  const CALIBRATION_WARNING_DAYS = 30;
+  const CERTIFICATE_UPLOAD_MAX_BYTES = 2 * 1024 * 1024;
+
+  function modulesForTier(tier){
+    const level2 = tier === "level2";
+    return {
+      projectHandling: true,
+      grouting: true,
+      stressing: level2,
+      jackData: level2
+    };
+  }
+
+  function tierLabel(tier){
+    return tier === "level2" ? "Level 2" : "Level 1";
+  }
+
+  function parseEpochMs(value){
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string"){
+      const parsed = Date.parse(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  function normalizeSession(session){
+    if (!session || typeof session !== "object") return null;
+    const tier = session.tier === "level2" ? "level2" : "level1";
+    const expiresAtMs = parseEpochMs(session.expiresAt);
+    if (!expiresAtMs) return null;
+    const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+    return {
+      ...session,
+      tier,
+      modules: {
+        ...modulesForTier(tier),
+        ...incomingModules,
+        projectHandling: true,
+        grouting: true
+      },
+      loginAt: session.loginAt || new Date().toISOString(),
+      expiresAt: expiresAtMs
+    };
+  }
+
+  function migrateLegacySession(raw){
+    if (!raw || raw.role !== "project_manager") return null;
+    const migrated = normalizeSession({
+      type: "company_access",
+      companyId: "legacy-pm",
+      companyName: "Legacy prosjektleder",
+      tier: "level2",
+      email: "",
+      modules: modulesForTier("level2"),
+      loginAt: raw.loginAt || new Date().toISOString(),
+      expiresAt: raw.expiresAt || (Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000))
+    });
+    if (!migrated) return null;
+    writeJson(STORAGE.auth, migrated);
+    return migrated;
+  }
+
+  function apiUrl(path){
+    return API_BASE + "/" + path.replace(/^\/+/, "");
+  }
+
+  async function requestApi(path, options){
+    const opts = options || {};
+    const headers = {};
+    if (opts.body) headers["Content-Type"] = "application/json";
+
+    const res = await fetch(apiUrl(path), {
+      method: opts.method || "GET",
+      credentials: "include",
+      headers,
+      body: opts.body
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {}
+
+    if (!res.ok || !data || data.ok === false) {
+      const msg = (data && (data.error || data.message))
+        ? (data.error || data.message)
+        : ("HTTP " + res.status);
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  function isLocalPreviewHost(){
+    const host = (window.location.hostname || "").toLowerCase();
+    if (window.location.protocol === "file:") return true;
+    if (!host) return true;
+    if (host === "etterspenning.no" || host.endsWith(".etterspenning.no")) return false;
+    return true;
+  }
+
+  function previewFallbackSession(email){
+    const nowIso = new Date().toISOString();
+    return {
+      type: "company_access",
+      userId: 0,
+      name: "Preview bruker",
+      fullName: "Preview bruker",
+      email: (email || "preview@local").toString().trim().toLowerCase(),
+      role: "admin",
+      companyId: "preview-local",
+      companyName: "Preview firma",
+      companyLogo: "",
+      tier: "level2",
+      tierLabel: "Level 2",
+      modules: {
+        projectHandling: true,
+        grouting: true,
+        stressing: true,
+        jackData: true,
+        jackControl: true
+      },
+      previewMode: true,
+      loginAt: nowIso,
+      expiresAt: Date.now() + (ACCESS_CONFIG.hours * 60 * 60 * 1000)
+    };
+  }
+
+  function writeSession(session){
+    const normalized = normalizeSession(session);
+    if (!normalized) return null;
+    writeJson(STORAGE.auth, normalized);
+    return normalized;
+  }
+
+  function clearSession(){
+    localStorage.removeItem(STORAGE.auth);
+  }
+
+  async function refreshSessionFromApi(){
+    try {
+      const data = await requestApi("me.php");
+      if (!data.authenticated || !data.session) {
+        clearSession();
+        return null;
+      }
+      return writeSession(data.session);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function loginViaApi(email, password){
+    try {
+      const data = await requestApi("login.php", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
+      });
+      const session = writeSession(data.session);
+      if (!session) throw new Error("Ugyldig sesjon fra server.");
+      return session;
+    } catch (err) {
+      if (!isLocalPreviewHost()) throw err;
+      const fallback = writeSession(previewFallbackSession(email));
+      if (!fallback) throw err;
+      return fallback;
+    }
+  }
+
+  function getSession(){
+    const raw = readJson(STORAGE.auth, null);
+    if (!raw) return null;
+
+    const normalized = normalizeSession(raw);
+    if (normalized) {
+      if (normalized.expiresAt < Date.now()) {
+        clearSession();
+        return null;
+      }
+      if (Number(raw.expiresAt) !== normalized.expiresAt) {
+        writeJson(STORAGE.auth, normalized);
+      }
+      return normalized;
+    }
+
+    const migrated = migrateLegacySession(raw);
+    if (!migrated || migrated.expiresAt < Date.now()) {
+      clearSession();
+      return null;
+    }
+    return migrated;
+  }
+
+  function hasPageAccess(){
+    const session = getSession();
+    return !!(
+      session &&
+      session.role !== "onsite_user" &&
+      session.modules &&
+      session.modules.jackData
+    );
+  }
+
+  function $(id){ return document.getElementById(id); }
+
+  function readJson(key, fallback){
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function companyScopeId(){
+    const session = getSession();
+    const raw = session && session.companyId !== undefined && session.companyId !== null
+      ? String(session.companyId).trim()
+      : "";
+    return raw || "no_company";
+  }
+
+  function scopedStorageKey(baseKey){
+    return baseKey + "__company_" + companyScopeId();
+  }
+
+  function projectsStorageKey(){
+    return scopedStorageKey(STORAGE.projects);
+  }
+
+  function jacksStorageKey(){
+    return scopedStorageKey(STORAGE.jacks);
+  }
+
+  function isLegacyCompanyScope(){
+    return companyScopeId() === "legacy-pm";
+  }
+
+  function migrateScopedArrayStore(scopedKey, legacyKey){
+    if (!isLegacyCompanyScope()) return;
+    if (localStorage.getItem(scopedKey) !== null) return;
+
+    const markerKey = legacyKey + "__scoped_v1_migrated";
+    if (localStorage.getItem(markerKey) === "1") return;
+
+    const legacyValue = readJson(legacyKey, null);
+    if (Array.isArray(legacyValue)) {
+      writeJson(scopedKey, legacyValue);
+      localStorage.setItem(markerKey, "1");
+    }
+  }
+
+  function normalizeProjectListForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const normalized = [];
+    let changed = !Array.isArray(list);
+
+    source.forEach((project) => {
+      if (!project || typeof project !== "object") {
+        changed = true;
+        return;
+      }
+
+      const rawProjectCompanyId = project.companyId;
+      const projectCompanyId = rawProjectCompanyId === undefined || rawProjectCompanyId === null
+        ? ""
+        : String(rawProjectCompanyId).trim();
+
+      if (projectCompanyId === "") {
+        if (!isLegacyCompanyScope()) {
+          changed = true;
+          return;
+        }
+      } else if (projectCompanyId !== companyId) {
+        changed = true;
+        return;
+      }
+
+      normalized.push({
+        ...project,
+        companyId
+      });
+
+      if (projectCompanyId !== companyId) {
+        changed = true;
+      }
+    });
+
+    return { normalized, changed };
+  }
+
+  function getJacks(){
+    const key = jacksStorageKey();
+    migrateScopedArrayStore(key, STORAGE.jacks);
+    const v = readJson(key, []);
+    return Array.isArray(v) ? v : [];
+  }
+
+  function saveJacks(list){
+    writeJson(jacksStorageKey(), list);
+  }
+
+  function getProjects(){
+    const key = projectsStorageKey();
+    migrateScopedArrayStore(key, STORAGE.projects);
+    const parsed = readJson(key, []);
+    const normalizedResult = normalizeProjectListForCompany(parsed);
+    if (normalizedResult.changed) {
+      writeJson(key, normalizedResult.normalized);
+    }
+    return normalizedResult.normalized;
+  }
+
+  function saveProjects(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const scopedProjects = source
+      .filter((project) => project && typeof project === "object")
+      .map((project) => ({
+        ...project,
+        companyId
+      }));
+
+    writeJson(projectsStorageKey(), scopedProjects);
+  }
+
+  function uid(prefix){
+    return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function fmtDate(iso){
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleDateString("no-NO");
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  async function logout(){
+    try {
+      await requestApi("logout.php", { method: "POST", body: "{}" });
+    } catch (e) {}
+    clearSession();
+    location.reload();
+  }
+
+  let activeSession = getSession();
+  let certificateAttachmentDraft = null;
+
+  function setMsg(el, text, type){
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("hidden", "error", "ok");
+    if (type) el.classList.add(type);
+  }
+
+  function clearMsg(el){
+    if (!el) return;
+    el.textContent = "";
+    el.classList.add("hidden");
+    el.classList.remove("error", "ok");
+  }
+
+  function readFileAsDataUrl(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+      reader.onerror = () => reject(new Error("Kunne ikke lese sertifikatfilen."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function sanitizeFileName(name){
+    const raw = (name || "").toString().trim();
+    if (!raw) return "kalibreringssertifikat";
+    return raw.replace(/[^\w.\-() ]+/g, "_");
+  }
+
+  function normalizeCertificateAttachment(raw){
+    if (!raw || typeof raw !== "object") return null;
+    const dataUrl = (raw.dataUrl || "").toString().trim();
+    if (!/^data:/i.test(dataUrl)) return null;
+    const fileName = sanitizeFileName(raw.fileName || "kalibreringssertifikat");
+    const mimeType = (raw.mimeType || "").toString().trim();
+    const sizeCandidate = Number(raw.sizeBytes);
+    const sizeBytes = Number.isFinite(sizeCandidate) && sizeCandidate >= 0
+      ? Math.round(sizeCandidate)
+      : null;
+    return {
+      dataUrl,
+      fileName,
+      mimeType,
+      sizeBytes
+    };
+  }
+
+  function certificateAttachmentFromJack(jack){
+    if (!jack || typeof jack !== "object") return null;
+    return normalizeCertificateAttachment({
+      dataUrl: jack.certificateDataUrl,
+      fileName: jack.certificateFileName,
+      mimeType: jack.certificateMimeType,
+      sizeBytes: jack.certificateSizeBytes
+    });
+  }
+
+  function setCertificateAttachmentDraft(attachment){
+    certificateAttachmentDraft = normalizeCertificateAttachment(attachment);
+    updateCertificateAttachmentUi();
+  }
+
+  function clearCertificateFileInput(){
+    const input = $("jackCertificateFile");
+    if (input) input.value = "";
+  }
+
+  function updateCertificateAttachmentUi(){
+    const info = $("jackCertificateFileInfo");
+    const clearBtn = $("clearJackCertificateFileBtn");
+    if (info) {
+      if (certificateAttachmentDraft) {
+        const sizeLabel = Number.isFinite(Number(certificateAttachmentDraft.sizeBytes))
+          ? (" (" + Math.max(1, Math.round(Number(certificateAttachmentDraft.sizeBytes) / 1024)).toLocaleString("no-NO") + " kB)")
+          : "";
+        info.textContent = "Vedlagt: " + (certificateAttachmentDraft.fileName || "sertifikat") + sizeLabel;
+      } else {
+        info.textContent = "Ingen fil lastet opp.";
+      }
+    }
+    if (clearBtn) clearBtn.classList.toggle("hidden", !certificateAttachmentDraft);
+  }
+
+  function certificateLinkForJack(jack){
+    const attachment = certificateAttachmentFromJack(jack);
+    if (attachment) {
+      return {
+        href: attachment.dataUrl,
+        label: "Aapne vedlegg",
+        downloadName: attachment.fileName || "kalibreringssertifikat"
+      };
+    }
+    const url = (jack && jack.certificateUrl ? jack.certificateUrl : "").toString().trim();
+    if (!url) return null;
+    return {
+      href: url,
+      label: "Aapne lenke",
+      downloadName: ""
+    };
+  }
+
+  function isSupportedCertificateFile(file){
+    if (!file) return false;
+    const mime = (file.type || "").toString().trim().toLowerCase();
+    if (mime === "application/pdf") return true;
+    if (mime.startsWith("image/")) return true;
+    const name = (file.name || "").toString().trim().toLowerCase();
+    return name.endsWith(".pdf");
+  }
+
+  async function applyCertificateFileSelection(file){
+    if (!file) {
+      return { error: "Velg en fil a laste opp." };
+    }
+    if (!isSupportedCertificateFile(file)) {
+      return { error: "Sertifikat maa vaere PDF eller bildefil." };
+    }
+    if (Number(file.size || 0) > CERTIFICATE_UPLOAD_MAX_BYTES) {
+      return {
+        error: "Sertifikatfilen er for stor. Maks " +
+          Math.round(CERTIFICATE_UPLOAD_MAX_BYTES / (1024 * 1024)).toLocaleString("no-NO") +
+          " MB."
+      };
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      const attachment = normalizeCertificateAttachment({
+        dataUrl,
+        fileName: file.name || "kalibreringssertifikat",
+        mimeType: file.type || "",
+        sizeBytes: file.size || 0
+      });
+      if (!attachment) {
+        return { error: "Kunne ikke lagre sertifikatfilen." };
+      }
+      setCertificateAttachmentDraft(attachment);
+      return { ok: true, fileName: attachment.fileName };
+    } catch (err) {
+      return { error: err && err.message ? err.message : "Kunne ikke lese sertifikatfilen." };
+    }
+  }
+
+  function updateAccessUi(){
+    activeSession = getSession();
+    const info = $("accessInfo");
+    if (!info || !activeSession) {
+      if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+        window.CompanyBranding.apply({ session: activeSession });
+      }
+      return;
+    }
+
+    const userLabel = (activeSession.fullName || activeSession.email || "-").toString();
+    info.textContent =
+      "Innlogget: " + userLabel + " • Firma: " + (activeSession.companyName || "-") +
+      " (" + tierLabel(activeSession.tier) + "). Tilgang: Stressing + Jekk data.";
+
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: activeSession });
+    }
+  }
+
+  function parseDateInput(v){
+    if (!v) return null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+      const d0 = new Date(v + "T00:00:00");
+      return Number.isNaN(d0.getTime()) ? null : d0;
+    }
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function addMonthsIso(isoDate, months){
+    const base = parseDateInput(isoDate);
+    if (!base || !Number.isFinite(months) || months < 1) return null;
+    const y = base.getFullYear();
+    const m = base.getMonth();
+    const d = base.getDate();
+    const target = new Date(y, m + months, d);
+    const yy = target.getFullYear();
+    const mm = String(target.getMonth() + 1).padStart(2, "0");
+    const dd = String(target.getDate()).padStart(2, "0");
+    return yy + "-" + mm + "-" + dd;
+  }
+
+  function defaultNextCalibration(calibratedAt){
+    const normalizedCalibratedAt = toDateOnly(calibratedAt);
+    if (!normalizedCalibratedAt) return null;
+    return addMonthsIso(normalizedCalibratedAt, CALIBRATION_INTERVAL_MONTHS);
+  }
+
+  function effectiveNextCalibrationForJack(jack){
+    if (!jack || typeof jack !== "object") return null;
+    const calculated = defaultNextCalibration(jack.calibratedAt);
+    if (calculated) return calculated;
+    return toDateOnly(jack.nextCalibration);
+  }
+
+  function calibrationState(nextCalibration, status){
+    if (status === "inactive") return { state: "inactive", label: "Inaktiv", days: null };
+    if (!nextCalibration) return { state: "unknown", label: "Ikke satt", days: null };
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const target = parseDateInput(nextCalibration);
+    if (!target) return { state: "unknown", label: "Ugyldig dato", days: null };
+
+    const days = Math.ceil((target - today) / 86400000);
+    if (days < 0) return { state: "overdue", label: "Overtid", days };
+    if (days <= CALIBRATION_WARNING_DAYS) return { state: "due", label: "Forfaller snart", days };
+    return { state: "valid", label: "Gyldig", days };
+  }
+
+  function calibrationWarning(calibration){
+    if (!calibration) return null;
+    if (calibration.state === "overdue") {
+      return {
+        className: "calWarn",
+        text: "Ikke innen kalibrering. Maa sendes til kalibrering."
+      };
+    }
+    if (calibration.state === "due") {
+      return {
+        className: "calWarn due",
+        text: "Forfaller innen " + CALIBRATION_WARNING_DAYS + " dager. Send til kalibrering snart (for forfallsdato)."
+      };
+    }
+    return null;
+  }
+
+  function syncNextCalibrationFromLast(){
+    const calibratedAt = toDateOnly($("jackCalibratedAt").value || null);
+    $("jackNextCalibration").value = calibratedAt ? (defaultNextCalibration(calibratedAt) || "") : "";
+  }
+
+  function verifyUrlForJack(jackId){
+    const u = new URL(window.location.href);
+    u.searchParams.set("verify", jackId);
+    return u.toString();
+  }
+
+  async function copyText(text){
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      return true;
+    }
+  }
+
+  function renderVerifyPanel(){
+    const panel = $("verifyPanel");
+    if (!panel) return;
+    const qp = new URLSearchParams(window.location.search);
+    const verifyId = qp.get("verify");
+    if (!verifyId) {
+      panel.classList.add("hidden");
+      panel.innerHTML = "";
+      return;
+    }
+
+    const jack = getJacks().find((j) => j.id === verifyId);
+    if (!jack) {
+      panel.classList.remove("hidden");
+      panel.innerHTML =
+        '<h3>Verifisering</h3>' +
+        '<div class="msg error">Fant ikke jack med ID <span class="mono">' + escapeHtml(verifyId) + "</span>.</div>" +
+        '<div class="actions"><button class="btn" type="button" id="closeVerifyBtn">Lukk</button></div>';
+      const closeBtn = $("closeVerifyBtn");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          const u = new URL(window.location.href);
+          u.searchParams.delete("verify");
+          window.history.replaceState({}, "", u.pathname + u.search + u.hash);
+          renderVerifyPanel();
+        });
+      }
+      return;
+    }
+
+    const nextCalibration = effectiveNextCalibrationForJack(jack);
+    const cal = calibrationState(nextCalibration, jack.status);
+    const calWarning = calibrationWarning(cal);
+    const calWarningHtml = calWarning
+      ? ('<div class="' + calWarning.className + '">' + escapeHtml(calWarning.text) + "</div>")
+      : "";
+    const typeLabel = jack.type || "-";
+    const cap = Number.isFinite(Number(jack.capacitykN)) ? Number(jack.capacitykN).toLocaleString("no-NO") + " kN" : "-";
+    const pressure = Number.isFinite(Number(jack.maxPressureBar)) ? Number(jack.maxPressureBar).toLocaleString("no-NO") + " bar" : "-";
+    const anchorPointMm = Number.isFinite(Number(jack.anchorPointMm)) ? Number(jack.anchorPointMm).toLocaleString("no-NO") + " mm" : "-";
+    const frictionValue = Number.isFinite(Number(jack.frictionPct)) ? Number(jack.frictionPct) : Number(jack.forcePerBar);
+    const friction = Number.isFinite(frictionValue) ? frictionValue.toLocaleString("no-NO", { maximumFractionDigits: 2 }) + " %" : "-";
+    const cert = jack.certNo ? escapeHtml(jack.certNo) : "-";
+    const certLink = certificateLinkForJack(jack);
+    const certLinkHtml = certLink
+      ? ('<a class="smallBtn" href="' + escapeHtml(certLink.href) + '"' +
+          (certLink.downloadName ? (' download="' + escapeHtml(certLink.downloadName) + '"') : "") +
+          ' target="_blank" rel="noopener">' + escapeHtml(certLink.label) + "</a>")
+      : '<span class="muted">-</span>';
+    const strokeMm = Number.isFinite(Number(jack.strokeMm)) ? Number(jack.strokeMm) : Number(jack.lengthMm);
+    const stroke = Number.isFinite(strokeMm) ? strokeMm.toLocaleString("no-NO") + " mm" : "-";
+    const tensionExt = Number.isFinite(Number(jack.tensioningExtensionMm))
+      ? Number(jack.tensioningExtensionMm).toLocaleString("no-NO") + " mm"
+      : "-";
+    const rearDiaA = Number.isFinite(Number(jack.rearDiameterAMm))
+      ? Number(jack.rearDiameterAMm).toLocaleString("no-NO") + " mm"
+      : "-";
+
+    panel.classList.remove("hidden");
+    panel.innerHTML =
+      "<h3>Verifisering av jack</h3>" +
+      '<div class="row3" style="margin-top:8px">' +
+      '<div><div class="lab">Kode</div><div><strong>' + escapeHtml(jack.code || "-") + "</strong></div></div>" +
+      '<div><div class="lab">Modell</div><div>' + escapeHtml(jack.model || "-") + "</div></div>" +
+      '<div><div class="lab">Serienummer</div><div class="mono">' + escapeHtml(jack.serial || "-") + "</div></div>" +
+      '<div><div class="lab">Type</div><div>' + escapeHtml(typeLabel) + "</div></div>" +
+      '<div><div class="lab">Kapasitet</div><div>' + escapeHtml(cap) + "</div></div>" +
+      '<div><div class="lab">Status</div><div><span class="badge ' + (jack.status === "inactive" ? "inactive" : "active") + '">' + (jack.status === "inactive" ? "Inaktiv" : "Aktiv") + "</span></div></div>" +
+      '<div><div class="lab">Sist kalibrert</div><div>' + escapeHtml(fmtDate(jack.calibratedAt)) + "</div></div>" +
+      '<div><div class="lab">Neste kalibrering</div><div>' + escapeHtml(fmtDate(nextCalibration)) + "</div></div>" +
+      '<div><div class="lab">Kalibreringsstatus</div><div><span class="badge ' + cal.state + '">' + escapeHtml(cal.label) + "</span>" + calWarningHtml + "</div></div>" +
+      '<div><div class="lab">Maks trykk</div><div>' + escapeHtml(pressure) + "</div></div>" +
+      '<div><div class="lab">Stroke</div><div>' + escapeHtml(stroke) + "</div></div>" +
+      '<div><div class="lab">Tensioning extension</div><div>' + escapeHtml(tensionExt) + "</div></div>" +
+      '<div><div class="lab">&Oslash;A (bakside)</div><div>' + escapeHtml(rearDiaA) + "</div></div>" +
+      '<div><div class="lab">Ankerpunkt i jekk</div><div>' + escapeHtml(anchorPointMm) + "</div></div>" +
+      '<div><div class="lab">Friksjon</div><div>' + escapeHtml(friction) + "</div></div>" +
+      '<div><div class="lab">Sertifikat nr.</div><div class="mono">' + cert + "</div></div>" +
+      '<div><div class="lab">Sertifikat fil</div><div>' + certLinkHtml + "</div></div>" +
+      "</div>" +
+      '<div class="actions"><button class="btn" type="button" id="closeVerifyBtn">Lukk verifisering</button></div>';
+
+    const closeBtn = $("closeVerifyBtn");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        const u = new URL(window.location.href);
+        u.searchParams.delete("verify");
+        window.history.replaceState({}, "", u.pathname + u.search + u.hash);
+        renderVerifyPanel();
+      });
+    }
+  }
+
+  function projectUsageCount(jackId){
+    const projects = getProjects();
+    let count = 0;
+    projects.forEach((p) => {
+      if (Array.isArray(p.jackIds) && p.jackIds.includes(jackId)) {
+        count += 1;
+      }
+    });
+    return count;
+  }
+
+  function updateFormMode(isEdit){
+    $("formMode").textContent = isEdit ? "Rediger jack" : "Ny jack";
+    $("saveJackBtn").textContent = isEdit ? "Lagre endringer" : "Lagre jack";
+    $("cancelEditBtn").classList.toggle("hidden", !isEdit);
+  }
+
+  function resetForm(){
+    $("jackForm").reset();
+    $("editingId").value = "";
+    $("jackStatus").value = "active";
+    $("jackType").value = "multi";
+    $("jackCalibrationInterval").value = String(CALIBRATION_INTERVAL_MONTHS);
+    syncNextCalibrationFromLast();
+    clearCertificateFileInput();
+    setCertificateAttachmentDraft(null);
+    updateFormMode(false);
+    clearMsg($("formMsg"));
+  }
+
+  function applyJackToForm(jack){
+    $("editingId").value = jack.id;
+    $("jackCode").value = jack.code || "";
+    $("jackModel").value = jack.model || "";
+    $("jackSerial").value = jack.serial || "";
+    $("jackStrands").value = Number.isFinite(Number(jack.strands)) ? String(jack.strands) : "";
+    $("jackAreaCm2").value = Number.isFinite(Number(jack.areaCm2)) ? String(jack.areaCm2) : "";
+    $("jackCapacity").value = Number.isFinite(Number(jack.capacitykN)) ? String(jack.capacitykN) : "";
+    const strokeMm = Number.isFinite(Number(jack.strokeMm)) ? Number(jack.strokeMm) : Number(jack.lengthMm);
+    $("jackStroke").value = Number.isFinite(strokeMm) ? String(strokeMm) : "";
+    $("jackTensioningExtensionMm").value = Number.isFinite(Number(jack.tensioningExtensionMm)) ? String(jack.tensioningExtensionMm) : "";
+    $("jackRearDiameterAMm").value = Number.isFinite(Number(jack.rearDiameterAMm)) ? String(jack.rearDiameterAMm) : "";
+    $("jackAnchorPointMm").value = Number.isFinite(Number(jack.anchorPointMm)) ? String(jack.anchorPointMm) : "";
+    $("jackWeightKg").value = Number.isFinite(Number(jack.weightKg)) ? String(jack.weightKg) : "";
+    $("jackType").value = jack.type || "multi";
+    $("jackManufacturer").value = jack.manufacturer || "";
+    $("jackStatus").value = jack.status === "inactive" ? "inactive" : "active";
+    $("jackMaxPressure").value = Number.isFinite(Number(jack.maxPressureBar)) ? String(jack.maxPressureBar) : "";
+    $("jackCalibratedAt").value = jack.calibratedAt || "";
+    $("jackCalibrationInterval").value = String(CALIBRATION_INTERVAL_MONTHS);
+    $("jackNextCalibration").value = effectiveNextCalibrationForJack(jack) || "";
+    const frictionValue = Number.isFinite(Number(jack.frictionPct)) ? Number(jack.frictionPct) : Number(jack.forcePerBar);
+    $("jackFrictionPct").value = Number.isFinite(frictionValue) ? String(frictionValue) : "";
+    $("jackCertificateUrl").value = jack.certificateUrl || "";
+    clearCertificateFileInput();
+    setCertificateAttachmentDraft(certificateAttachmentFromJack(jack));
+    $("jackGaugeId").value = jack.gaugeId || "";
+    $("jackCertNo").value = jack.certNo || "";
+    $("jackNote").value = jack.note || "";
+
+    updateFormMode(true);
+    clearMsg($("formMsg"));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function collectFormData(){
+    const code = $("jackCode").value.trim();
+    const model = $("jackModel").value.trim();
+    const serial = $("jackSerial").value.trim();
+    const strandsRaw = $("jackStrands").value.trim();
+    const areaRaw = $("jackAreaCm2").value.trim();
+    const type = $("jackType").value;
+    const manufacturer = $("jackManufacturer").value.trim();
+    const certNo = $("jackCertNo").value.trim();
+    const certificateUrl = $("jackCertificateUrl").value.trim();
+
+    if (!code || !model || !serial) {
+      return { error: "Jack kode, modell og serienummer er obligatorisk." };
+    }
+
+    const capacityRaw = $("jackCapacity").value.trim();
+    const strokeRaw = $("jackStroke").value.trim();
+    const tensioningExtensionRaw = $("jackTensioningExtensionMm").value.trim();
+    const rearDiameterARaw = $("jackRearDiameterAMm").value.trim();
+    const anchorPointRaw = $("jackAnchorPointMm").value.trim();
+    const weightRaw = $("jackWeightKg").value.trim();
+    const maxPressureRaw = $("jackMaxPressure").value.trim();
+    const frictionRaw = $("jackFrictionPct").value.trim();
+    const calibratedAt = toDateOnly($("jackCalibratedAt").value || null);
+    const nextCalibration = calibratedAt ? defaultNextCalibration(calibratedAt) : null;
+
+    const strands = strandsRaw === "" ? null : Number(strandsRaw);
+    const areaCm2 = areaRaw === "" ? null : Number(areaRaw);
+    const capacitykN = capacityRaw === "" ? null : Number(capacityRaw);
+    const strokeMm = strokeRaw === "" ? null : Number(strokeRaw);
+    const tensioningExtensionMm = tensioningExtensionRaw === "" ? null : Number(tensioningExtensionRaw);
+    const rearDiameterAMm = rearDiameterARaw === "" ? null : Number(rearDiameterARaw);
+    const anchorPointMm = anchorPointRaw === "" ? null : Number(anchorPointRaw);
+    const weightKg = weightRaw === "" ? null : Number(weightRaw);
+    const maxPressureBar = maxPressureRaw === "" ? null : Number(maxPressureRaw);
+    const frictionPct = frictionRaw === "" ? null : Number(frictionRaw);
+    const calibrationIntervalMonths = CALIBRATION_INTERVAL_MONTHS;
+
+    if (strands !== null && (!Number.isFinite(strands) || strands < 0)) {
+      return { error: "Strands maa vaere et gyldig tall." };
+    }
+    if (strands !== null && !Number.isInteger(strands)) {
+      return { error: "Strands maa vaere et heltall." };
+    }
+    if (type === "multi" && (strands === null || strands <= 0)) {
+      return { error: "For multi-strand jekk maa Strands settes til et heltall storre enn 0." };
+    }
+
+    if (areaCm2 !== null && (!Number.isFinite(areaCm2) || areaCm2 < 0)) {
+      return { error: "Area (cm2) maa vaere et gyldig tall." };
+    }
+
+    if (capacitykN !== null && (!Number.isFinite(capacitykN) || capacitykN < 0)) {
+      return { error: "Kapasitet maa vaere et gyldig tall." };
+    }
+
+    if (strokeMm !== null && (!Number.isFinite(strokeMm) || strokeMm < 0)) {
+      return { error: "Stroke (mm) maa vaere et gyldig tall." };
+    }
+
+    if (tensioningExtensionMm !== null && (!Number.isFinite(tensioningExtensionMm) || tensioningExtensionMm < 0)) {
+      return { error: "Tensioning extension (mm) maa vaere et gyldig tall." };
+    }
+
+    if (rearDiameterAMm !== null && (!Number.isFinite(rearDiameterAMm) || rearDiameterAMm < 0)) {
+      return { error: "OA (mm, bakside) maa vaere et gyldig tall." };
+    }
+
+    if (anchorPointMm !== null && (!Number.isFinite(anchorPointMm) || anchorPointMm < 0)) {
+      return { error: "Ankerpunkt i jekk maa vaere et gyldig tall." };
+    }
+
+    if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
+      return { error: "Weight (kg) maa vaere et gyldig tall." };
+    }
+
+    if (maxPressureBar !== null && (!Number.isFinite(maxPressureBar) || maxPressureBar < 0)) {
+      return { error: "Maks trykk maa vaere et gyldig tall." };
+    }
+
+    if (frictionPct !== null && (!Number.isFinite(frictionPct) || frictionPct < 0)) {
+      return { error: "Friksjon maa vaere et gyldig tall." };
+    }
+
+    return {
+      data: {
+        code,
+        model,
+        serial,
+        strands,
+        areaCm2,
+        type,
+        manufacturer,
+        capacitykN,
+        lengthMm: strokeMm,
+        strokeMm,
+        tensioningExtensionMm,
+        rearDiameterAMm,
+        anchorPointMm,
+        weightKg,
+        maxPressureBar,
+        frictionPct,
+        calibratedAt,
+        calibrationIntervalMonths,
+        nextCalibration,
+        certificateUrl,
+        certificateDataUrl: certificateAttachmentDraft ? certificateAttachmentDraft.dataUrl : "",
+        certificateFileName: certificateAttachmentDraft ? certificateAttachmentDraft.fileName : "",
+        certificateMimeType: certificateAttachmentDraft ? certificateAttachmentDraft.mimeType : "",
+        certificateSizeBytes: certificateAttachmentDraft ? certificateAttachmentDraft.sizeBytes : null,
+        gaugeId: $("jackGaugeId").value.trim(),
+        certNo,
+        note: $("jackNote").value.trim(),
+        status: $("jackStatus").value === "inactive" ? "inactive" : "active"
+      }
+    };
+  }
+
+  function removeJack(jackId){
+    const list = getJacks();
+    const jack = list.find((j) => j.id === jackId);
+    if (!jack) return;
+
+    const useCount = projectUsageCount(jackId);
+    const warning = useCount > 0
+      ? "Jacken er knyttet til " + useCount + " prosjekt(er). Fjerne likevel?"
+      : "Fjerne jacken fra registeret?";
+
+    if (!confirm(warning)) return;
+
+    const next = list.filter((j) => j.id !== jackId);
+    saveJacks(next);
+
+    if ($("editingId").value === jackId) {
+      resetForm();
+    }
+
+    // Fjern referanse fra prosjekter
+    const projects = getProjects();
+    let changed = false;
+    projects.forEach((p) => {
+      if (!Array.isArray(p.jackIds)) return;
+      const before = p.jackIds.length;
+      p.jackIds = p.jackIds.filter((id) => id !== jackId);
+      if (p.jackIds.length !== before) {
+        p.updatedAt = new Date().toISOString();
+        changed = true;
+      }
+    });
+    if (changed) {
+      saveProjects(projects);
+    }
+
+    renderJacks();
+    setMsg($("formMsg"), "Jack fjernet.", "ok");
+  }
+
+  function renderJacks(){
+    const rows = $("jackRows");
+    const listMsg = $("listMsg");
+
+    const search = $("searchInput").value.trim().toLowerCase();
+    const filter = $("statusFilter").value;
+
+    let list = getJacks().slice().sort((a, b) => {
+      const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return bt - at;
+    });
+
+    list = list.filter((j) => {
+      const nextCalibration = effectiveNextCalibrationForJack(j);
+      const cal = calibrationState(nextCalibration, j.status);
+      if (filter === "active" && j.status !== "active") return false;
+      if (filter === "inactive" && j.status !== "inactive") return false;
+      if (filter === "dueSoon" && cal.state !== "due") return false;
+      if (filter === "overdue" && cal.state !== "overdue") return false;
+      if (!search) return true;
+      const src = (
+        (j.code || "") + " " +
+        (j.model || "") + " " +
+        (j.serial || "") + " " +
+        (j.strands ?? "") + " " +
+        (j.areaCm2 ?? "") + " " +
+        (j.capacitykN ?? "") + " " +
+        (j.maxPressureBar ?? "") + " " +
+        (j.frictionPct ?? "") + " " +
+        (j.weightKg ?? "") + " " +
+        (j.anchorPointMm ?? "") + " " +
+        (j.strokeMm ?? j.lengthMm ?? "") + " " +
+        (j.tensioningExtensionMm ?? "") + " " +
+        (j.rearDiameterAMm ?? "") + " " +
+        (j.manufacturer || "") + " " +
+        (j.certNo || "") + " " +
+        (j.certificateFileName || "") + " " +
+        (j.certificateUrl || "")
+      ).toLowerCase();
+      return src.includes(search);
+    });
+
+    const all = getJacks();
+    const total = all.length;
+    const active = all.filter((j) => j.status !== "inactive").length;
+    const inactive = all.filter((j) => j.status === "inactive").length;
+    const dueSoon = all.filter((j) => calibrationState(effectiveNextCalibrationForJack(j), j.status).state === "due").length;
+    const overdue = all.filter((j) => calibrationState(effectiveNextCalibrationForJack(j), j.status).state === "overdue").length;
+
+    $("kpiTotal").textContent = total.toLocaleString("no-NO");
+    $("kpiActive").textContent = active.toLocaleString("no-NO");
+    $("kpiInactive").textContent = inactive.toLocaleString("no-NO");
+    $("kpiDueSoon").textContent = dueSoon.toLocaleString("no-NO");
+    $("kpiOverdue").textContent = overdue.toLocaleString("no-NO");
+
+    if (list.length === 0) {
+      rows.innerHTML = "";
+      listMsg.textContent = total === 0 ? "Ingen jacks registrert ennå." : "Ingen treff med valgt filter/sok.";
+      renderVerifyPanel();
+      return;
+    }
+
+    rows.innerHTML = list.map((j) => {
+      const nextCalibration = effectiveNextCalibrationForJack(j);
+      const cal = calibrationState(nextCalibration, j.status);
+      const calWarning = calibrationWarning(cal);
+      const strands = Number.isFinite(Number(j.strands)) ? Number(j.strands).toLocaleString("no-NO") : "-";
+      const area = Number.isFinite(Number(j.areaCm2))
+        ? Number(j.areaCm2).toLocaleString("no-NO", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        : "-";
+      const cap = Number.isFinite(Number(j.capacitykN)) ? Number(j.capacitykN).toLocaleString("no-NO") : "-";
+      const calMeta = cal.days === null
+        ? "-"
+        : (cal.days >= 0 ? cal.days.toLocaleString("no-NO") + " dager" : Math.abs(cal.days).toLocaleString("no-NO") + " dager overtid");
+      const calClass =
+        cal.state === "overdue" ? "overdue" :
+        cal.state === "due" ? "due" :
+        cal.state === "valid" ? "valid" :
+        cal.state === "inactive" ? "inactive" : "unknown";
+      const certLink = certificateLinkForJack(j);
+      const certCell = certLink
+        ? ('<a class="smallBtn" href="' + escapeHtml(certLink.href) + '"' +
+            (certLink.downloadName ? (' download="' + escapeHtml(certLink.downloadName) + '"') : "") +
+            ' target="_blank" rel="noopener">' + escapeHtml(certLink.label) + "</a>")
+        : '<span class="muted">-</span>';
+      const calWarningHtml = calWarning
+        ? '<div class="' + calWarning.className + '">' + escapeHtml(calWarning.text) + "</div>"
+        : "";
+
+      return '<tr>' +
+        '<td><strong>' + escapeHtml(j.code || "-") + '</strong><br><span class="muted mono">SN: ' + escapeHtml(j.serial || "-") + '</span><div class="rowActions" style="margin-top:6px">' +
+          '<button class="smallBtn" type="button" data-edit="' + escapeHtml(j.id) + '">Rediger</button>' +
+          '<button class="smallBtn" type="button" data-remove="' + escapeHtml(j.id) + '">Fjern</button>' +
+        '</div></td>' +
+        '<td>' + escapeHtml(j.model || "-") + '</td>' +
+        '<td>' + escapeHtml(strands) + '</td>' +
+        '<td>' + escapeHtml(area) + '</td>' +
+        '<td>' + escapeHtml(cap) + '</td>' +
+        '<td><span class="badge ' + calClass + '">' + escapeHtml(cal.label) + '</span><br><span class="muted">' + escapeHtml(fmtDate(nextCalibration)) + '</span><br><span class="muted">' + escapeHtml(calMeta) + '</span>' + calWarningHtml + '</td>' +
+        '<td><div class="rowActions">' +
+          certCell +
+          '<button class="smallBtn" type="button" data-link="' + escapeHtml(j.id) + '">QR/Link</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join("");
+
+    listMsg.textContent = "Viser " + list.length.toLocaleString("no-NO") + " jack(er).";
+
+    rows.querySelectorAll("[data-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-edit");
+        const jack = getJacks().find((j) => j.id === id);
+        if (!jack) return;
+        applyJackToForm(jack);
+      });
+    });
+
+    rows.querySelectorAll("[data-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-remove");
+        removeJack(id);
+      });
+    });
+
+    rows.querySelectorAll("[data-link]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-link");
+        const ok = await copyText(verifyUrlForJack(id));
+        const u = new URL(window.location.href);
+        u.searchParams.set("verify", id);
+        window.history.replaceState({}, "", u.pathname + u.search + u.hash);
+        renderVerifyPanel();
+        setMsg($("formMsg"), ok ? "Verifiseringslenke kopiert." : "Kunne ikke kopiere lenke.", ok ? "ok" : "error");
+      });
+    });
+
+    renderVerifyPanel();
+  }
+
+  function toDateOnly(value){
+    if (!value) return null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return null;
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return yyyy + "-" + mm + "-" + dd;
+  }
+
+  function normalizeImportedJack(raw){
+    if (!raw || typeof raw !== "object") return null;
+    const code = (raw.code || "").toString().trim();
+    const model = (raw.model || "").toString().trim();
+    const serial = (raw.serial || "").toString().trim();
+    if (!code || !model || !serial) return null;
+
+    const asNumber = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const calibrationIntervalMonths = CALIBRATION_INTERVAL_MONTHS;
+    const frictionRaw = raw.frictionPct ?? raw.friction ?? raw.forcePerBar;
+    const anchorPointRaw = raw.anchorPointMm ?? raw.anchorPointDistanceMm ?? raw.anchorPoint;
+    const strokeRaw = raw.strokeMm ?? raw.lengthMm;
+    const tensioningExtensionRaw = raw.tensioningExtensionMm ?? raw.extensionMm ?? raw.tensionExtensionMm;
+    const rearDiameterARaw = raw.rearDiameterAMm ?? raw.diameterAmm ?? raw.diameterARearMm ?? raw.diameterBackMm;
+
+    const calibratedAt = toDateOnly(raw.calibratedAt);
+    let nextCalibration = defaultNextCalibration(calibratedAt);
+    if (!nextCalibration) nextCalibration = toDateOnly(raw.nextCalibration);
+    const attachmentRaw = (raw.certificateAttachment && typeof raw.certificateAttachment === "object")
+      ? raw.certificateAttachment
+      : null;
+    const certificateAttachment = normalizeCertificateAttachment({
+      dataUrl: raw.certificateDataUrl || (attachmentRaw ? attachmentRaw.dataUrl : ""),
+      fileName: raw.certificateFileName || (attachmentRaw ? attachmentRaw.fileName : ""),
+      mimeType: raw.certificateMimeType || (attachmentRaw ? attachmentRaw.mimeType : ""),
+      sizeBytes: raw.certificateSizeBytes || (attachmentRaw ? attachmentRaw.sizeBytes : null)
+    });
+
+    return {
+      id: (raw.id || uid("jack")).toString(),
+      code,
+      model,
+      serial,
+      strands: asNumber(raw.strands),
+      areaCm2: asNumber(raw.areaCm2),
+      type: (raw.type || "multi").toString(),
+      manufacturer: (raw.manufacturer || "").toString().trim(),
+      capacitykN: asNumber(raw.capacitykN),
+      lengthMm: asNumber(strokeRaw),
+      strokeMm: asNumber(strokeRaw),
+      tensioningExtensionMm: asNumber(tensioningExtensionRaw),
+      rearDiameterAMm: asNumber(rearDiameterARaw),
+      anchorPointMm: asNumber(anchorPointRaw),
+      weightKg: asNumber(raw.weightKg),
+      maxPressureBar: asNumber(raw.maxPressureBar),
+      frictionPct: asNumber(frictionRaw),
+      calibratedAt,
+      calibrationIntervalMonths,
+      nextCalibration,
+      certificateUrl: (raw.certificateUrl || "").toString().trim(),
+      certificateDataUrl: certificateAttachment ? certificateAttachment.dataUrl : "",
+      certificateFileName: certificateAttachment ? certificateAttachment.fileName : "",
+      certificateMimeType: certificateAttachment ? certificateAttachment.mimeType : "",
+      certificateSizeBytes: certificateAttachment ? certificateAttachment.sizeBytes : null,
+      gaugeId: (raw.gaugeId || "").toString().trim(),
+      certNo: (raw.certNo || "").toString().trim(),
+      note: (raw.note || "").toString().trim(),
+      status: raw.status === "inactive" ? "inactive" : "active",
+      createdAt: raw.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  function exportJacks(){
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      count: getJacks().length,
+      jacks: getJacks()
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = "jack-register-" + stamp + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importJacksFromJsonText(text){
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch (e) {
+      return { error: "JSON-fil kunne ikke leses." };
+    }
+
+    const incoming = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.jacks) ? parsed.jacks : null);
+    if (!incoming) return { error: "JSON mangler jack-liste." };
+
+    const normalized = incoming.map(normalizeImportedJack).filter(Boolean);
+    if (normalized.length === 0) return { error: "Ingen gyldige jack-poster funnet i importfil." };
+
+    const existing = getJacks();
+    const bySerial = new Map();
+    existing.forEach((j) => bySerial.set((j.serial || "").toLowerCase(), j));
+
+    let updated = 0;
+    let created = 0;
+    normalized.forEach((j) => {
+      const key = (j.serial || "").toLowerCase();
+      const prev = bySerial.get(key);
+      if (prev) {
+        bySerial.set(key, {
+          ...prev,
+          ...j,
+          id: prev.id,
+          createdAt: prev.createdAt || j.createdAt,
+          updatedAt: new Date().toISOString()
+        });
+        updated += 1;
+      } else {
+        bySerial.set(key, j);
+        created += 1;
+      }
+    });
+
+    saveJacks(Array.from(bySerial.values()));
+    return { created, updated, total: bySerial.size };
+  }
+
+  function initJackForm(){
+    $("jackCalibratedAt").addEventListener("input", syncNextCalibrationFromLast);
+    $("jackCalibratedAt").addEventListener("change", syncNextCalibrationFromLast);
+    const certFileInput = $("jackCertificateFile");
+    if (certFileInput) {
+      certFileInput.addEventListener("change", async () => {
+        const file = certFileInput.files && certFileInput.files[0] ? certFileInput.files[0] : null;
+        const result = await applyCertificateFileSelection(file);
+        if (result.error) {
+          setMsg($("formMsg"), result.error, "error");
+          clearCertificateFileInput();
+          return;
+        }
+        setMsg($("formMsg"), "Sertifikatvedlegg klart: " + (result.fileName || "fil") + ".", "ok");
+        clearCertificateFileInput();
+      });
+    }
+    const clearAttachmentBtn = $("clearJackCertificateFileBtn");
+    if (clearAttachmentBtn) {
+      clearAttachmentBtn.addEventListener("click", () => {
+        setCertificateAttachmentDraft(null);
+        clearCertificateFileInput();
+        setMsg($("formMsg"), "Vedlagt sertifikat fjernet.", "ok");
+      });
+    }
+
+    $("jackForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const result = collectFormData();
+      if (result.error) {
+        setMsg($("formMsg"), result.error, "error");
+        return;
+      }
+
+      const payload = result.data;
+      const now = new Date().toISOString();
+      const list = getJacks();
+      const id = $("editingId").value;
+
+      const duplicateBySerial = list.find((j) => (j.serial || "").toLowerCase() === payload.serial.toLowerCase() && j.id !== id);
+      if (duplicateBySerial) {
+        setMsg($("formMsg"), "Serienummer finnes allerede i registeret.", "error");
+        return;
+      }
+      const duplicateByCode = list.find((j) => (j.code || "").toLowerCase() === payload.code.toLowerCase() && j.id !== id);
+      if (duplicateByCode) {
+        setMsg($("formMsg"), "Jack-kode finnes allerede i registeret.", "error");
+        return;
+      }
+
+      if (id) {
+        const idx = list.findIndex((j) => j.id === id);
+        if (idx < 0) {
+          setMsg($("formMsg"), "Fant ikke jacken du forsokte a redigere.", "error");
+          return;
+        }
+
+        list[idx] = {
+          ...list[idx],
+          ...payload,
+          updatedAt: now
+        };
+
+        saveJacks(list);
+        setMsg($("formMsg"), "Jack oppdatert.", "ok");
+      } else {
+        list.push({
+          id: uid("jack"),
+          ...payload,
+          createdAt: now,
+          updatedAt: now
+        });
+
+        saveJacks(list);
+        setMsg($("formMsg"), "Jack lagt til.", "ok");
+      }
+
+      renderJacks();
+      setTimeout(() => {
+        resetForm();
+      }, 500);
+    });
+
+    $("resetFormBtn").addEventListener("click", () => {
+      resetForm();
+      renderJacks();
+    });
+
+    $("cancelEditBtn").addEventListener("click", () => {
+      resetForm();
+      renderJacks();
+    });
+
+    $("searchInput").addEventListener("input", renderJacks);
+    $("statusFilter").addEventListener("change", renderJacks);
+
+    $("exportBtn").addEventListener("click", () => {
+      exportJacks();
+      setMsg($("formMsg"), "Jack-register eksportert.", "ok");
+    });
+
+    $("importInput").addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!confirm("Importer jack-data? Eksisterende jacks med samme serienummer blir oppdatert.")) {
+        e.target.value = "";
+        return;
+      }
+
+      try {
+        const text = await file.text();
+        const result = importJacksFromJsonText(text);
+        if (result.error) {
+          setMsg($("formMsg"), result.error, "error");
+        } else {
+          setMsg(
+            $("formMsg"),
+            "Import fullfort. Nye: " + result.created.toLocaleString("no-NO") +
+            ", oppdaterte: " + result.updated.toLocaleString("no-NO") +
+            ", totalt: " + result.total.toLocaleString("no-NO") + ".",
+            "ok"
+          );
+          renderJacks();
+        }
+      } catch (err) {
+        setMsg($("formMsg"), "Import feilet.", "error");
+      } finally {
+        e.target.value = "";
+      }
+    });
+
+    window.addEventListener("popstate", renderVerifyPanel);
+
+    window.addEventListener("storage", (ev) => {
+      if (
+        ev.key === jacksStorageKey() ||
+        ev.key === projectsStorageKey() ||
+        ev.key === STORAGE.jacks ||
+        ev.key === STORAGE.projects
+      ) {
+        renderJacks();
+      }
+      if (ev.key === STORAGE.auth) {
+        if (!hasPageAccess()) {
+          location.reload();
+        } else {
+          updateAccessUi();
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        updateAccessUi();
+      }
+    });
+
+    syncNextCalibrationFromLast();
+  }
+
+  function showGuard(){
+    $("guardView").hidden = false;
+    $("appView").hidden = true;
+    $("guardActions").classList.add("hidden");
+    const msg = $("loginMsg");
+    clearMsg(msg);
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: getSession() });
+    }
+
+    const existing = getSession();
+    if (existing && existing.modules && !existing.modules.jackData){
+      $("pmLoginForm").classList.add("hidden");
+      setMsg(
+        msg,
+        "Innlogget som " + (existing.companyName || "-") + " (" + tierLabel(existing.tier) + "). Jekk data krever Level 2.",
+        "error"
+      );
+      $("guardActions").classList.remove("hidden");
+      const logoutGuardBtn = $("guardLogoutBtn");
+      if (logoutGuardBtn) logoutGuardBtn.addEventListener("click", logout);
+      return;
+    }
+
+    $("pmLoginForm").classList.remove("hidden");
+
+    $("pmLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = $("pmUser").value.trim().toLowerCase();
+      const pass = $("pmPass").value;
+      if (!user || !pass) {
+        setMsg(msg, "Fyll ut e-post og passord.", "error");
+        return;
+      }
+      try {
+        const session = await loginViaApi(user, pass);
+        const confirmedSession = isLocalPreviewHost() ? (getSession() || session) : await refreshSessionFromApi();
+        if (!confirmedSession) {
+          throw new Error("Innlogging ble ikke bekreftet av server. Tillat cookies for etterspenning.no og prov igjen.");
+        }
+        location.reload();
+      } catch (err) {
+        setMsg(msg, "Innlogging feilet: " + (err?.message || "ukjent feil"), "error");
+      }
+    });
+  }
+
+  function showApp(){
+    activeSession = getSession();
+    $("guardView").hidden = true;
+    $("appView").hidden = false;
+
+    $("logoutBtn").addEventListener("click", logout);
+
+    initJackForm();
+    resetForm();
+    updateAccessUi();
+    renderJacks();
+  }
+
+  async function initAccessGate(){
+    await refreshSessionFromApi();
+    if (hasPageAccess()) {
+      showApp();
+    } else {
+      showGuard();
+    }
+  }
+
+  initAccessGate();
+</script>
+
+</body>
+</html>

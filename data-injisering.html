@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Etterspenning.no | Data – Injisering</title>
+  <meta name="description" content="Beregning av injiseringsvolum og materialforbruk for forankringer: hullgeometri, foringsrør og volumfortrengning fra stang/spennline." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --danger:#ff6b6b;
+      --ok:#8bb93d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      padding:0;
+      line-height:1;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity: 1; pointer-events: auto;}
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    .hero{padding:34px 0 10px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(24px, 3.1vw, 40px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:90ch;
+      line-height:1.55;
+      font-size: 14px;
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns: 1.2fr .8fr;align-items:start;margin-top:14px}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .section-title{
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: .2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .formgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 720px){ .formgrid{grid-template-columns:1fr} }
+
+    .field{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+    }
+    .field label{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .field input, .field select{
+      width:100%;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+    }
+    .hint{
+      margin-top:8px;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+      font-size: 13px;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+
+    .kpi{
+      display:grid;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .kpi .box{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+    }
+    .kpi .k{font-size:12px;color:var(--muted)}
+    .kpi .v{margin-top:6px;font-weight:900;letter-spacing:-0.01em;font-size:16px}
+    .kpi .s{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.4}
+
+    .warn{
+      margin-top: 10px;
+      border: 1px solid rgba(255,107,107,.35);
+      background: rgba(255,107,107,.08);
+      border-radius: 14px;
+      padding: 12px;
+      color: var(--text);
+      display:none;
+    }
+    .warn.show{display:block;}
+    .warn strong{color: #ffd1d1}
+
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" alt="Etterspenning – logo">
+        </a>
+      </div>
+      <div>
+        <div style="font-weight:900;letter-spacing:.2px">Etterspenning.no</div>
+        <div style="font-size:12px;color:var(--muted)">Praktisk faginfo for etterspenning og forankringer</div>
+      </div>
+    </div>
+
+    <button class="lang-btn" id="langBtn" aria-label="Språk" title="Språk">
+      🇳🇴
+    </button>
+
+    <button class="menu-btn" id="openMenu" aria-label="Åpne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktøy</a>
+      <a class="navlink" href="software.html">Software</a>
+      <a class="navlink active" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html">Software</a>
+    <a class="active" href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+
+  <section class="hero" id="beregning">
+    <h1>Injisering – volum og materialforbruk</h1>
+    <p>
+      Verktøyet beregner injiseringsvolum basert på hullgeometri (fjell + foringsrør) og trekker fra volumet av det som står i hullet
+      (stang eller spennline). Resultatet kan korrigeres med overforbruk (%). Ready Mix kan velges som preset.
+      Dette er en planleggingsberegning og må alltid vurderes opp mot utførelse, ruhet/hulrom, retur og krav i prosjektet.
+    </p>
+  </section>
+
+  <div class="grid">
+
+    <!-- INPUT -->
+    <section class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Input</h2>
+          <small>Hull, innlagt element, blanding og overforbruk</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="section-title">Hullgeometri</div>
+        <div class="formgrid">
+          <div class="field">
+            <label>Diameter fjell (mm) <span class="mono" id="dRockM">—</span></label>
+            <input id="dRock" type="number" min="0" step="1" value="165" />
+            <div class="hint">Bruk borediameter i fjellsonen.</div>
+          </div>
+          <div class="field">
+            <label>Lengde fjell (m)</label>
+            <input id="lRock" type="number" min="0" step="0.01" value="12.00" />
+            <div class="hint">Lengde i fjell (utenfor foringsrør).</div>
+          </div>
+
+          <div class="field">
+            <label>Diameter foringsrør (mm) <span class="mono" id="dCasingM">—</span></label>
+            <input id="dCasing" type="number" min="0" step="1" value="178" />
+            <div class="hint">Innvendig diameter hvis du vet den – ellers bruk bore-/foringsdiameter som praktisk tilnærming.</div>
+          </div>
+          <div class="field">
+            <label>Lengde foringsrør (m)</label>
+            <input id="lCasing" type="number" min="0" step="0.01" value="3.00" />
+            <div class="hint">Lengde i foringsrørsonen.</div>
+          </div>
+
+          <div class="field" style="grid-column:1 / -1">
+            <label>Total hull-lengde (m)</label>
+            <input id="lTotal" type="number" min="0" step="0.01" value="15.00" disabled />
+            <div class="hint">Beregnes automatisk: fjell + foringsrør.</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="section-title">Det som settes i hullet (volumfortrengning)</div>
+        <div class="formgrid">
+
+          <div class="field">
+            <label>Type</label>
+            <select id="insertType">
+              <option value="bar">Stang</option>
+              <option value="strand">Spennline (tau)</option>
+            </select>
+            <div class="hint">Velg om du vil trekke fra volum av stang eller spennline.</div>
+          </div>
+
+          <div class="field">
+            <label>Lengde som står i hullet (m)</label>
+            <input id="lInsert" type="number" min="0" step="0.01" value="15.00" />
+            <div class="hint">
+              Normalt lik total hull-lengde.
+              <button class="btn" type="button" id="setInsertToTotal" style="margin-top:8px;padding:8px 10px;font-weight:800;">Sett lik total</button>
+            </div>
+          </div>
+
+          <!-- BAR -->
+          <div class="field" id="barFields">
+            <label>Stang – ytterdiameter (mm)</label>
+            <input id="dBar" type="number" min="0" step="1" value="40" />
+            <div class="hint">Bruk ytterdiameter for det som faktisk står i injeksjonssonen (inkl. kappe/rør hvis relevant).</div>
+          </div>
+
+          <!-- STRAND -->
+          <div class="field" id="strandCountField" style="display:none">
+            <label>Antall tau</label>
+            <input id="nStrands" type="number" min="0" step="1" value="7" />
+            <div class="hint">Antall spenntråder/tau i forankringen.</div>
+          </div>
+
+          <div class="field" id="strandTypeField" style="display:none">
+            <label>Tautype (areal pr tau)</label>
+            <select id="strandAreaPreset">
+              <option value="140">140 mm² (standard)</option>
+              <option value="custom">Egendefinert</option>
+            </select>
+            <div class="hint">Velg standard 140 mm² eller legg inn eget areal.</div>
+          </div>
+
+          <div class="field" id="strandAreaCustomField" style="display:none">
+            <label>Areal pr tau (mm²)</label>
+            <input id="strandAreaCustom" type="number" min="0" step="1" value="140" />
+            <div class="hint">Oppgis i mm² pr tau.</div>
+          </div>
+
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="section-title">Tillegg / overforbruk</div>
+        <div class="formgrid">
+          <div class="field">
+            <label>Overforbruk (%)</label>
+            <input id="overPct" type="number" min="0" step="0.1" value="10.0" />
+            <div class="hint">Typisk 5–20% avhengig av ruhet, hulrom og retur.</div>
+          </div>
+          <div class="field">
+            <label>Min. netto (L) – sikkerhet</label>
+            <input id="minNetL" type="number" min="0" step="1" value="0" />
+            <div class="hint">Valgfritt: minimum liter du alltid vil ha (0 = av).</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="section-title">Blanding / produkt</div>
+        <div class="formgrid">
+          <div class="field">
+            <label>Valg</label>
+            <select id="mixType">
+              <option value="readymix">Ready Mix (CCL READY MIX)</option>
+              <option value="custom">Egendefinert</option>
+            </select>
+            <div class="hint">
+              Ready Mix bruker standarddata (20 kg sekk, 5,8 L vann pr sekk som dokumentert, maks 6,9 L).
+            </div>
+          </div>
+
+          <div class="field" id="rmWaterField">
+            <label>Ready Mix – vann pr sekk (L / 20 kg)</label>
+            <input id="rmWaterPerBag" type="number" min="0" step="0.1" value="5.8" />
+            <div class="hint">Hold deg ≤ 6,9 L/20 kg iht. datablad (maks vann).</div>
+          </div>
+
+          <div class="field" id="customSolidsField" style="display:none">
+            <label>Tørrstoff (kg/m³)</label>
+            <input id="customSolids" type="number" min="0" step="1" value="1596" />
+            <div class="hint">Hvis du kjenner tørrstoffinnhold pr m³ ferdig mørtel.</div>
+          </div>
+
+          <div class="field" id="customWaterField" style="display:none">
+            <label>Vann (L/m³)</label>
+            <input id="customWater" type="number" min="0" step="1" value="464" />
+            <div class="hint">Vann pr m³ ferdig mørtel (1 L ≈ 1 kg).</div>
+          </div>
+
+        </div>
+
+        <div class="warn" id="warnBox">
+          <strong>Kontroll:</strong> Netto volum er ≤ 0 eller input er ulogisk. Sjekk diametre og lengder.
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Resultater</h2>
+          <small>Volum, tillegg og materialforbruk</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="kpi">
+          <div class="box">
+            <div class="k">Hullvolum (fjell + foringsrør)</div>
+            <div class="v"><span id="holeL">0</span> L</div>
+            <div class="s"><span class="mono" id="holeM3">0</span> m³</div>
+          </div>
+
+          <div class="box">
+            <div class="k">Volum som fortrenges (stang / tau)</div>
+            <div class="v"><span id="insL">0</span> L</div>
+            <div class="s">Areal: <span class="mono" id="insArea">0</span> m²</div>
+          </div>
+
+          <div class="box">
+            <div class="k">Netto injiseringsvolum (før overforbruk)</div>
+            <div class="v"><span id="netL">0</span> L</div>
+            <div class="s"><span class="mono" id="netM3">0</span> m³</div>
+          </div>
+
+          <div class="box">
+            <div class="k">Planlagt volum (inkl. overforbruk)</div>
+            <div class="v"><span id="planL">0</span> L</div>
+            <div class="s"><span class="mono" id="planM3">0</span> m³</div>
+          </div>
+
+          <div class="box" id="rmBox">
+            <div class="k">Ready Mix – forbruk</div>
+            <div class="v"><span id="bags">0</span> sekker (20 kg)</div>
+            <div class="s">Pulver: <span class="mono" id="powderKg">0</span> kg • Vann: <span class="mono" id="waterL">0</span> L</div>
+            <div class="s">Forsendelse fra Nord-Danmark. Typisk leveringstid til Norge: 2–8 virkedager.</div>
+            <div class="row" style="margin-top:10px">
+              <button class="btn secondary" id="askReadyMixOfferBtn" type="button">Be om tilbud på Ready Mix</button>
+            </div>
+          </div>
+
+          <div class="box" id="customBox" style="display:none">
+            <div class="k">Egendefinert – forbruk</div>
+            <div class="v">Tørrstoff: <span id="cPowderKg" class="mono">0</span> kg</div>
+            <div class="s">Vann: <span id="cWaterL" class="mono">0</span> L</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+        <div class="field">
+          <label>Notat</label>
+          <div class="hint">
+            1) Hullvolum = sum av sylindervolum for fjell og foringsrørsonen.<br/>
+            2) Fortrengt volum = (stangareal eller tauareal) × valgt lengde i hull.<br/>
+            3) Overforbruk er en enkel prosentvis korreksjon – vurder alltid ruhet/hulrom og retur i praksis.
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Beregningen er et hjelpemiddel og erstatter ikke prosjektspesifikke krav, prosedyrer eller kontrollplan.
+  </footer>
+
+</div>
+
+<script>
+  // ------------------------
+  // Utilities
+  // ------------------------
+  const PI = Math.PI;
+
+  function toNum(id){
+    const el = document.getElementById(id);
+    const v = parseFloat(el.value);
+    return isFinite(v) ? v : 0;
+  }
+
+  function mmToM(mm){ return mm / 1000.0; }
+  function mm2ToM2(mm2){ return mm2 / 1e6; }
+
+  function cylVol(d_m, L_m){
+    if (d_m <= 0 || L_m <= 0) return 0;
+    const r = d_m/2;
+    return PI * r * r * L_m;
+  }
+
+  function fmt(n, dec=0){
+    if (!isFinite(n)) return "0";
+    return n.toLocaleString("no-NO", {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  }
+
+  function setText(id, text){
+    document.getElementById(id).textContent = text;
+  }
+
+  // ------------------------
+  // UI toggles
+  // ------------------------
+  function applyInsertTypeUI(){
+    const type = document.getElementById("insertType").value;
+    const barFields = document.getElementById("barFields");
+    const strandCount = document.getElementById("strandCountField");
+    const strandType = document.getElementById("strandTypeField");
+    const strandCustom = document.getElementById("strandAreaCustomField");
+
+    if (type === "bar"){
+      barFields.style.display = "";
+      strandCount.style.display = "none";
+      strandType.style.display = "none";
+      strandCustom.style.display = "none";
+    } else {
+      barFields.style.display = "none";
+      strandCount.style.display = "";
+      strandType.style.display = "";
+      const preset = document.getElementById("strandAreaPreset").value;
+      strandCustom.style.display = (preset === "custom") ? "" : "none";
+    }
+  }
+
+  function applyMixTypeUI(){
+    const mt = document.getElementById("mixType").value;
+    const rm = document.getElementById("rmWaterField");
+    const cs = document.getElementById("customSolidsField");
+    const cw = document.getElementById("customWaterField");
+
+    const rmBox = document.getElementById("rmBox");
+    const cBox = document.getElementById("customBox");
+
+    if (mt === "readymix"){
+      rm.style.display = "";
+      cs.style.display = "none";
+      cw.style.display = "none";
+      rmBox.style.display = "";
+      cBox.style.display = "none";
+    } else {
+      rm.style.display = "none";
+      cs.style.display = "";
+      cw.style.display = "";
+      rmBox.style.display = "none";
+      cBox.style.display = "";
+    }
+  }
+
+  // ------------------------
+  // Core calc
+  // ------------------------
+  function recalc(){
+    // Hole geometry
+    const dRock_mm = toNum("dRock");
+    const lRock_m  = toNum("lRock");
+    const dCasing_mm = toNum("dCasing");
+    const lCasing_m  = toNum("lCasing");
+
+    const dRock_m = mmToM(dRock_mm);
+    const dCasing_m = mmToM(dCasing_mm);
+
+    const lTotal = Math.max(0, lRock_m + lCasing_m);
+    document.getElementById("lTotal").value = lTotal.toFixed(2);
+
+    setText("dRockM", `${(dRock_m).toFixed(3)} m`);
+    setText("dCasingM", `${(dCasing_m).toFixed(3)} m`);
+
+    const vRock = cylVol(dRock_m, lRock_m);
+    const vCasing = cylVol(dCasing_m, lCasing_m);
+    const vHole = vRock + vCasing; // m3
+
+    // Insert
+    const insertType = document.getElementById("insertType").value;
+    const lInsert_m = Math.max(0, toNum("lInsert"));
+
+    let aInsert_m2 = 0;
+    if (insertType === "bar"){
+      const dBar_mm = toNum("dBar");
+      const dBar_m = mmToM(dBar_mm);
+      aInsert_m2 = (dBar_m > 0) ? (PI * Math.pow(dBar_m/2, 2)) : 0;
+    } else {
+      const n = Math.max(0, Math.floor(toNum("nStrands")));
+      const preset = document.getElementById("strandAreaPreset").value;
+      let area_mm2 = 140;
+      if (preset === "custom"){
+        area_mm2 = Math.max(0, toNum("strandAreaCustom"));
+      }
+      aInsert_m2 = n * mm2ToM2(area_mm2);
+    }
+    const vInsert = aInsert_m2 * lInsert_m;
+
+    // Net + plan
+    let vNet = vHole - vInsert;
+    const warnBox = document.getElementById("warnBox");
+
+    // Safety min liters
+    const minNetL = Math.max(0, toNum("minNetL"));
+    if (minNetL > 0){
+      vNet = Math.max(vNet, minNetL / 1000.0);
+    }
+
+    const overPct = Math.max(0, toNum("overPct"));
+    const vPlan = vNet * (1 + overPct/100.0);
+
+    const invalid = !(vHole > 0) || vNet <= 0 || vInsert < 0 || lInsert_m < 0;
+    warnBox.classList.toggle("show", invalid);
+
+    // Outputs
+    const holeL = vHole * 1000;
+    const insL  = vInsert * 1000;
+    const netL  = vNet * 1000;
+    const planL = vPlan * 1000;
+
+    setText("holeL", fmt(holeL, 0));
+    setText("holeM3", fmt(vHole, 3));
+    setText("insL", fmt(insL, 0));
+    setText("insArea", fmt(aInsert_m2, 6));
+    setText("netL", fmt(netL, 0));
+    setText("netM3", fmt(vNet, 3));
+    setText("planL", fmt(planL, 0));
+    setText("planM3", fmt(vPlan, 3));
+
+    // Mix consumption
+    const mixType = document.getElementById("mixType").value;
+
+    if (mixType === "readymix"){
+      // Ready Mix constants from declarational sheet:
+      // Dry solids ~1596 kg/m3, water ~464 L/m3 at 5.8L/20kg, bag 20kg.
+      const solids_kg_per_m3 = 1596;
+      const bag_kg = 20;
+
+      // User-chosen water per bag, check vs max 6.9
+      const waterPerBag_L = Math.max(0, toNum("rmWaterPerBag"));
+      const maxWater_L = 6.9;
+      const clampWaterPerBag = Math.min(waterPerBag_L, maxWater_L);
+      if (clampWaterPerBag !== waterPerBag_L){
+        document.getElementById("rmWaterPerBag").value = clampWaterPerBag.toFixed(1);
+      }
+
+      const powderKg = solids_kg_per_m3 * vPlan;
+      const bags = (bag_kg > 0) ? (powderKg / bag_kg) : 0;
+      const bagsRoundedUp = Math.ceil(bags);
+
+      // Water follows rounded bag count for practical ordering/planning.
+      const waterL = bagsRoundedUp * clampWaterPerBag;
+
+      setText("bags", fmt(bagsRoundedUp, 0));
+      setText("powderKg", fmt(powderKg, 0));
+      setText("waterL", fmt(waterL, 0));
+    } else {
+      const solids = Math.max(0, toNum("customSolids")); // kg/m3
+      const water = Math.max(0, toNum("customWater"));  // L/m3
+      const cPowderKg = solids * vPlan;
+      const cWaterL = water * vPlan;
+      setText("cPowderKg", fmt(cPowderKg, 0));
+      setText("cWaterL", fmt(cWaterL, 0));
+    }
+  }
+
+  // ------------------------
+  // Events
+  // ------------------------
+  function bind(){
+    const ids = [
+      "dRock","lRock","dCasing","lCasing",
+      "insertType","lInsert","dBar","nStrands","strandAreaPreset","strandAreaCustom",
+      "overPct","minNetL",
+      "mixType","rmWaterPerBag","customSolids","customWater"
+    ];
+
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("input", ()=>{ applyInsertTypeUI(); applyMixTypeUI(); recalc(); });
+      el.addEventListener("change", ()=>{ applyInsertTypeUI(); applyMixTypeUI(); recalc(); });
+    });
+
+    document.getElementById("setInsertToTotal").addEventListener("click", ()=>{
+      const lTotal = parseFloat(document.getElementById("lTotal").value) || 0;
+      document.getElementById("lInsert").value = lTotal.toFixed(2);
+      recalc();
+    });
+
+    const askReadyMixOfferBtn = document.getElementById("askReadyMixOfferBtn");
+    if (askReadyMixOfferBtn){
+      askReadyMixOfferBtn.addEventListener("click", ()=>{
+        const bags = (document.getElementById("bags")?.textContent || "0").trim();
+        const planL = (document.getElementById("planL")?.textContent || "0").trim();
+        const subject = "Tilbudsforesporsel - CCL Ready Mix";
+        const body = [
+          "Hei,",
+          "",
+          "Vi ønsker tilbud på CCL Ready Mix til prosjekt i Norge.",
+          `Beregnet behov: ${bags} sekker (20 kg).`,
+          `Planlagt volum: ${planL} L injisering.`,
+          "",
+          "Vennlig hilsen"
+        ].join("\n");
+
+        window.location.href =
+          "mailto:jan@etterspenning.no" +
+          "?subject=" + encodeURIComponent(subject) +
+          "&body=" + encodeURIComponent(body);
+      });
+    }
+
+    // Initial
+    applyInsertTypeUI();
+    applyMixTypeUI();
+    recalc();
+  }
+
+  // Off-canvas menu logic (same as your other pages)
+  (function () {
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    if (openBtn && closeBtn && overlay && drawer) {
+      openBtn.addEventListener("click", openMenu);
+      closeBtn.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+      });
+    }
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.addEventListener("click", () => {
+        alert("Språkvalg kommer senere (NO/EN/SV/DA).");
+      });
+    }
+  })();
+
+  // Init form bindings after DOM
+  bind();
+</script>
+
+</body>
+</html>

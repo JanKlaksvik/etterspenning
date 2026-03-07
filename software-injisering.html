@@ -1,0 +1,2011 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software – Injisering | Etterspenning.no</title>
+  <meta name="description" content="Beregning av injiseringsvolum for borehull/ankere: foringsrør, borehull, overboring og Ready Mix." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --warn:#ffd36a;
+      --bad:#ff6b6b;
+      --badbg: rgba(255, 107, 107, .10);
+      --okbg: rgba(139, 185, 61, .08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{height:38px;width:auto;display:block;border-radius:10px}
+    .brandtitle{font-weight:900;letter-spacing:.2px}
+    .brandsub{font-size:12px;color:var(--muted)}
+
+    nav.primary{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;left:0;right:0;height:2px;background:var(--text);border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{opacity:1;pointer-events:auto}
+
+    .drawer{
+      position: fixed; top:0; right:0;
+      height:100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav{padding:12px;display:grid;gap:10px}
+    .drawer-nav a{
+      padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{background: rgba(244,122,32,.12);border-color: rgba(244,122,32,.45)}
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    .hero{padding:22px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(24px, 3.2vw, 40px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:96ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1.18fr .82fr;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{margin:0 0 8px;font-size:14px;letter-spacing:-0.01em}
+
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
+    @media (max-width: 680px){.row{grid-template-columns:1fr}}
+
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select, textarea{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      outline:none;
+      width:100%;
+      max-width:100%;
+    }
+    textarea{resize:vertical; min-height: 42px;}
+    input:focus, select:focus, textarea:focus{border-color: rgba(244,122,32,.55)}
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color: var(--muted);
+      font-weight:900;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+    }
+    tbody tr:last-child td{border-bottom:none}
+
+    tr.bad td{ background: var(--badbg); }
+    tr.ok td{ background: var(--okbg); }
+
+    .rowWarn{
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.35;
+      color: var(--muted);
+    }
+    .rowWarn strong{color: var(--bad)}
+    .rowOk{color: var(--accent2)}
+    .rowBad{color: var(--bad)}
+
+    .cellInput{
+      width:100%;
+      padding:9px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.30);
+      color: var(--text);
+    }
+    .cellInput:focus{border-color: rgba(244,122,32,.55)}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.danger{
+      background: rgba(255,90,90,.12);
+      border-color: rgba(255,90,90,.35);
+    }
+    .btn[aria-disabled="true"]{
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    .kpi{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width:620px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{
+      padding:12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+      min-width:0;
+    }
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .kpi .val{font-size:14px;font-weight:900;margin-top:6px;overflow-wrap:anywhere}
+
+    .msg{
+      padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      color: var(--muted);
+      font-size:13px; line-height:1.45;
+      margin-bottom:12px;
+    }
+
+    .btnstack{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .spacer{height:10px}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+
+<body>
+<script>
+  (async function enforceCompanyAccess(){
+    const KEY = "esp_pm_auth_v1";
+    const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+    function parseEpochMs(value){
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string"){
+        const numeric = Number(value);
+        if (Number.isFinite(numeric)) return numeric;
+        const parsed = Date.parse(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return 0;
+    }
+    function normalizeSession(session){
+      if (!session || typeof session !== "object") return null;
+      const expiresAtMs = parseEpochMs(session.expiresAt);
+      if (!expiresAtMs || expiresAtMs < Date.now()) return null;
+
+      const rawCompanyId = session.companyId === undefined || session.companyId === null
+        ? ""
+        : String(session.companyId).trim();
+      const isLegacyPm = session.role === "project_manager" && rawCompanyId === "";
+      const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+      return {
+        ...session,
+        companyId: isLegacyPm ? "legacy-pm" : (rawCompanyId || session.companyId || ""),
+        modules: {
+          ...incomingModules,
+          ...(isLegacyPm ? { grouting: true } : {})
+        },
+        expiresAt: expiresAtMs
+      };
+    }
+    function readSession(){
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return null;
+        const parsed = normalizeSession(JSON.parse(raw));
+        if (!parsed) {
+          localStorage.removeItem(KEY);
+          return null;
+        }
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+    async function refreshSessionFromApi(){
+      try {
+        const res = await fetch(API_BASE + "/me.php", {
+          method: "GET",
+          credentials: "include"
+        });
+        let data = null;
+        try {
+          data = await res.json();
+        } catch (e) {}
+        if (!res.ok || !data || data.ok === false || !data.authenticated || !data.session) {
+          return null;
+        }
+        const normalized = normalizeSession(data.session);
+        if (!normalized) return null;
+        localStorage.setItem(KEY, JSON.stringify(normalized));
+        return normalized;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    let session = readSession();
+    if (!session) {
+      session = await refreshSessionFromApi();
+    }
+    const hasGrouting = !!(session && session.modules && session.modules.grouting);
+    const hasPlannerRole = !!(session && session.role !== "onsite_user");
+    if (!hasGrouting || !hasPlannerRole) {
+      const pageName = (window.location.pathname.split("/").pop() || "software-injisering.html");
+      const next = pageName + window.location.search + window.location.hash;
+      window.location.href = "software.html?next=" + encodeURIComponent(next);
+    }
+  })();
+</script>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software – Injisering (borehull)</div>
+        <div class="brandsub" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="openMenu" aria-label="Åpne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktøy</a>
+      <a class="navlink active" href="software.html">Software</a>
+      <a class="navlink" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a class="active" href="software.html">Software</a>
+    <a href="data.html">Data</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Injisering – borehull</h1>
+    <p>
+      Beregningen estimerer teoretisk volum for injisering basert på borehulls- og foringsrørdata.
+      Prosjektleder kan sende ankerlisten til feltpersonell for utførelse og få data tilbake til godkjenning.
+    </p>
+    <div class="actions">
+      <a class="btn secondary" href="software-prosjektstyring.html">Prosjektstyring</a>
+      <button class="btn" id="logoutBtn" type="button">Logg ut</button>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Input</h2>
+          <small>Prosjekt + innhold i hull + borehull</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section">
+          <div class="row">
+            <label>
+              <span class="lab">Prosjektnavn</span>
+              <input id="projectName" type="text" placeholder="f.eks. E18 – Strekning X">
+            </label>
+            <label>
+              <span class="lab">Prosjektnr.</span>
+              <input id="projectNo" type="text" placeholder="f.eks. 24-00123">
+            </label>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <label style="grid-column: 1 / -1;">
+              <span class="lab">Rad / område (valgfritt)</span>
+              <input id="projectRow" type="text" placeholder="f.eks. Rad A, felt 3, akse 2–6">
+            </label>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <label style="grid-column: 1 / -1;">
+              <span class="lab">Trekk inn eksisterende prosjekt</span>
+              <select id="existingProjectSelect">
+                <option value="">Velg prosjekt fra oversikten...</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="actions" style="margin-top:10px">
+            <button class="btn" id="loadProjectBtn" type="button">Hent prosjekt</button>
+            <button class="btn secondary" id="newProjectBtn" type="button">Nytt prosjekt</button>
+          </div>
+
+          <div class="hint" id="projectLinkInfo">
+            Velg eksisterende prosjekt, eller fyll inn nytt prosjekt og trykk «Lagre» for å lagre og åpne injisering felt.
+          </div>
+          <input id="linkedProjectId" type="hidden" value="">
+        </div>
+
+        <div class="section">
+          <h3>Hva står i hullet?</h3>
+          <div class="row">
+            <label>
+              <span class="lab">Type</span>
+              <select id="anchorType">
+                <option value="strand">Lineforankring (spenntau)</option>
+                <option value="bar">Stangforankring</option>
+              </select>
+            </label>
+
+            <label id="strandCountWrap">
+              <span class="lab">Antall spenntau</span>
+              <input id="strandCount" type="number" min="0" step="1" value="7">
+            </label>
+
+            <label id="strandAreaWrap">
+              <span class="lab">Areal pr. spenntau (mm²)</span>
+             <select id="strandArea">
+              <option value="140">140</option>
+               <option value="150">150</option>
+                <option value="165">165</option>
+             </select>
+            </label>
+
+            <label id="barDiaWrap" style="display:none">
+              <span class="lab">Stang – ytre diameter (mm)</span>
+              <input id="barDia" type="number" min="0" step="1" value="32">
+            </label>
+          </div>
+
+          <div class="hint">
+            Volumet som fortrenges av stang/spenntau trekkes fra borehullsvolum langs <strong>Fri + Forankring</strong>.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Borehull</h3>
+          <div class="row">
+            <label>
+              <span class="lab">Foringsrør diameter (mm)</span>
+              <input id="dCasing" type="number" min="0" step="1" value="139">
+            </label>
+            <label>
+              <span class="lab">Borehulls diameter i fjell (mm)</span>
+              <input id="dBore" type="number" min="0" step="1" value="115">
+            </label>
+          </div>
+          <div class="hint">
+            Kontroll per anker: <span style="color:var(--warn)">Foringsrør + (Borehull + overboring)</span> skal være
+            <span style="color:var(--warn)"><strong>lengre enn</strong></span> <span style="color:var(--warn)">Fri + Forankring</span>.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Borehull (lengder i meter)</h3>
+
+          <table aria-label="Borehullsliste">
+            <thead>
+              <tr>
+                <th style="width:14%">Anker nr.</th>
+                <th style="width:14%">Foringsrør</th>
+                <th style="width:14%">Borehull + overboring</th>
+                <th style="width:14%">Fri</th>
+                <th style="width:14%">Forankring</th>
+                <th>Handling / kontroll</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+
+          <div class="actions">
+            <button class="btn" id="addRowBtn" type="button">+ Legg til anker</button>
+            <button class="btn danger" id="clearBtn" type="button">Tøm liste</button>
+          </div>
+
+          <div class="hint">
+            Volumberegningen bruker <strong>total borehullslengde</strong> definert som:
+            <span class="mono">Foringsrør + (Borehull + overboring)</span>.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Resultater</h2>
+          <small>Volum + Ready Mix</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+        <div class="msg" id="msgBox">Legg inn borehull, så beregnes volum automatisk.</div>
+
+        <div class="section">
+          <h3>Svinn / overforbruk</h3>
+          <div class="row">
+            <label>
+              <span class="lab">Svinn (%)</span>
+              <input id="wastePct" type="number" min="0" step="0.1" value="10.0">
+            </label>
+            <label>
+              <span class="lab">Kommentar (valgfritt)</span>
+              <textarea id="comment" rows="2" placeholder="f.eks. sprukket fjell, stort tap til terreng"></textarea>
+            </label>
+          </div>
+          <div class="hint">
+            Merk: Beregningen inkluderer <strong>ikke</strong> masse til prøver.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Volum</h3>
+          <div class="kpi">
+            <div class="box">
+              <div class="lab">Netto injiseringsvolum (liter)</div>
+              <div class="val" id="vNet">–</div>
+            </div>
+            <div class="box">
+              <div class="lab">Anbefalt inkl. svinn (liter)</div>
+              <div class="val" id="vRec">–</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Ready Mix (20 kg sekk)</h3>
+          <div class="row">
+            <label>
+              <span class="lab">Vann pr. sekk (liter)</span>
+              <input id="waterPerBag" type="number" min="0" step="0.1" value="4.0">
+            </label>
+            <label>
+              <span class="lab">Utbytte pr. sekk (liter ferdig grout)</span>
+              <input id="yieldPerBag" type="number" min="0" step="0.1" value="10.0">
+            </label>
+          </div>
+
+          <div class="kpi" style="margin-top:10px">
+            <div class="box">
+              <div class="lab">Antall sekker (avrundet opp)</div>
+              <div class="val" id="bags">–</div>
+            </div>
+            <div class="box">
+              <div class="lab">Vannforbruk (liter, avrundet opp)</div>
+              <div class="val" id="waterTotal">–</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btnstack">
+          <button class="btn" id="saveBtn" type="button">Lagre</button>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="section">
+          <h3>Detaljer</h3>
+          <div class="hint" id="detailBox">–</div>
+        </div>
+
+        <div class="section">
+          <h3>Feltflyt</h3>
+          <div class="hint" id="workflowInfo">
+            Prosjektet er ikke sendt til felt enda.
+          </div>
+          <div class="hint" style="margin-top:8px">
+            Feltpersonell kan registrere per anker: beregnet/brukt sement (sekker), start/stopp injisering, beregnet tid, trykkstabilitet (5-10 bar) og grout-temperatur. I tillegg registreres prosjektets oppstartskontroller (3-timers test, 1-liters vekt, siv-test og spread test).
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Til godkjenning fra felt</h3>
+          <table aria-label="Injisering til godkjenning">
+            <thead>
+              <tr>
+                <th style="width:18%">Anker</th>
+                <th style="width:52%">Feltdata</th>
+                <th style="width:30%">Handling</th>
+              </tr>
+            </thead>
+            <tbody id="approvalRows"></tbody>
+          </table>
+          <div class="hint" id="approvalMsg" style="margin-top:8px">Ingen anker sendt til godkjenning.</div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Software / Injisering. Denne nettsiden bruker Google Analytics for anonym trafikkstatistikk. Ingen informasjonskapsler brukes til markedsføring. Ingen cookies.
+  </footer>
+</div>
+
+<script>
+  // ========= MENY (hamburger) =========
+  (function initMenu(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+  })();
+</script>
+
+<script src="company-branding.js"></script>
+<script>
+  // ========= BEREGNING (uten re-render på tastetrykk) =========
+  function $(id){ return document.getElementById(id); }
+  function num(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
+  function clampMin(v, min){ return (v < min) ? min : v; }
+  function fmt(n, dec=1){
+    if (!Number.isFinite(n)) return "–";
+    return n.toLocaleString("no-NO", {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  }
+  function ceilInt(n){ return Number.isFinite(n) ? Math.ceil(n) : 0; }
+
+  function areaFromDiameter_m2(d_mm){
+    const d_m = d_mm / 1000;
+    const r = d_m / 2;
+    return Math.PI * r * r;
+  }
+  function areaFromDiameter_mm2(d_mm){
+    const r = d_mm / 2;
+    return Math.PI * r * r; // mm²
+  }
+
+  const state = { rows: [] };
+
+  function makeRowData(preset){
+    const id = "r" + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+    return {
+      id,
+      anchorNo: preset?.anchorNo ?? "",
+      lCasing: preset?.lCasing ?? 3.0,
+      lBore: preset?.lBore ?? 6.0,
+      lFree: preset?.lFree ?? 3.0,
+      lBond: preset?.lBond ?? 3.0,
+      el: null
+    };
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function setMsg(text){ $("msgBox").textContent = text; }
+
+  const STORAGE_KEYS = {
+    auth: "esp_pm_auth_v1",
+    projects: "esp_pm_projects_v1"
+  };
+  const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+
+  function readJson(key, fallback){
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function parseEpochMs(value){
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string"){
+      const numeric = Number(value);
+      if (Number.isFinite(numeric)) return numeric;
+      const parsed = Date.parse(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+
+  function companyScopeId(){
+    const session = getAuthSession();
+    const raw = session && session.companyId !== undefined && session.companyId !== null
+      ? String(session.companyId).trim()
+      : "";
+    return raw || "no_company";
+  }
+
+  function projectsStorageKey(){
+    return STORAGE_KEYS.projects + "__company_" + companyScopeId();
+  }
+
+  function isLegacyCompanyScope(){
+    return companyScopeId() === "legacy-pm";
+  }
+
+  function migrateScopedProjectsIfNeeded(scopedKey){
+    if (!isLegacyCompanyScope()) return;
+    if (localStorage.getItem(scopedKey) !== null) return;
+
+    const markerKey = STORAGE_KEYS.projects + "__scoped_v1_migrated";
+    if (localStorage.getItem(markerKey) === "1") return;
+
+    const legacyProjects = readJson(STORAGE_KEYS.projects, null);
+    if (Array.isArray(legacyProjects)) {
+      writeJson(scopedKey, legacyProjects);
+      localStorage.setItem(markerKey, "1");
+    }
+  }
+
+  function normalizeProjectListForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    const normalized = [];
+    let changed = !Array.isArray(list);
+
+    source.forEach((project) => {
+      if (!project || typeof project !== "object") {
+        changed = true;
+        return;
+      }
+
+      const rawProjectCompanyId = project.companyId;
+      const projectCompanyId = rawProjectCompanyId === undefined || rawProjectCompanyId === null
+        ? ""
+        : String(rawProjectCompanyId).trim();
+
+      if (projectCompanyId === "") {
+        if (!isLegacyCompanyScope()) {
+          changed = true;
+          return;
+        }
+      } else if (projectCompanyId !== companyId) {
+        changed = true;
+        return;
+      }
+
+      normalized.push({
+        ...project,
+        companyId
+      });
+
+      if (projectCompanyId !== companyId) {
+        changed = true;
+      }
+    });
+
+    return { normalized, changed };
+  }
+
+  let projectsCache = null;
+  let projectsHydratePromise = null;
+  let projectsSaveChain = Promise.resolve();
+
+  function cloneProjectsList(list){
+    try {
+      return JSON.parse(JSON.stringify(Array.isArray(list) ? list : []));
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function scopedProjectsForCompany(list){
+    const companyId = companyScopeId();
+    const source = Array.isArray(list) ? list : [];
+    return source
+      .filter((project) => project && typeof project === "object")
+      .map((project) => ({
+        ...project,
+        companyId
+      }));
+  }
+
+  function readLocalProjectsFallback(){
+    const key = projectsStorageKey();
+    migrateScopedProjectsIfNeeded(key);
+    const parsed = readJson(key, []);
+    const normalizedResult = normalizeProjectListForCompany(parsed);
+    return normalizedResult.normalized;
+  }
+
+  async function hydrateProjectsFromServer(){
+    if (projectsHydratePromise) return projectsHydratePromise;
+
+    projectsHydratePromise = (async () => {
+      const data = await requestApi("projects.php", { method: "GET" });
+      const remoteList = Array.isArray(data && data.projects) ? data.projects : [];
+      const normalizedRemote = normalizeProjectListForCompany(remoteList).normalized;
+
+      if (normalizedRemote.length > 0) {
+        projectsCache = cloneProjectsList(normalizedRemote);
+        return getProjects();
+      }
+
+      const localFallback = readLocalProjectsFallback();
+      if (localFallback.length > 0) {
+        const bootstrap = scopedProjectsForCompany(localFallback);
+        projectsCache = cloneProjectsList(bootstrap);
+        await requestApi("projects.php", {
+          method: "POST",
+          body: JSON.stringify({ projects: bootstrap })
+        });
+        return getProjects();
+      }
+
+      projectsCache = [];
+      return [];
+    })().finally(() => {
+      projectsHydratePromise = null;
+    });
+
+    return projectsHydratePromise;
+  }
+
+  function getProjects(){
+    if (!Array.isArray(projectsCache)) {
+      projectsCache = [];
+    }
+    return cloneProjectsList(projectsCache);
+  }
+
+  function saveProjects(list){
+    const scopedProjects = scopedProjectsForCompany(list);
+    projectsCache = cloneProjectsList(scopedProjects);
+    const snapshot = cloneProjectsList(scopedProjects);
+    writeJson(projectsStorageKey(), snapshot);
+
+    projectsSaveChain = projectsSaveChain
+      .catch(() => {})
+      .then(() => requestApi("projects.php", {
+        method: "POST",
+        body: JSON.stringify({ projects: snapshot })
+      }));
+
+    projectsSaveChain.catch((err) => {
+      try { console.error("projects sync failed (injisering)", err); } catch (e) {}
+    });
+
+    return projectsSaveChain;
+  }
+
+  async function flushProjectsSave(){
+    await projectsSaveChain;
+  }
+
+  function uid(prefix){
+    return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function apiUrl(path){
+    return API_BASE + "/" + path.replace(/^\/+/, "");
+  }
+
+  async function requestApi(path, options){
+    const opts = options || {};
+    const headers = {};
+    if (opts.body) headers["Content-Type"] = "application/json";
+
+    const res = await fetch(apiUrl(path), {
+      method: opts.method || "GET",
+      credentials: "include",
+      headers,
+      body: opts.body
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (e) {}
+
+    if (!res.ok || !data || data.ok === false) {
+      const msg = (data && (data.error || data.message))
+        ? (data.error || data.message)
+        : ("HTTP " + res.status);
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  function getAuthSession(){
+    const raw = readJson(STORAGE_KEYS.auth, null);
+    if (!raw || typeof raw !== "object") return null;
+    const expiresAt = parseEpochMs(raw.expiresAt);
+    if (!expiresAt || expiresAt < Date.now()) return null;
+
+    const isLegacyPm = raw.role === "project_manager" &&
+      (raw.companyId === undefined || raw.companyId === null || String(raw.companyId).trim() === "");
+    if (isLegacyPm) {
+      return {
+        ...raw,
+        companyId: "legacy-pm",
+        modules: {
+          ...(raw.modules && typeof raw.modules === "object" ? raw.modules : {}),
+          grouting: true
+        },
+        expiresAt
+      };
+    }
+
+    return {
+      ...raw,
+      expiresAt
+    };
+  }
+
+  function currentActorLabel(){
+    const session = getAuthSession();
+    if (!session) return "";
+    return (session.email || session.name || "").toString();
+  }
+
+  async function logoutAndRedirect(){
+    try {
+      await requestApi("logout.php", { method: "POST", body: "{}" });
+    } catch (e) {}
+    localStorage.removeItem(STORAGE_KEYS.auth);
+    window.location.href = "software.html";
+  }
+
+  function normText(v){
+    return (v || "").toString().trim().toLowerCase();
+  }
+
+  function projectOptionLabel(project){
+    const name = (project.name || "Uten navn").toString();
+    const number = (project.number || "").toString().trim();
+    const status = project.status === "finished" ? "ferdig" : "aktiv";
+    return number ? (name + " (" + number + ") - " + status) : (name + " - " + status);
+  }
+
+  function projectSupportsGrouting(project){
+    if (!project || typeof project !== "object") return false;
+    const modules = (project.modules && typeof project.modules === "object") ? project.modules : null;
+    if (!modules) return true; // Legacy prosjekt uten modulfelt.
+    return !!modules.grouting;
+  }
+
+  function defaultProjectLinkText(){
+    return "Velg eksisterende prosjekt, eller fyll inn nytt prosjekt og trykk «Lagre» for å lagre og åpne injisering felt.";
+  }
+
+  function setProjectLinkInfo(text){
+    const info = $("projectLinkInfo");
+    if (!info) return;
+    info.textContent = text;
+  }
+
+  function refreshProjectSelect(selectedId){
+    const select = $("existingProjectSelect");
+    if (!select) return;
+
+    const projects = getProjects()
+      .filter((project) => projectSupportsGrouting(project))
+      .slice()
+      .sort((a, b) => {
+        const at = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const bt = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return bt - at;
+      });
+
+    const current = selectedId !== undefined ? selectedId : (select.value || "");
+    let html = '<option value="">Velg prosjekt fra oversikten...</option>';
+    html += projects.map((project) =>
+      '<option value="' + escapeHtml(project.id || "") + '">' + escapeHtml(projectOptionLabel(project)) + "</option>"
+    ).join("");
+    select.innerHTML = html;
+
+    if (current && projects.some((project) => project.id === current)) {
+      select.value = current;
+    }
+  }
+
+  function updateProjectLinkInfo(){
+    const linkedInput = $("linkedProjectId");
+    if (!linkedInput) return;
+
+    const linkedId = (linkedInput.value || "").trim();
+    if (!linkedId) {
+      setProjectLinkInfo(defaultProjectLinkText());
+      return;
+    }
+
+    const project = getProjects().find((p) => p.id === linkedId);
+    if (!project || !projectSupportsGrouting(project)) {
+      linkedInput.value = "";
+      setProjectLinkInfo(defaultProjectLinkText());
+      return;
+    }
+
+    const number = (project.number || "").toString().trim();
+    setProjectLinkInfo(
+      "Koblet prosjekt: " + (project.name || "Uten navn") + (number ? (" (" + number + ")") : "") + "."
+    );
+  }
+
+  function safeNumber(value, fallback){
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
+  }
+
+  function collectGroutingSnapshot(){
+    return {
+      anchorType: $("anchorType").value === "bar" ? "bar" : "strand",
+      strandCount: clampMin(num($("strandCount").value), 0),
+      strandArea: clampMin(num($("strandArea").value), 0),
+      barDia: clampMin(num($("barDia").value), 0),
+      dCasing: clampMin(num($("dCasing").value), 0),
+      dBore: clampMin(num($("dBore").value), 0),
+      wastePct: clampMin(num($("wastePct").value), 0),
+      waterPerBag: clampMin(num($("waterPerBag").value), 0),
+      yieldPerBag: clampMin(num($("yieldPerBag").value), 0),
+      comment: ($("comment").value || "").toString(),
+      rows: state.rows.map((r) => ({
+        anchorNo: (r.anchorNo || "").toString(),
+        lCasing: clampMin(num(r.lCasing), 0),
+        lBore: clampMin(num(r.lBore), 0),
+        lFree: clampMin(num(r.lFree), 0),
+        lBond: clampMin(num(r.lBond), 0)
+      })),
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  function applyGroutingSnapshot(snapshot){
+    if (!snapshot || typeof snapshot !== "object") {
+      return false;
+    }
+
+    $("anchorType").value = snapshot.anchorType === "bar" ? "bar" : "strand";
+    $("strandCount").value = String(safeNumber(snapshot.strandCount, 7));
+    $("strandArea").value = String(safeNumber(snapshot.strandArea, 140));
+    $("barDia").value = String(safeNumber(snapshot.barDia, 32));
+    $("dCasing").value = String(safeNumber(snapshot.dCasing, 139));
+    $("dBore").value = String(safeNumber(snapshot.dBore, 115));
+    $("wastePct").value = String(safeNumber(snapshot.wastePct, 10));
+    $("waterPerBag").value = String(safeNumber(snapshot.waterPerBag, 4));
+    $("yieldPerBag").value = String(safeNumber(snapshot.yieldPerBag, 10));
+    $("comment").value = (snapshot.comment || "").toString();
+
+    const incomingRows = Array.isArray(snapshot.rows) ? snapshot.rows : [];
+    $("rows").innerHTML = "";
+    state.rows = [];
+    if (incomingRows.length > 0) {
+      incomingRows.forEach((row) => {
+        addRow(makeRowData({
+          anchorNo: (row.anchorNo || "").toString(),
+          lCasing: safeNumber(row.lCasing, 3.0),
+          lBore: safeNumber(row.lBore, 6.0),
+          lFree: safeNumber(row.lFree, 3.0),
+          lBond: safeNumber(row.lBond, 3.0)
+        }));
+      });
+    } else {
+      addRow(makeRowData({ anchorNo: "A1", lCasing: 3.0, lBore: 6.0, lFree: 3.0, lBond: 3.0 }));
+    }
+
+    updateAnchorTypeUI();
+    compute();
+    return true;
+  }
+
+  function setProjectFromRecord(project){
+    if (!project || typeof project !== "object") return false;
+    if (!projectSupportsGrouting(project)) return false;
+
+    $("projectName").value = project.name || "";
+    $("projectNo").value = project.number || "";
+    $("projectRow").value = project.location || "";
+    $("linkedProjectId").value = project.id || "";
+
+    if (!applyGroutingSnapshot(project.groutingData)) {
+      // Hvis prosjektet ikke har lagret grouting-data enda, behold standard oppsett.
+      $("rows").innerHTML = "";
+      state.rows = [];
+      addRow(makeRowData({ anchorNo: "A1", lCasing: 3.0, lBore: 6.0, lFree: 3.0, lBond: 3.0 }));
+      updateAnchorTypeUI();
+      compute();
+    }
+
+    refreshProjectSelect(project.id || "");
+    updateProjectLinkInfo();
+    renderWorkflowUi();
+    return true;
+  }
+
+  function projectIdFromUrl(){
+    const qp = new URLSearchParams(window.location.search);
+    const id = (qp.get("projectId") || "").trim();
+    return id;
+  }
+
+  function loadSelectedProjectIntoForm(){
+    const select = $("existingProjectSelect");
+    const linkedInput = $("linkedProjectId");
+    if (!select || !linkedInput) return;
+
+    const selectedId = (select.value || "").trim();
+    if (!selectedId) {
+      setMsg("Velg et prosjekt først.");
+      return;
+    }
+
+    const project = getProjects().find((p) => p.id === selectedId);
+    if (!project) {
+      refreshProjectSelect("");
+      linkedInput.value = "";
+      updateProjectLinkInfo();
+      setMsg("Prosjektet ble ikke funnet. Listen er oppdatert.");
+      return;
+    }
+    if (!projectSupportsGrouting(project)) {
+      refreshProjectSelect("");
+      linkedInput.value = "";
+      updateProjectLinkInfo();
+      setMsg("Prosjektet har ikke Injisering aktivert i Prosjektstyring.");
+      return;
+    }
+
+    setProjectFromRecord(project);
+    setMsg("Prosjekt hentet fra prosjektoversikten.");
+  }
+
+  function startNewProjectDraft(){
+    const select = $("existingProjectSelect");
+    const linkedInput = $("linkedProjectId");
+    if (!select || !linkedInput) return;
+
+    select.value = "";
+    linkedInput.value = "";
+    $("projectName").value = "";
+    $("projectNo").value = "";
+    $("projectRow").value = "";
+    updateProjectLinkInfo();
+    updateFieldPageLink("");
+    renderWorkflowUi();
+    compute();
+    setMsg("Ny prosjektkladd klar.");
+  }
+
+  function ensureProjectInOverview(){
+    const name = ($("projectName").value || "").toString().trim();
+    const number = ($("projectNo").value || "").toString().trim();
+    const location = ($("projectRow").value || "").toString().trim();
+    const linkedInput = $("linkedProjectId");
+
+    if (!name) {
+      setMsg("Fyll inn prosjektnavn for du lagrer til prosjektoversikten.");
+      return null;
+    }
+
+    const now = new Date().toISOString();
+    const projects = getProjects();
+    const linkedId = linkedInput ? (linkedInput.value || "").trim() : "";
+    const groutingData = collectGroutingSnapshot();
+
+    let idx = linkedId ? projects.findIndex((p) => p.id === linkedId) : -1;
+    if (idx >= 0 && !projectSupportsGrouting(projects[idx])) {
+      setMsg("Valgt prosjekt har ikke Injisering aktivert i Prosjektstyring.");
+      return null;
+    }
+    if (idx < 0 && normText(number)) {
+      idx = projects.findIndex((p) => projectSupportsGrouting(p) && normText(p.number) === normText(number));
+    }
+    if (idx < 0 && normText(name) && !normText(number)) {
+      idx = projects.findIndex((p) => projectSupportsGrouting(p) && normText(p.name) === normText(name) && !normText(p.number));
+    }
+
+    let projectId = "";
+    let message = "";
+
+    if (idx >= 0) {
+      const prev = projects[idx];
+      const prevModules = (prev.modules && typeof prev.modules === "object") ? prev.modules : {};
+      const nextWorkflow = buildWorkflowFromRows(
+        (prev && prev.groutingWorkflow) ? prev.groutingWorkflow : null,
+        Array.isArray(groutingData.rows) ? groutingData.rows : []
+      );
+
+      projects[idx] = {
+        ...prev,
+        name,
+        number,
+        location: location || prev.location || "",
+        modules: {
+          grouting: true,
+          stressing: !!prevModules.stressing,
+          stressingOptions: Array.isArray(prevModules.stressingOptions) ? prevModules.stressingOptions : [],
+          liftOff: !!prevModules.liftOff,
+          diffBondlength: !!prevModules.diffBondlength
+        },
+        groutingData,
+        groutingWorkflow: (nextWorkflow && Array.isArray(nextWorkflow.anchors) && nextWorkflow.anchors.length > 0)
+          ? nextWorkflow
+          : null,
+        updatedAt: now,
+        startedAt: prev.startedAt || prev.createdAt || now
+      };
+
+      projectId = projects[idx].id;
+      message = "Prosjekt oppdatert i prosjektoversikten.";
+    } else {
+      const nextWorkflow = buildWorkflowFromRows(
+        null,
+        Array.isArray(groutingData.rows) ? groutingData.rows : []
+      );
+      const created = {
+        id: "project_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8),
+        name,
+        number,
+        client: "",
+        location,
+        note: "",
+        modules: {
+          grouting: true,
+          stressing: false,
+          stressingOptions: [],
+          liftOff: false,
+          diffBondlength: false
+        },
+        groutingData,
+        groutingWorkflow: (nextWorkflow && Array.isArray(nextWorkflow.anchors) && nextWorkflow.anchors.length > 0)
+          ? nextWorkflow
+          : null,
+        jackIds: [],
+        status: "active",
+        createdAt: now,
+        startedAt: now,
+        updatedAt: now,
+        finishedAt: null
+      };
+
+      projects.push(created);
+      projectId = created.id;
+      message = "Nytt prosjekt opprettet i prosjektoversikten.";
+    }
+
+    saveProjects(projects);
+    if (linkedInput) linkedInput.value = projectId;
+    refreshProjectSelect(projectId);
+    updateProjectLinkInfo();
+    renderWorkflowUi();
+
+    return { message, projectId };
+  }
+
+  function normalizeAnchorNo(value, idx){
+    const raw = (value || "").toString().trim();
+    return raw || ("A" + (idx + 1));
+  }
+
+  function normalizedLength(value){
+    return clampMin(num(value), 0).toFixed(3);
+  }
+
+  function anchorSourceKeyFromRow(row, idx){
+    return [
+      normalizeAnchorNo(row.anchorNo, idx),
+      normalizedLength(row.lCasing),
+      normalizedLength(row.lBore),
+      normalizedLength(row.lFree),
+      normalizedLength(row.lBond)
+    ].join("|");
+  }
+
+  function anchorSourceKeyFromWorkflowAnchor(anchor){
+    return [
+      normalizeAnchorNo(anchor.anchorNo, 0),
+      normalizedLength(anchor.lCasing),
+      normalizedLength(anchor.lBore),
+      normalizedLength(anchor.lFree),
+      normalizedLength(anchor.lBond)
+    ].join("|");
+  }
+
+  function workflowStatusFromAnchors(anchors){
+    const list = Array.isArray(anchors) ? anchors : [];
+    if (list.length === 0) return "draft";
+
+    const pending = list.filter((a) => a.status === "pending").length;
+    const forApproval = list.filter((a) => a.status === "sent_for_approval").length;
+    const approved = list.filter((a) => a.status === "approved").length;
+
+    if (approved === list.length) return "approved";
+    if (forApproval > 0 && approved === 0) return "for_approval";
+    if (forApproval > 0 || approved > 0) return "partly_approved";
+    if (pending === list.length) return "sent_to_site";
+    return "draft";
+  }
+
+  function buildWorkflowFromRows(existingWorkflow, rows){
+    const now = new Date().toISOString();
+    const sourceRows = Array.isArray(rows) ? rows : [];
+    const previous = (existingWorkflow && Array.isArray(existingWorkflow.anchors)) ? existingWorkflow.anchors : [];
+    const previousByKey = new Map();
+
+    previous.forEach((anchor) => {
+      const key = (anchor.sourceKey || anchorSourceKeyFromWorkflowAnchor(anchor));
+      if (!previousByKey.has(key)) previousByKey.set(key, anchor);
+    });
+
+    const usedKeys = new Set();
+    const nextAnchors = sourceRows.map((row, idx) => {
+      const sourceKey = anchorSourceKeyFromRow(row, idx);
+      usedKeys.add(sourceKey);
+      const prev = previousByKey.get(sourceKey);
+      if (prev) {
+        return {
+          ...prev,
+          sourceKey,
+          anchorNo: normalizeAnchorNo(row.anchorNo, idx),
+          lCasing: clampMin(num(row.lCasing), 0),
+          lBore: clampMin(num(row.lBore), 0),
+          lFree: clampMin(num(row.lFree), 0),
+          lBond: clampMin(num(row.lBond), 0)
+        };
+      }
+
+      return {
+        id: uid("grout_anchor"),
+        sourceKey,
+        anchorNo: normalizeAnchorNo(row.anchorNo, idx),
+        lCasing: clampMin(num(row.lCasing), 0),
+        lBore: clampMin(num(row.lBore), 0),
+        lFree: clampMin(num(row.lFree), 0),
+        lBond: clampMin(num(row.lBond), 0),
+        status: "pending",
+        siteData: null,
+        approvedAt: null
+      };
+    });
+
+    // Keep historical anchors that already went through site/approval even if PM removed them later.
+    previous.forEach((anchor) => {
+      const key = (anchor.sourceKey || anchorSourceKeyFromWorkflowAnchor(anchor));
+      if (!usedKeys.has(key) && anchor.status !== "pending") {
+        nextAnchors.push(anchor);
+      }
+    });
+
+    const status = workflowStatusFromAnchors(nextAnchors);
+    return {
+      sentToSiteAt: (existingWorkflow && existingWorkflow.sentToSiteAt) || now,
+      sentToSiteBy: (existingWorkflow && existingWorkflow.sentToSiteBy) || currentActorLabel(),
+      updatedAt: now,
+      status,
+      anchors: nextAnchors
+    };
+  }
+
+  function getLinkedProject(){
+    const linkedId = (($("linkedProjectId") && $("linkedProjectId").value) || "").trim();
+    if (!linkedId) return null;
+    return getProjects().find((p) => p.id === linkedId) || null;
+  }
+
+  function updateFieldPageLink(projectId){
+    const link = $("openFieldPageBtn");
+    if (!link) return;
+    if (!projectId) {
+      link.href = "software-injisering-felt.html";
+      link.setAttribute("aria-disabled", "true");
+      return;
+    }
+    link.href = "software-injisering-felt.html?projectId=" + encodeURIComponent(projectId);
+    link.setAttribute("aria-disabled", "false");
+  }
+
+  function fmtDateTime(iso){
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+  }
+
+  function boolText(value){
+    return value ? "Ja" : "Nei";
+  }
+
+  function workflowStatusLabel(status){
+    if (status === "approved") return "Godkjent";
+    if (status === "partly_approved") return "Delvis godkjent";
+    if (status === "for_approval") return "Til godkjenning";
+    if (status === "sent_to_site") return "Sendt til felt";
+    return "Utkast";
+  }
+
+  function renderApprovalRows(project){
+    const tbody = $("approvalRows");
+    const msg = $("approvalMsg");
+    if (!tbody || !msg) return;
+
+    const workflow = project && project.groutingWorkflow;
+    const anchors = (workflow && Array.isArray(workflow.anchors)) ? workflow.anchors : [];
+    const visible = anchors.filter((a) => a.status === "sent_for_approval" || a.status === "approved");
+
+    if (visible.length === 0) {
+      tbody.innerHTML = "";
+      msg.textContent = "Ingen anker sendt til godkjenning.";
+      return;
+    }
+
+    tbody.innerHTML = visible.map((anchor) => {
+      const site = anchor.siteData || {};
+      const statusLabel = anchor.status === "approved"
+        ? ("Godkjent " + fmtDateTime(anchor.approvedAt))
+        : "Venter pa godkjenning";
+      const action = anchor.status === "approved"
+        ? '<span class="hint">Godkjent</span>'
+        : '<button class="btn secondary" type="button" data-approve-anchor="' + escapeHtml(anchor.id || "") + '">Godkjenn</button>';
+
+      return [
+        "<tr>",
+        '<td><strong>' + escapeHtml(anchor.anchorNo || "-") + '</strong><br><span class="hint">Lc ' + fmt(num(anchor.lCasing), 2) + ' | Lb ' + fmt(num(anchor.lBore), 2) + ' | Lf ' + fmt(num(anchor.lFree), 2) + ' | Lbond ' + fmt(num(anchor.lBond), 2) + "</span></td>",
+        '<td><span class="hint">Forbruk: </span>' + fmt(num(site.groutUsedL), 1) + ' L'
+          + ' | <span class="hint">Tid: </span>' + fmt(num(site.timeUsedMin), 0) + ' min'
+          + "<br><span class=\"hint\">3t test:</span> " + boolText(!!site.test3hDone)
+          + ' | <span class="hint">1L vekt:</span> ' + boolText(!!site.oneLiterWeightOk)
+          + ' | <span class="hint">Siv-test:</span> ' + boolText(!!site.sieveTestOk)
+          + ' | <span class="hint">Masse ut kvalitet:</span> ' + boolText(!!site.returnMassQualityConfirmed)
+          + "<br><span class=\"hint\">" + escapeHtml(statusLabel) + "</span></td>",
+        "<td>" + action + "</td>",
+        "</tr>"
+      ].join("");
+    }).join("");
+
+    msg.textContent = "Viser " + visible.length.toLocaleString("no-NO") + " anker fra felt.";
+
+    tbody.querySelectorAll("[data-approve-anchor]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const anchorId = btn.getAttribute("data-approve-anchor");
+        approveAnchorFromField(anchorId || "");
+      });
+    });
+  }
+
+  function renderWorkflowUi(){
+    const info = $("workflowInfo");
+    const project = getLinkedProject();
+    if (!info) return;
+
+    if (!project) {
+      info.textContent = "Koble prosjekt for a aktivere feltflyt.";
+      updateFieldPageLink("");
+      renderApprovalRows(null);
+      return;
+    }
+
+    updateFieldPageLink(project.id || "");
+
+    const workflow = project.groutingWorkflow;
+    if (!workflow || !Array.isArray(workflow.anchors) || workflow.anchors.length === 0) {
+      info.textContent = "Prosjektet er ikke sendt til felt enda.";
+      renderApprovalRows(project);
+      return;
+    }
+
+    const anchors = workflow.anchors;
+    const pending = anchors.filter((a) => a.status === "pending").length;
+    const forApproval = anchors.filter((a) => a.status === "sent_for_approval").length;
+    const approved = anchors.filter((a) => a.status === "approved").length;
+    const status = workflowStatusFromAnchors(anchors);
+
+    info.textContent =
+      "Status: " + workflowStatusLabel(status) +
+      ". Totalt " + anchors.length.toLocaleString("no-NO") +
+      " | Venter felt: " + pending.toLocaleString("no-NO") +
+      " | Til godkjenning: " + forApproval.toLocaleString("no-NO") +
+      " | Godkjent: " + approved.toLocaleString("no-NO") +
+      ". Sendt: " + fmtDateTime(workflow.sentToSiteAt);
+
+    renderApprovalRows(project);
+  }
+
+  async function approveAnchorFromField(anchorId){
+    if (!anchorId) return;
+    const project = getLinkedProject();
+    if (!project || !project.id) return;
+
+    const projects = getProjects();
+    const idx = projects.findIndex((p) => p.id === project.id);
+    if (idx < 0) return;
+
+    const current = projects[idx];
+    const workflow = (current.groutingWorkflow && Array.isArray(current.groutingWorkflow.anchors))
+      ? { ...current.groutingWorkflow, anchors: current.groutingWorkflow.anchors.map((a) => ({ ...a })) }
+      : null;
+    if (!workflow) return;
+
+    const anchorIdx = workflow.anchors.findIndex((a) => a.id === anchorId);
+    if (anchorIdx < 0) return;
+    if (workflow.anchors[anchorIdx].status !== "sent_for_approval") return;
+
+    const now = new Date().toISOString();
+    workflow.anchors[anchorIdx].status = "approved";
+    workflow.anchors[anchorIdx].approvedAt = now;
+    workflow.anchors[anchorIdx].approvedBy = currentActorLabel();
+    workflow.updatedAt = now;
+    workflow.status = workflowStatusFromAnchors(workflow.anchors);
+
+    projects[idx] = {
+      ...current,
+      groutingWorkflow: workflow,
+      updatedAt: now
+    };
+    saveProjects(projects);
+    try {
+      await flushProjectsSave();
+    } catch (err) {
+      setMsg("Kunne ikke lagre godkjenning til server: " + ((err && err.message) ? err.message : "ukjent feil"));
+      return;
+    }
+    renderWorkflowUi();
+    setMsg("Anker " + (workflow.anchors[anchorIdx].anchorNo || "-") + " godkjent.");
+  }
+
+  async function saveProjectAndGoToField(){
+    const synced = ensureProjectInOverview();
+    if (!synced) return;
+
+    try {
+      await flushProjectsSave();
+    } catch (err) {
+      setMsg("Kunne ikke lagre prosjekt til server: " + ((err && err.message) ? err.message : "ukjent feil"));
+      return;
+    }
+
+    setMsg("Prosjekt lagret. Aapner injisering felt...");
+    window.location.href = "software-injisering-felt.html?projectId=" + encodeURIComponent(synced.projectId || "");
+  }
+
+  function getSteelArea_m2(){
+    const type = $("anchorType").value;
+    if (type === "strand"){
+      const n = clampMin(num($("strandCount").value), 0);
+      const a_mm2 = clampMin(num($("strandArea").value), 0);
+      return (n * a_mm2) / 1e6; // mm² -> m²
+    }
+    const d = clampMin(num($("barDia").value), 0);
+    const a_mm2 = areaFromDiameter_mm2(d);
+    return a_mm2 / 1e6;
+  }
+
+  function updateAnchorTypeUI(){
+    const type = $("anchorType").value;
+    const isStrand = type === "strand";
+    $("strandCountWrap").style.display = isStrand ? "" : "none";
+    $("strandAreaWrap").style.display  = isStrand ? "" : "none";
+    $("barDiaWrap").style.display      = isStrand ? "none" : "";
+    compute();
+  }
+
+  function validateAndUpdateRowUI(r){
+    const Ltotal = clampMin(num(r.lCasing),0) + clampMin(num(r.lBore),0);
+    const Lanchor = clampMin(num(r.lFree),0) + clampMin(num(r.lBond),0);
+    const ok = (Ltotal >= Lanchor);
+    const delta = Ltotal - Lanchor;
+
+    const tr = r.el;
+    if (!tr) return;
+
+    tr.classList.toggle("bad", !ok);
+    tr.classList.toggle("ok", ok);
+
+    const warn = tr.querySelector("[data-warn]");
+    if (warn){
+      warn.innerHTML = ok
+        ? `<span class="rowOk">OK:</span> Total ${fmt(Ltotal,2)} m ≥ Anker ${fmt(Lanchor,2)} m (margin ${fmt(delta,2)} m)`
+        : `<span class="rowBad"><strong>ADVARSEL:</strong></span> Total ${fmt(Ltotal,2)} m &lt; Anker ${fmt(Lanchor,2)} m (mangler ${fmt(Math.abs(delta),2)} m)`;
+    }
+
+    return { ok, Ltotal, Lanchor };
+  }
+
+  function attachRowEvents(r){
+    const tr = r.el;
+
+    function bindInput(selector, key, isText){
+      const inp = tr.querySelector(selector);
+      inp.addEventListener("input", () => {
+        if (isText) r[key] = inp.value;
+        else r[key] = clampMin(num(inp.value), 0);
+        validateAndUpdateRowUI(r);
+        compute();
+      });
+    }
+
+    bindInput(`[data-k="anchorNo"]`, "anchorNo", true);
+    bindInput(`[data-k="lCasing"]`,  "lCasing",  false);
+    bindInput(`[data-k="lBore"]`,    "lBore",    false);
+    bindInput(`[data-k="lFree"]`,    "lFree",    false);
+    bindInput(`[data-k="lBond"]`,    "lBond",    false);
+
+    tr.querySelector("[data-dup]").addEventListener("click", () => {
+      const copy = makeRowData({ ...r, anchorNo: "" });
+      addRow(copy);
+      // Fokus på ny rad, første felt
+      const first = copy.el.querySelector(`[data-k="anchorNo"]`);
+      if (first) first.focus();
+    });
+
+    tr.querySelector("[data-del]").addEventListener("click", () => {
+      removeRow(r.id);
+    });
+  }
+
+  function rowTemplate(r){
+    return `
+      <td><input class="cellInput" data-k="anchorNo" type="text" value="${escapeHtml(r.anchorNo)}" placeholder="f.eks. A12"></td>
+      <td><input class="cellInput" data-k="lCasing" type="number" min="0" step="0.01" value="${r.lCasing}"></td>
+      <td><input class="cellInput" data-k="lBore" type="number" min="0" step="0.01" value="${r.lBore}"></td>
+      <td><input class="cellInput" data-k="lFree" type="number" min="0" step="0.01" value="${r.lFree}"></td>
+      <td><input class="cellInput" data-k="lBond" type="number" min="0" step="0.01" value="${r.lBond}"></td>
+      <td>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" type="button" data-dup style="padding:8px 10px">+</button>
+          <button class="btn danger" type="button" data-del style="padding:8px 10px">Slett</button>
+        </div>
+        <div class="rowWarn" data-warn></div>
+      </td>
+    `;
+  }
+
+  function addRow(r){
+    const tbody = $("rows");
+    const tr = document.createElement("tr");
+    tr.innerHTML = rowTemplate(r);
+    r.el = tr;
+    state.rows.push(r);
+    tbody.appendChild(tr);
+
+    attachRowEvents(r);
+    validateAndUpdateRowUI(r);
+    compute();
+  }
+
+  function removeRow(id){
+    const idx = state.rows.findIndex(x => x.id === id);
+    if (idx < 0) return;
+    const r = state.rows[idx];
+    if (r.el && r.el.parentNode) r.el.parentNode.removeChild(r.el);
+    state.rows.splice(idx, 1);
+    compute();
+  }
+
+  function clearRows(){
+    $("rows").innerHTML = "";
+    state.rows = [];
+    compute();
+  }
+
+  function compute(){
+    const dCasing = clampMin(num($("dCasing").value), 0);
+    const dBore = clampMin(num($("dBore").value), 0);
+    const wastePct = clampMin(num($("wastePct").value), 0);
+
+    if (state.rows.length === 0){
+      $("vNet").textContent = "–";
+      $("vRec").textContent = "–";
+      $("bags").textContent = "–";
+      $("waterTotal").textContent = "–";
+      $("detailBox").textContent = "–";
+      setMsg("Legg til minst ett borehull.");
+      return;
+    }
+
+    const areaBore = areaFromDiameter_m2(dBore);
+    const areaCasing = areaFromDiameter_m2(dCasing);
+
+    const steelArea = getSteelArea_m2(); // m²
+
+    let vNet_L = 0;
+    const lines = [];
+    let badCount = 0;
+
+    state.rows.forEach((r, idx) => {
+      const Lc = clampMin(num(r.lCasing), 0);
+      const Lb = clampMin(num(r.lBore), 0);
+      const Ltotal = Lc + Lb;                  // total borehullslengde (din definisjon)
+      const Lanchor = clampMin(num(r.lFree),0) + clampMin(num(r.lBond),0);
+
+      if (Ltotal < Lanchor) badCount++;
+
+      // Borehullvolum (m³) langs hele Ltotal (fjell-diameter)
+      const vBore_m3 = areaBore * Ltotal;
+
+      // Ekstra volum i foringsrør-delen hvis foringsrørdiameter > borehulldiameter
+      const vDiff_m3 = Math.max(0, (areaCasing - areaBore)) * Lc;
+
+      // Fortrengt volum av stang/spenntau langs ankerlengde (fri+forankring),
+      // begrenset av Ltotal (i tilfelle bruker gjør feil).
+      const Lsteel = Math.min(Lanchor, Ltotal);
+      const vSteel_m3 = steelArea * Lsteel;
+
+      const vRow_m3 = Math.max(0, (vBore_m3 + vDiff_m3) - vSteel_m3);
+      const vRow_L = vRow_m3 * 1000;
+
+      vNet_L += vRow_L;
+
+      const aNo = (r.anchorNo || "").trim() || `Rad ${idx+1}`;
+      lines.push(`${aNo}: Total ${fmt(Ltotal,2)} m -> ${fmt(vRow_L,1)} L (minus stål)`);
+    });
+
+    const vRec_L = vNet_L * (1 + wastePct/100);
+
+    $("vNet").textContent = fmt(vNet_L, 1);
+    $("vRec").textContent = fmt(vRec_L, 1);
+
+    // Ready Mix
+    const waterPerBag = clampMin(num($("waterPerBag").value), 0);
+    const yieldPerBag = clampMin(num($("yieldPerBag").value), 0);
+
+    if (yieldPerBag > 0 && vRec_L > 0) {
+      const bags = ceilInt(vRec_L / yieldPerBag);
+      const waterTotal = ceilInt(bags * waterPerBag);
+      $("bags").textContent = bags.toLocaleString("no-NO");
+      $("waterTotal").textContent = waterTotal.toLocaleString("no-NO");
+    } else {
+      $("bags").textContent = "–";
+      $("waterTotal").textContent = "–";
+    }
+
+    $("detailBox").textContent = lines.join(" | ");
+
+    if (badCount > 0) {
+      setMsg(`Beregning oppdatert. ADVARSEL: ${badCount} rad(er) har total lengde kortere enn Fri+Forankring. Prøvemasse er ikke inkludert.`);
+    } else {
+      setMsg("Beregning oppdatert. Merk: prøvemasse er ikke inkludert.");
+    }
+
+  }
+
+  async function init(){
+    if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+      window.CompanyBranding.apply({ session: getAuthSession() });
+    }
+
+    // init UI
+    $("anchorType").addEventListener("change", updateAnchorTypeUI);
+    ["strandCount","strandArea","barDia","dCasing","dBore","wastePct","waterPerBag","yieldPerBag",
+     "projectName","projectNo","projectRow","comment"].forEach(id => {
+      const el = $(id);
+      if (!el) return;
+      el.addEventListener("input", compute);
+      el.addEventListener("change", compute);
+    });
+
+    $("loadProjectBtn").addEventListener("click", loadSelectedProjectIntoForm);
+    $("newProjectBtn").addEventListener("click", startNewProjectDraft);
+    $("existingProjectSelect").addEventListener("change", () => {
+      const selectedId = $("existingProjectSelect").value;
+      if (selectedId) {
+        setMsg("Trykk «Hent prosjekt» for å fylle inn valgt prosjekt.");
+      }
+    });
+
+    $("addRowBtn").addEventListener("click", () => {
+      addRow(makeRowData({}));
+      const last = state.rows[state.rows.length-1];
+      const first = last?.el?.querySelector(`[data-k="anchorNo"]`);
+      if (first) first.focus();
+    });
+
+    $("clearBtn").addEventListener("click", () => {
+      clearRows();
+    });
+
+    $("logoutBtn").addEventListener("click", () => {
+      logoutAndRedirect();
+    });
+
+    $("saveBtn").addEventListener("click", async () => {
+      await saveProjectAndGoToField();
+    });
+
+    window.addEventListener("storage", (ev) => {
+      if (ev.key === projectsStorageKey() || ev.key === STORAGE_KEYS.projects) {
+        const linkedId = $("linkedProjectId").value || "";
+        refreshProjectSelect(linkedId);
+        updateProjectLinkInfo();
+        renderWorkflowUi();
+      }
+      if (ev.key === STORAGE_KEYS.auth) {
+        const session = getAuthSession();
+        const hasGrouting = !!(session && session.modules && session.modules.grouting);
+        const hasPlannerRole = !!(session && session.role !== "onsite_user");
+        if (!hasGrouting || !hasPlannerRole) {
+          const pageName = (window.location.pathname.split("/").pop() || "software-injisering.html");
+          const next = pageName + window.location.search + window.location.hash;
+          window.location.href = "software.html?next=" + encodeURIComponent(next);
+          return;
+        }
+        if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+          window.CompanyBranding.apply({ session });
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        if (window.CompanyBranding && typeof window.CompanyBranding.apply === "function") {
+          window.CompanyBranding.apply({ session: getAuthSession() });
+        }
+      }
+    });
+
+    try {
+      await hydrateProjectsFromServer();
+    } catch (err) {
+      setMsg("Kunne ikke hente prosjekter fra server: " + ((err && err.message) ? err.message : "ukjent feil"));
+    }
+
+    // Start med én rad / eller åpne prosjekt fra URL.
+    refreshProjectSelect("");
+    updateProjectLinkInfo();
+    renderWorkflowUi();
+    const fromUrl = projectIdFromUrl();
+    if (fromUrl) {
+      const project = getProjects().find((p) => p.id === fromUrl);
+      if (project && projectSupportsGrouting(project) && setProjectFromRecord(project)) {
+        setMsg("Prosjekt lastet fra prosjektoversikten.");
+      } else if (project && !projectSupportsGrouting(project)) {
+        addRow(makeRowData({ anchorNo:"A1", lCasing:3.0, lBore:6.0, lFree:3.0, lBond:3.0 }));
+        updateAnchorTypeUI();
+        compute();
+        setMsg("Prosjektet har ikke Injisering aktivert i Prosjektstyring.");
+      } else {
+        addRow(makeRowData({ anchorNo:"A1", lCasing:3.0, lBore:6.0, lFree:3.0, lBond:3.0 }));
+        updateAnchorTypeUI();
+        compute();
+        setMsg("Fant ikke prosjekt i lenken. Startet med ny beregning.");
+      }
+      return;
+    }
+
+    addRow(makeRowData({ anchorNo:"A1", lCasing:3.0, lBore:6.0, lFree:3.0, lBond:3.0 }));
+    updateAnchorTypeUI();
+    compute();
+  }
+
+  init();
+</script>
+
+</body>
+</html>

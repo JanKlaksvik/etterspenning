@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anchors | Etterspenning.no</title>
+  <meta name="description" content="Practical technical information on anchors: strand anchors, permanent and temporary anchors, and differentiated anchoring." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    /* ===== HEADER + NAV + DRAWER (identical to index.html) ===== */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    /* Brand (left) */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
+    }
+
+    /* image logo */
+    .logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .logo img{
+      height: 38px;
+      width: auto;
+      display:block;
+      border-radius: 10px;
+    }
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger button (hidden on desktop) */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Overlay + off-canvas */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    /* Mobile: show hamburger, hide desktop nav */
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* Language button (same as index.html fix) */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    /* ===== Page content (existing) ===== */
+    .hero{padding:28px 0 12px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:82ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns: 1.15fr .85fr;align-items:start;margin-top:14px}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+    }
+    .section:last-child{margin-bottom:0}
+    .section h3{
+      margin:0 0 6px;
+      font-size:14px;
+      letter-spacing:-0.01em;
+    }
+    .section p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .notice{
+      border-radius:14px;
+      border:1px solid rgba(244,122,32,.35);
+      background: rgba(244,122,32,.10);
+      padding:12px;
+      color: var(--text);
+      line-height:1.45;
+      font-size:13px;
+    }
+
+    .imgwrap{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      overflow:hidden;
+      background: rgba(7,11,20,.25);
+    }
+    .imgwrap img{display:block;width:100%;height:auto}
+    .caption{padding:10px 12px;color:var(--muted);font-size:12px;line-height:1.45}
+    .imghead{margin:14px 0 8px;font-size:14px;letter-spacing:-0.01em}
+
+    /* Table */
+    .tablewrap{
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      overflow:hidden;
+      background: rgba(7,11,20,.25);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+    }
+    th, td{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      text-align:left;
+      color:var(--muted);
+      vertical-align:middle;
+    }
+    td.num, th.num{
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    th{
+      color:var(--text);
+      font-size:12px;
+      letter-spacing:.2px;
+      text-transform:none;
+      background: rgba(16,26,47,.35);
+    }
+    tr:last-child td{border-bottom:none}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    /* Buttons */
+    .btnrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:700;
+      text-decoration:none;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+https://etterspenning.no/software.html
+<body>
+
+<!-- Header identical to index.html (loaded dynamically) -->
+<div id="site-header"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Anchors</h1>
+    <p>
+      Practical and execution-oriented information about anchor types, requirements, control points and documentation.
+      The goal is to make requirements easy to understand - from production and delivery to installation, grouting and stressing.
+    </p>
+
+    <div class="pillrow">
+      <div class="pill">Strand and bar</div>
+      <div class="pill">Permanent and temporary</div>
+      <div class="pill">Competence, equipment and traceability</div>
+      <div class="pill">Grouting and testing</div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- MAIN CONTENT -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Types and practice</h2>
+          <small>Practical overview - structured for quick reading</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+
+        <div class="section">
+          <h3>Strand anchors</h3>
+          <p>
+            Strands are the most common solution for rock anchors and post-tensioning work where high capacity,
+            robust load transfer and field flexibility are required. Below is a simple overview of typical cross-sectional area and breaking load.
+          </p>
+
+          <div class="tablewrap" role="region" aria-label="Strands - area and breaking load" tabindex="0">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th class="num">Area (mm²)</th>
+                  <th class="num">Breaking load (kN)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Normal</td>
+                  <td class="num">140</td>
+                  <td class="num">260.4</td>
+                </tr>
+                <tr>
+                  <td>Super</td>
+                  <td class="num">150</td>
+                  <td class="num">279</td>
+                </tr>
+                <tr>
+                  <td>Compact</td>
+                  <td class="num">165</td>
+                  <td class="num">306.9</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top:10px;color:var(--muted);font-size:12px;line-height:1.45">
+            Values are provided as practical reference and must always be verified against the manufacturer documentation (certificate/data sheet) for the selected system.
+          </div>
+
+          <div style="margin-top:14px;">
+            <h3>Bar anchors</h3>
+            <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.55">
+              Overview of common WR types, area and maximum characteristic load.
+            </p>
+
+            <div class="tablewrap" role="region" aria-label="Bar anchor - area and maximum characteristic load" tabindex="0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th class="num">Area (mm²)</th>
+                    <th class="num">Maximum characteristic load (kN)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>WR18</td><td class="num">241</td><td class="num">255</td></tr>
+                  <tr><td>WR26</td><td class="num">552</td><td class="num">580</td></tr>
+                  <tr><td>WR32</td><td class="num">804</td><td class="num">845</td></tr>
+                  <tr><td>WR36</td><td class="num">1018</td><td class="num">1070</td></tr>
+                  <tr><td>WR40</td><td class="num">1257</td><td class="num">1320</td></tr>
+                  <tr><td>WR47</td><td class="num">1735</td><td class="num">1820</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Permanent anchors</h3>
+          <p>
+            There are strict requirements for production, materials, equipment, grout and crew experience. Here is a short summary.
+          </p>
+          <div class="sep"></div>
+          <p>
+            Laws and regulations: In Norway, System 1+ is required for production, and EAD requirements have been introduced, but most manufacturers do not yet have this.
+            Anchor construction is described in <span class="mono">NS EN 1537:2013</span>.
+            Grout testing and annual testing are described in <span class="mono">NS EN 445, 446 and 447</span>.
+            Competence requirements are described in <span class="mono">NS EN 1537:2013</span>.
+            Requirements for stressing and equipment are described in <span class="mono">NS EN ISO 22477-5:2018</span>.
+          </p>
+        </div>
+
+        <div class="section">
+          <h3>Temporary anchors</h3>
+          <p>
+            The same requirements as for permanent anchors apply, except for corrugated plastic ducting along the full anchor length.
+          </p>
+        </div>
+
+        <div class="section">
+          <h3>Differentiated anchoring</h3>
+          <p>
+            Differentiated anchoring for rock anchors represents a technically improved solution compared with conventional anchoring.
+            The cost level for both types is approximately the same. This anchoring type has been used on several ferry quays in Norway since 2012
+            where tensile anchoring has been required.
+          </p>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="notice">
+          Contact us if you would like more information or guidance.
+        </div>
+
+        <div class="btnrow">
+          <a class="btn primary" href="kontakt-en.html">Contact</a>
+          <a class="btn secondary" href="data-en.html">Data & calculations</a>
+          <a class="btn" href="software-en.html">Software</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Illustration</h2>
+          <small>Differentiated vs. "normal" load distribution</small>
+        </div>
+      </div>
+
+      <div class="cardbody">
+        <div class="imgwrap">
+          <img src="img/Diff-Forank-Forkl.png" alt="Differentiated anchoring illustration" loading="lazy">
+          <div class="caption">
+            The figure shows the principle of load distribution for a conventional anchor, a differentiated anchor, and a comparison of load distribution.
+          </div>
+        </div>
+
+        <h3 class="imghead">Force impact on anchor during construction and service life.</h3>
+        <div class="imgwrap">
+          <img src="img/fordeling-krefter-spunt.png" alt="Forces on anchor over its lifetime" loading="lazy">
+        </div>
+
+        <div class="sep"></div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Anchors. This website uses Google Analytics for anonymized traffic statistics. No cookies are used for marketing.
+  </footer>
+
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇳🇴 NO";
+      langBtn.setAttribute("aria-label", "Switch to Norwegian");
+      langBtn.setAttribute("title", "Switch to Norwegian");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "forankringer.html";
+      });
+    }
+  }
+
+  // Include header-en.html and set the correct active nav item automatically (desktop + mobile)
+  (async function () {
+    const mount = document.getElementById("site-header");
+    if (!mount) return;
+
+    try{
+      const res = await fetch("header-en.html", { cache: "no-cache" });
+      if (!res.ok) return;
+      mount.innerHTML = await res.text();
+      initHeaderUi();
+
+      const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+
+      // Desktop
+      mount.querySelectorAll("nav.primary a.navlink").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+
+      // Mobile
+      mount.querySelectorAll(".drawer-nav a").forEach(a => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        a.classList.toggle("active", href === path);
+      });
+    }catch(e){
+      console.warn("Could not load header-en.html", e);
+    }
+  })();
+</script>
+
+</body>
+</html>

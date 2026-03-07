@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TSNDL4ZB7Y');
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Etterspenning.no | Anchors, bridges and tools</title>
+  <meta name="description" content="Practical information about post-tensioning, anchors and execution - with data, tools and documentation." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    /* Brand (left) */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
+    }
+
+    /* New: image logo replaces old "E" box */
+    .logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .logo img{
+      height: 38px;      /* adjust if needed */
+      width: auto;
+      display:block;
+      border-radius: 10px; /* optional */
+    }
+
+    /* Desktop nav */
+    nav.primary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-left:auto;
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger button (hidden on desktop) */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    /* Overlay + off-canvas */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    .hero{padding:34px 0 14px}
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing:-0.02em;
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:78ch;
+      line-height:1.55;
+      font-size: 15px;
+    }
+    .hero .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:700;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.25);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+
+    .front-gallery{
+      margin:14px 0 8px;
+    }
+    .front-carousel{
+      position:relative;
+    }
+    .front-images{
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+    }
+    .front-image{
+      margin:0;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      overflow:hidden;
+      background: rgba(7,11,20,.30);
+      box-shadow: var(--shadow);
+    }
+    .front-image img{
+      width:100%;
+      height:210px;
+      display:block;
+      object-fit:cover;
+    }
+    .front-image figcaption{
+      padding:8px 10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .front-carousel-btn,
+    .front-carousel-dots{
+      display:none;
+    }
+
+    @media (max-width: 720px){
+      .front-carousel{
+        overflow:hidden;
+      }
+      .front-images{
+        display:flex;
+        gap:0;
+        transition:transform .34s ease;
+        will-change:transform;
+      }
+      .front-image{
+        min-width:100%;
+      }
+      .front-image img{
+        height:230px;
+      }
+      .front-carousel-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        position:absolute;
+        top:calc(50% - 20px);
+        width:36px;
+        height:36px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,.20);
+        background: rgba(7,11,20,.72);
+        color:var(--text);
+        cursor:pointer;
+      }
+      .front-carousel-btn.prev{left:8px;}
+      .front-carousel-btn.next{right:8px;}
+      .front-carousel-dots{
+        display:flex;
+        justify-content:center;
+        gap:8px;
+        margin-top:10px;
+      }
+      .front-dot{
+        width:9px;
+        height:9px;
+        border:none;
+        border-radius:999px;
+        background: rgba(255,255,255,.35);
+        cursor:pointer;
+        padding:0;
+      }
+      .front-dot.active{
+        background: var(--text);
+      }
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns: 1.1fr .9fr;align-items:start;margin-top:14px}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .steps{display:grid;gap:12px}
+    .step{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+    }
+    .step .t{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .step strong{font-size:13px}
+    .step .tag{font-size:11px;color:var(--muted);border:1px solid rgba(255,255,255,.10);padding:4px 8px;border-radius:999px}
+    .step p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+
+    .quick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 620px){.quick{grid-template-columns:1fr}}
+    .qbox{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+    }
+    .qbox .k{font-size:12px;color:var(--muted)}
+    .qbox .v{margin-top:6px;font-weight:800;letter-spacing:-0.01em}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+
+    .links{display:grid;gap:10px;margin-top:10px}
+    .linkcard{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.30);
+    }
+    .linkcard:hover{border-color: rgba(255,255,255,.18)}
+    .linkcard .left{min-width:0}
+    .linkcard .title{font-weight:800}
+    .linkcard .desc{margin-top:4px;color:var(--muted);font-size:13px;line-height:1.45}
+    .chev{color:var(--muted);font-weight:900}
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+
+    /* Mobile: show hamburger, hide desktop nav */
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+      .logo img{height:34px;}
+    }
+
+    /* Language button */
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      width:auto;
+      height:44px;
+      padding:0 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER INKLUDERES HER -->
+<div id="site-header"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Post-tensioning - precise language, precise execution</h1>
+    <p>
+      In Norwegian, the term "spennarmering" is often used, but for <span class="mono">post-tensioning</span>,
+      "etterspenning" is more precise in practice: the element is tensioned <em>after</em> the structure is established.
+      This page gathers execution-focused information, data and tools that support quality, traceability and efficient delivery,
+      while meeting legal, standard and guidance requirements.
+    </p>
+
+    <div class="actions">
+      <a class="btn primary" href="data.html">Open Data & calculations</a>
+      <a class="btn secondary" href="forankringer.html">View Anchors</a>
+      <a class="btn" href="kontakt.html">Contact</a>
+    </div>
+
+    <div class="pillrow">
+      <div class="pill">Execution-focused</div>
+      <div class="pill">Traceability and documentation</div>
+      <div class="pill">Practical forms and checklists</div>
+      <div class="pill">EN/NS-EN ISO / publication no. 14 & best practice</div>
+    </div>
+  </section>
+
+  <section class="front-gallery" aria-label="Anchor photos">
+    <div class="front-carousel" id="frontCarousel">
+      <div class="front-images">
+        <figure class="front-image">
+          <img src="img/forankring-top-personell.jpg" alt="Crew working on anchoring operations" loading="lazy" />
+        </figure>
+        <figure class="front-image">
+          <img src="img/Forankring-Aalesund.JPG" alt="Anchoring work in Aalesund" loading="lazy" />
+        </figure>
+        <figure class="front-image">
+          <img src="img/Forankring-spunt.png" alt="Sketch of anchoring in sheet piling" loading="lazy" />
+          <figcaption>Sketch</figcaption>
+        </figure>
+      </div>
+      <button class="front-carousel-btn prev" type="button" aria-label="Previous image" data-front-prev>‹</button>
+      <button class="front-carousel-btn next" type="button" aria-label="Next image" data-front-next>›</button>
+      <div class="front-carousel-dots" aria-label="Select image">
+        <button class="front-dot active" type="button" aria-label="Image 1" aria-selected="true" data-front-dot="0"></button>
+        <button class="front-dot" type="button" aria-label="Image 2" aria-selected="false" data-front-dot="1"></button>
+        <button class="front-dot" type="button" aria-label="Image 3" aria-selected="false" data-front-dot="2"></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- MAIN CARD: PROCESS -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>What it takes to deliver an anchor - from requirements to final documentation</h2>
+          <small>A structured process reduces deviations, time and errors</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="steps">
+          <div class="step">
+            <div class="t">
+              <strong>1) Prosjekteringsgrunnlag og krav</strong>
+              <span class="tag">Requirements / standard</span>
+            </div>
+            <p>
+              Define load, geometry, environment, corrosion protection, test program (stressing), acceptance criteria and creep where relevant.
+              Clarify quantities, lengths, traceability, documentation and responsibilities between design and site execution.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="t">
+              <strong>2) Production and delivery</strong>
+              <span class="tag">Material / QA</span>
+            </div>
+            <p>
+              Verify production (System 1+/EAD), material certificates, component identification, marking and delivery package.
+              Plan transport, handling, storage and protection before installation.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="t">
+              <strong>3) Installation and assembly</strong>
+              <span class="tag">Execution</span>
+            </div>
+            <p>
+              Borehole data, hole geometry, cleaning, positioning and centralizing. Correct assembly of heads/anchors,
+              ducts, sealing and transition zones. Everything that can affect grouting and later stressing.
+              Most errors happen here.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="t">
+              <strong>4) Grouting and control</strong>
+              <span class="tag">Grout / control / test</span>
+            </div>
+            <p>
+              Test before start and during grouting, use correct mix design, and log quantity/time, consistency, temperature,
+              pressure and volume. Document grouting, tests and any deviations.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="t">
+              <strong>5) Stressing/control and final documentation</strong>
+              <span class="tag">Stressing / protocol</span>
+            </div>
+            <p>
+              Check calibration certificates, stressing procedure (acceptance, suitability and/or investigation testing),
+              elongation measurements, acceptance criteria/creep, calibration and traceability.
+              Finish with complete protocol, control points and report according to NS EN ISO 22477-5.
+            </p>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="quick">
+          <div class="qbox">
+            <div class="k">Quick start</div>
+            <div class="v">Use the <span class="mono">Data</span> page for calculations and bid basis</div>
+          </div>
+          <div class="qbox">
+            <div class="k">Practical focus</div>
+            <div class="v">Standardized steps reduce deviations and improve predictability</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDE PANEL: SHORTCUTS -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Shortcuts</h2>
+          <small>Find the right page quickly</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="links">
+          <a class="linkcard" href="forankringer.html">
+            <div class="left">
+              <div class="title">Anchors</div>
+              <div class="desc">Types, principles, corrosion protection and execution checkpoints.</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+
+          <a class="linkcard" href="verktoy.html">
+            <div class="left">
+              <div class="title">Tools</div>
+              <div class="desc">Equipment, routines and control points - practical and field-oriented.</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+
+          <a class="linkcard" href="software.html">
+            <div class="left">
+              <div class="title">Software</div>
+              <div class="desc">Digital forms, protocols and traceability for execution.</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+
+          <a class="linkcard" href="data.html">
+            <div class="left">
+              <div class="title">Data</div>
+              <div class="desc">Calculations and quotation requests with structured summaries.</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+
+          <a class="linkcard" href="bilder.html">
+            <div class="left">
+              <div class="title">Photos</div>
+              <div class="desc">Examples, details and execution in practice.</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+
+          <a class="linkcard" href="kontakt.html">
+            <div class="left">
+              <div class="title">Contact</div>
+              <div class="desc">Questions, clarifications or request for quotation.</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+        </div>
+
+        <div class="sep"></div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - This website uses Google Analytics for anonymized traffic statistics. No cookies are used for marketing.
+  </footer>
+
+</div>
+
+<script>
+  function initHeaderUi(){
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    // Language button: switch to Norwegian front page
+    const langBtn = document.getElementById("langBtn");
+    if(langBtn){
+      langBtn.textContent = "🇳🇴 NO";
+      langBtn.setAttribute("aria-label", "Switch to Norwegian");
+      langBtn.setAttribute("title", "Switch to Norwegian");
+      langBtn.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    }
+  }
+
+  function initFrontCarousel(){
+    const root = document.getElementById("frontCarousel");
+    if (!root) return;
+
+    const track = root.querySelector(".front-images");
+    const slides = Array.from(root.querySelectorAll(".front-image"));
+    const prevBtn = root.querySelector("[data-front-prev]");
+    const nextBtn = root.querySelector("[data-front-next]");
+    const dots = Array.from(root.querySelectorAll("[data-front-dot]"));
+    if (!track || slides.length === 0) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 720px)");
+    let index = 0;
+    let touchStartX = 0;
+    let touchDeltaX = 0;
+
+    function render(){
+      const isMobile = mobileQuery.matches;
+      track.style.transform = isMobile ? `translateX(-${index * 100}%)` : "translateX(0)";
+      dots.forEach((dot, dotIndex) => {
+        const isActive = dotIndex === index;
+        dot.classList.toggle("active", isActive);
+        dot.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+    }
+
+    function goTo(nextIndex){
+      const total = slides.length;
+      index = ((nextIndex % total) + total) % total;
+      render();
+    }
+
+    if (prevBtn){
+      prevBtn.addEventListener("click", () => goTo(index - 1));
+    }
+    if (nextBtn){
+      nextBtn.addEventListener("click", () => goTo(index + 1));
+    }
+    dots.forEach((dot, dotIndex) => {
+      dot.addEventListener("click", () => goTo(dotIndex));
+    });
+
+    track.addEventListener("touchstart", (event) => {
+      if (!mobileQuery.matches) return;
+      touchStartX = event.touches[0].clientX;
+      touchDeltaX = 0;
+    }, { passive: true });
+
+    track.addEventListener("touchmove", (event) => {
+      if (!mobileQuery.matches) return;
+      touchDeltaX = event.touches[0].clientX - touchStartX;
+    }, { passive: true });
+
+    track.addEventListener("touchend", () => {
+      if (!mobileQuery.matches) return;
+      if (Math.abs(touchDeltaX) > 50){
+        goTo(index + (touchDeltaX < 0 ? 1 : -1));
+      }
+    });
+
+    if (mobileQuery.addEventListener){
+      mobileQuery.addEventListener("change", () => {
+        index = 0;
+        render();
+      });
+    }else if (mobileQuery.addListener){
+      mobileQuery.addListener(() => {
+        index = 0;
+        render();
+      });
+    }
+
+    render();
+  }
+
+  initFrontCarousel();
+
+  // Load english header into #site-header
+  (async function () {
+    const mount = document.getElementById("site-header");
+    if (!mount) return;
+
+    try{
+      const res = await fetch("header-en.html", { cache: "no-cache" });
+      if (!res.ok) return;
+      mount.innerHTML = await res.text();
+      initHeaderUi();
+    }catch(e){
+      // quiet fail: page should still work if header include fails
+      console.warn("Could not load header-en.html", e);
+    }
+  })();
+</script>
+
+</body>
+</html>

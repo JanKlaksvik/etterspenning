@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software - Personell Admin | Etterspenning.no</title>
+  <meta name="description" content="Admin-side for a godkjenne personell, gi tilgang og fjerne tilgang." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --ok:#8bb93d;
+      --bad:#ff6b6b;
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1220px;margin:0 auto;padding:20px 18px 70px}
+
+    header{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1220px;margin:0 auto;padding:14px 18px;
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .logo img{
+      height:36px;
+      width:auto;
+      max-width:140px;
+      display:block;
+      border-radius:8px;
+      object-fit:contain;
+    }
+    .brandtitle{font-weight:900}
+    .brandsub{font-size:12px;color:var(--muted)}
+    .brandmini{font-size:11px;color:var(--muted)}
+    .top-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+    @media (max-width:760px){
+      .brand{min-width:auto}
+      .logo img{height:32px;max-width:120px}
+    }
+
+    .hero{padding:18px 0 10px}
+    .hero h1{margin:0 0 8px;font-size:clamp(24px,3.2vw,38px);line-height:1.08}
+    .hero p{margin:0;color:var(--muted);max-width:90ch;line-height:1.55;font-size:15px}
+
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:1fr 1.35fr;
+      margin-top:14px;
+    }
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-width:0;
+    }
+    .cardhead{
+      padding:16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+
+    .section{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:12px;
+      min-width:0;
+    }
+    .section:last-child{margin-bottom:0}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:680px){.row{grid-template-columns:1fr}}
+    label{display:grid;gap:6px}
+    .lab{font-size:12px;color:var(--muted)}
+    input, select{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.35);
+      color:var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{border-color:rgba(244,122,32,.55)}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(16,26,47,.50);
+      color:var(--text);
+      padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color:rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background:linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color:rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.danger{
+      background:rgba(255,90,90,.12);
+      border-color:rgba(255,90,90,.35);
+    }
+    .btn.small{
+      padding:8px 10px;
+      font-size:12px;
+    }
+    .btn[disabled]{opacity:.45;cursor:not-allowed}
+    .rowActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .hint{font-size:12px;color:var(--muted);line-height:1.45}
+    .logoPreview{
+      margin-top:8px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      background:rgba(7,11,20,.30);
+      min-height:58px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+    }
+    .logoPreview img{
+      height:34px;
+      width:auto;
+      max-width:180px;
+      display:block;
+      object-fit:contain;
+      border-radius:6px;
+    }
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,11,20,.30);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .msg.ok{border-color:rgba(139,185,61,.5);color:#d8f0b3}
+    .msg.error{border-color:rgba(255,107,107,.5);color:#ffd3d3}
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    @media (max-width:780px){.toolbar{grid-template-columns:1fr}}
+    .checkline{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+
+    .tableWrap{overflow:auto}
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      overflow:hidden;
+      background:rgba(7,11,20,.25);
+      min-width:760px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      padding:10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background:rgba(16,26,47,.25);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+    }
+    tbody tr:last-child td{border-bottom:none}
+    .status{
+      display:inline-flex;align-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:12px;
+      font-weight:800;
+    }
+    .status.active{border-color:rgba(139,185,61,.6);background:rgba(139,185,61,.12)}
+    .status.inactive{border-color:rgba(255,107,107,.6);background:rgba(255,107,107,.12)}
+
+    .guard{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:rgba(7,11,20,.28);
+      padding:14px;
+      margin-top:12px;
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <a href="index.html" aria-label="Til forsiden">
+          <img src="Logo.jpeg" data-company-logo alt="Firmalogo">
+        </a>
+      </div>
+      <div>
+        <div class="brandtitle">Etterspenning.no</div>
+        <div class="brandsub">Software - Personell Admin</div>
+        <div class="brandmini" data-company-identity>Innlogget: - • Firma: -</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="btn" href="software.html">Software</a>
+      <a class="btn" href="software-prosjektstyring.html">Prosjektstyring</a>
+      <button class="btn" id="topLogoutBtn" type="button">Logg ut</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="guardView">
+  <section class="hero">
+    <h1>Personelladministrasjon</h1>
+    <p>Denne siden krever admin-tilgang.</p>
+  </section>
+  <div class="guard">
+    <div class="msg" id="guardMsg">Sjekker tilgang...</div>
+    <div class="actions">
+      <a class="btn secondary" href="software.html">Til software</a>
+      <button class="btn" id="guardLogoutBtn" type="button">Logg ut</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" id="appView" hidden>
+  <section class="hero">
+    <h1>Personelladministrasjon</h1>
+    <p>
+      Opprett nye brukere med rolle prosjektleder eller onsite-personell, og fjern brukere som ikke lenger skal kunne logge inn.
+      Systemadmin (admin@example.com) ser alle firma. Andre innloggede brukere ser kun eget firma.
+      Alle roller er knyttet til valgt firma.
+    </p>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Godkjenn Ny Personell</h2>
+          <small>Oppretter aktiv bruker med valgt rolle</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <form id="createUserForm">
+          <div class="section">
+            <div class="row">
+              <label>
+                <span class="lab">Navn</span>
+                <input id="newFullName" type="text" required placeholder="f.eks. Ola Nordmann">
+              </label>
+              <label>
+                <span class="lab">E-post</span>
+                <input id="newEmail" type="email" required placeholder="f.eks. ola@firma.no">
+              </label>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <label>
+                <span class="lab">Firmanavn</span>
+                <input id="newCompanyName" type="text" required placeholder="f.eks. Entreprenor AS">
+              </label>
+              <label>
+                <span class="lab">Passord (minst 10 tegn)</span>
+                <input id="newPassword" type="password" required placeholder="sterkt passord">
+              </label>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <label>
+                <span class="lab">Rolle</span>
+                <select id="newRole">
+                  <option value="project_manager">Prosjektleder</option>
+                  <option value="onsite_user">Onsite-personell</option>
+                </select>
+              </label>
+            </div>
+            <div class="actions">
+              <button class="btn primary" id="createUserBtn" type="submit">Godkjenn og opprett</button>
+              <button class="btn" id="clearCreateFormBtn" type="button">Nullstill</button>
+            </div>
+            <div class="hint" style="margin-top:8px">
+              Velg rolle etter behov for oppgaver i prosjektet.
+            </div>
+          </div>
+        </form>
+        <div class="section" id="logoSection">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap">
+            <div>
+              <h3 style="margin:0 0 4px;font-size:14px">Firmalogo</h3>
+              <div class="hint">Logo vises pa softwaresider for samme firma.</div>
+            </div>
+            <div class="hint">Innlogget admin: <strong data-user-name>-</strong></div>
+          </div>
+          <label style="margin-top:10px">
+            <span class="lab">Firma som skal ha logo</span>
+            <input id="logoCompanyName" type="text" placeholder="f.eks. Entreprenor AS">
+          </label>
+          <label style="margin-top:10px">
+            <span class="lab">Last opp logo (PNG/JPG/WebP/SVG, maks 2 MB)</span>
+            <input id="companyLogoInput" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          </label>
+          <div class="logoPreview">
+            <img id="companyLogoPreview" src="Logo.jpeg" alt="Firmalogo preview">
+          </div>
+          <div class="actions">
+            <button class="btn" id="loadCompanyLogoBtn" type="button">Hent logo</button>
+            <button class="btn" id="clearCompanyLogoBtn" type="button">Fjern logo</button>
+          </div>
+          <div class="msg" id="logoMsg">Velg firma, hent logo og/eller last opp ny.</div>
+        </div>
+        <div class="msg" id="createMsg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+        <div class="cardhead">
+        <div>
+          <h2>Personell Med Tilgang</h2>
+          <small id="usersScopeHint">Brukere i alle firma</small>
+        </div>
+      </div>
+      <div class="cardbody">
+        <div class="toolbar">
+          <input id="userSearch" type="text" placeholder="Sok navn, e-post, firma eller type">
+          <label class="checkline">
+            <input id="showInactive" type="checkbox">
+            <span>Vis inaktive</span>
+          </label>
+          <button class="btn" id="refreshUsersBtn" type="button">Oppdater</button>
+        </div>
+
+        <div class="tableWrap">
+          <table aria-label="Brukerliste">
+            <thead>
+              <tr>
+                <th style="width:17%">Navn</th>
+                <th style="width:21%">E-post</th>
+                <th style="width:16%">Firma</th>
+                <th style="width:10%">Type</th>
+                <th style="width:10%">Status</th>
+                <th style="width:12%">Opprettet</th>
+                <th style="width:18%">Handling</th>
+              </tr>
+            </thead>
+            <tbody id="usersRows"></tbody>
+          </table>
+        </div>
+        <div class="msg" id="usersMsg">Laster brukere...</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no - Personell Admin (lukket). Ingen markedsforing-cookies.
+  </footer>
+</div>
+
+<script src="company-branding.js"></script>
+<script>
+  (function initPersonnelAdmin(){
+    const STORAGE_AUTH_KEY = "esp_pm_auth_v1";
+    const ADMIN_EMAIL = "admin@example.com";
+    const API_BASE = (window.ESP_API_BASE || "backend/public/api").replace(/\/+$/, "");
+    const state = {
+      session: null,
+      users: []
+    };
+
+    function $(id){ return document.getElementById(id); }
+
+    function applyBranding(){
+      if (!window.CompanyBranding || typeof window.CompanyBranding.apply !== "function") return null;
+      return window.CompanyBranding.apply({ session: state.session });
+    }
+
+    function normalizeEmail(email){
+      return (email || "").toString().trim().toLowerCase();
+    }
+
+    function isOnlyAdminSession(session){
+      return !!(session && normalizeEmail(session.email) === ADMIN_EMAIL);
+    }
+
+    function canAccessPersonnelPage(session){
+      if (!session || typeof session !== "object") return false;
+      if (isOnlyAdminSession(session)) return true;
+      return session.role === "project_manager";
+    }
+
+    function applyAccessScopedUi(){
+      const isAdmin = isOnlyAdminSession(state.session);
+      const usersScopeHint = $("usersScopeHint");
+      if (usersScopeHint) {
+        usersScopeHint.textContent = isAdmin ? "Brukere i alle firma" : "Brukere i ditt firma";
+      }
+
+      const companyInput = $("newCompanyName");
+      if (companyInput) {
+        const companyName = (state.session && state.session.companyName ? String(state.session.companyName) : "").trim();
+        if (!isAdmin && companyName) {
+          companyInput.value = companyName;
+        }
+        companyInput.readOnly = !isAdmin;
+      }
+
+      const logoSection = $("logoSection");
+      if (logoSection) {
+        logoSection.hidden = !isAdmin;
+      }
+    }
+
+    function selectedLogoCompanyName(){
+      const fromField = ($("logoCompanyName") && $("logoCompanyName").value || "").toString().trim();
+      if (fromField) return fromField;
+      const fromCreate = ($("newCompanyName") && $("newCompanyName").value || "").toString().trim();
+      if (fromCreate) return fromCreate;
+      return (state.session && state.session.companyName ? String(state.session.companyName).trim() : "");
+    }
+
+    function syncLogoCompanyField(){
+      const el = $("logoCompanyName");
+      if (!el) return;
+      if (!isOnlyAdminSession(state.session)) return;
+      const value = (el.value || "").toString().trim();
+      if (value) return;
+      const fallback = selectedLogoCompanyName();
+      if (fallback) el.value = fallback;
+    }
+
+    function readFileAsDataUrl(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+        reader.onerror = () => reject(new Error("Kunne ikke lese bildefilen."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function updateCompanyLogoPreview(logoSrc){
+      const src = (logoSrc || "").toString().trim() || "Logo.jpeg";
+      const img = $("companyLogoPreview");
+      if (img) {
+        img.src = src;
+      }
+    }
+
+    function apiUrl(path){
+      return API_BASE + "/" + path.replace(/^\/+/, "");
+    }
+
+    function setMsg(id, text, type){
+      const el = $(id);
+      if (!el) return;
+      el.textContent = text || "";
+      el.classList.remove("ok", "error");
+      if (type) el.classList.add(type);
+    }
+
+    function parseEpochMs(value){
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string"){
+        const parsed = Date.parse(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return 0;
+    }
+
+    function normalizeSession(session){
+      if (!session || typeof session !== "object") return null;
+      const tier = session.tier === "level2" ? "level2" : "level1";
+      const expiresAtMs = parseEpochMs(session.expiresAt);
+      if (!expiresAtMs) return null;
+
+      const baseModules = {
+        projectHandling: true,
+        grouting: true,
+        stressing: tier === "level2",
+        jackData: tier === "level2",
+        jackControl: tier === "level2"
+      };
+      const incomingModules = (session.modules && typeof session.modules === "object") ? session.modules : {};
+
+      return {
+        ...session,
+        tier,
+        modules: {
+          ...baseModules,
+          ...incomingModules,
+          projectHandling: true,
+          grouting: true
+        },
+        loginAt: session.loginAt || new Date().toISOString(),
+        expiresAt: expiresAtMs
+      };
+    }
+
+    function readSession(){
+      try {
+        const raw = localStorage.getItem(STORAGE_AUTH_KEY);
+        if (!raw) return null;
+        const parsed = normalizeSession(JSON.parse(raw));
+        if (!parsed || parsed.expiresAt < Date.now()) {
+          localStorage.removeItem(STORAGE_AUTH_KEY);
+          return null;
+        }
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeSession(session){
+      const normalized = normalizeSession(session);
+      if (!normalized) return null;
+      localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(normalized));
+      return normalized;
+    }
+
+    function clearSession(){
+      localStorage.removeItem(STORAGE_AUTH_KEY);
+    }
+
+    async function requestApi(path, options){
+      const opts = options || {};
+      const headers = {};
+      if (opts.body) headers["Content-Type"] = "application/json";
+
+      const res = await fetch(apiUrl(path), {
+        method: opts.method || "GET",
+        credentials: "include",
+        headers,
+        body: opts.body
+      });
+
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (e) {}
+
+      if (!res.ok || !data || data.ok === false) {
+        const msg = (data && (data.error || data.message))
+          ? (data.error || data.message)
+          : ("HTTP " + res.status);
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    async function refreshSessionFromApi(){
+      try {
+        const data = await requestApi("me.php");
+        if (!data.authenticated || !data.session){
+          clearSession();
+          return null;
+        }
+        return writeSession(data.session);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function logout(){
+      try {
+        await requestApi("logout.php", { method: "POST", body: "{}" });
+      } catch (e) {}
+      clearSession();
+      applyBranding();
+      window.location.href = "software.html";
+    }
+
+    function roleLabel(role){
+      if (role === "admin") return "Admin";
+      if (role === "onsite_user") return "Onsite-personell";
+      return "Prosjektleder";
+    }
+
+    function fmtDate(iso){
+      if (!iso) return "-";
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "-";
+      return d.toLocaleString("no-NO", { dateStyle: "short", timeStyle: "short" });
+    }
+
+    function normalizeUsers(list){
+      const arr = Array.isArray(list) ? list : [];
+      return arr.map((u) => ({
+        id: Number(u.id) || 0,
+        companyId: Number(u.company_id) || 0,
+        companyName: (u.company_name || u.companyName || "").toString(),
+        fullName: (u.full_name || "").toString(),
+        email: (u.email || "").toString(),
+        role: (u.role || "").toString(),
+        isActive: Number(u.is_active) === 1,
+        createdAt: (u.created_at || "").toString(),
+        updatedAt: (u.updated_at || "").toString()
+      }));
+    }
+
+    function filteredUsers(){
+      const search = (($("userSearch") && $("userSearch").value) || "").toString().trim().toLowerCase();
+      const showInactive = !!(($("showInactive") && $("showInactive").checked));
+      return state.users.filter((u) => {
+        if (!showInactive && !u.isActive) return false;
+        if (!search) return true;
+        const hay = [u.fullName, u.email, u.companyName, roleLabel(u.role)].join(" ").toLowerCase();
+        return hay.includes(search);
+      });
+    }
+
+    function renderUsers(){
+      const rows = $("usersRows");
+      const msg = $("usersMsg");
+      if (!rows || !msg) return;
+
+      const users = filteredUsers();
+      if (users.length === 0) {
+        rows.innerHTML = "";
+        msg.textContent = state.users.length === 0
+          ? "Ingen brukere funnet."
+          : "Ingen treff med valgt filter.";
+        return;
+      }
+
+      rows.innerHTML = users.map((u) => {
+        const statusClass = u.isActive ? "active" : "inactive";
+        const statusText = u.isActive ? "Aktiv" : "Inaktiv";
+        const isSelf = state.session && Number(state.session.userId) === u.id;
+        const isSystemAdmin = normalizeEmail(u.email || "") === ADMIN_EMAIL;
+
+        let actionHtml = "";
+        if (isSelf) {
+          actionHtml = '<div class="rowActions"><button class="btn small danger" type="button" disabled>Egen admin</button></div>';
+        } else if (isSystemAdmin) {
+          actionHtml = '<div class="rowActions"><button class="btn small danger" type="button" disabled>System admin</button></div>';
+        } else {
+          actionHtml =
+            '<div class="rowActions">' +
+              '<button class="btn small" type="button" data-reset="' + String(u.id) + '">Resett passord</button>' +
+              '<button class="btn small danger" type="button" data-remove="' + String(u.id) + '">Fjern bruker</button>' +
+            '</div>';
+        }
+
+        return '<tr>' +
+          '<td><strong>' + escapeHtml(u.fullName || "-") + '</strong></td>' +
+          '<td>' + escapeHtml(u.email || "-") + '</td>' +
+          '<td>' + escapeHtml(u.companyName || "-") + '</td>' +
+          '<td>' + escapeHtml(roleLabel(u.role)) + '</td>' +
+          '<td><span class="status ' + statusClass + '">' + statusText + '</span></td>' +
+          '<td>' + escapeHtml(fmtDate(u.createdAt)) + '</td>' +
+          '<td>' + actionHtml + '</td>' +
+        '</tr>';
+      }).join("");
+
+      msg.textContent = "Viser " + users.length.toLocaleString("no-NO") + " bruker(e).";
+
+      rows.querySelectorAll("[data-remove]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const userId = Number(btn.getAttribute("data-remove") || 0);
+          if (userId < 1) return;
+          const user = state.users.find((u) => u.id === userId);
+          const label = user && user.fullName ? user.fullName : ("ID " + String(userId));
+          if (!window.confirm('Fjern bruker "' + label + '" permanent?')) return;
+          await removeUser(userId);
+        });
+      });
+
+      rows.querySelectorAll("[data-reset]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const userId = Number(btn.getAttribute("data-reset") || 0);
+          if (userId < 1) return;
+          const user = state.users.find((u) => u.id === userId);
+          const label = user && user.fullName ? user.fullName : ("ID " + String(userId));
+          const email = user && user.email ? (" (" + user.email + ")") : "";
+
+          const newPassword = window.prompt(
+            'Nytt midlertidig passord for "' + label + '"' + email + ':\nMinst 10 tegn.'
+          );
+          if (newPassword === null) return;
+          if (newPassword.length < 10) {
+            setMsg("usersMsg", "Passord ma vare minst 10 tegn.", "error");
+            return;
+          }
+          if (!window.confirm('Lagre nytt passord for "' + label + '"?')) return;
+
+          await resetUserPassword(userId, newPassword, label);
+        });
+      });
+    }
+
+    function escapeHtml(s){
+      return (s ?? "").toString()
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function loadUsers(){
+      try {
+        setMsg("usersMsg", "Laster brukere...");
+        const data = await requestApi("admin/users.php");
+        state.users = normalizeUsers(data.users);
+        applyAccessScopedUi();
+        renderUsers();
+      } catch (err) {
+        setMsg("usersMsg", "Kunne ikke hente brukere: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    async function removeUser(userId){
+      try {
+        await requestApi("admin/users.php", {
+          method: "DELETE",
+          body: JSON.stringify({ userId })
+        });
+        await loadUsers();
+        setMsg("usersMsg", "Bruker fjernet.", "ok");
+      } catch (err) {
+        setMsg("usersMsg", "Kunne ikke fjerne bruker: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    async function resetUserPassword(userId, newPassword, label){
+      try {
+        setMsg("usersMsg", "Oppdaterer passord...");
+        await requestApi("admin/users.php", {
+          method: "PATCH",
+          body: JSON.stringify({ userId, newPassword })
+        });
+        setMsg("usersMsg", 'Passord oppdatert for "' + (label || ("ID " + String(userId))) + '". Del midlertidig passord pa sikker mate.', "ok");
+      } catch (err) {
+        setMsg("usersMsg", "Kunne ikke oppdatere passord: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    function resetCreateForm(message, type){
+      if ($("createUserForm")) $("createUserForm").reset();
+      if ($("newRole")) $("newRole").value = "project_manager";
+      if ($("newCompanyName") && state.session && state.session.companyName) {
+        $("newCompanyName").value = (state.session.companyName || "").toString();
+      }
+      if ($("newCompanyName")) {
+        $("newCompanyName").readOnly = !isOnlyAdminSession(state.session);
+      }
+      syncLogoCompanyField();
+      if (message) {
+        setMsg("createMsg", message, type);
+      } else {
+        setMsg("createMsg", "Fyll inn data for ny personell.");
+      }
+    }
+
+    async function createUserFromForm(e){
+      e.preventDefault();
+      const fullName = ($("newFullName") && $("newFullName").value || "").toString().trim();
+      const email = ($("newEmail") && $("newEmail").value || "").toString().trim().toLowerCase();
+      const companyName = isOnlyAdminSession(state.session)
+        ? (($("newCompanyName") && $("newCompanyName").value || "").toString().trim())
+        : ((state.session && state.session.companyName) ? String(state.session.companyName).trim() : "");
+      const password = ($("newPassword") && $("newPassword").value || "").toString();
+      const role = ($("newRole") && $("newRole").value || "project_manager").toString().trim();
+
+      if (!fullName || !email || !companyName || !password) {
+        setMsg("createMsg", "Fyll ut navn, e-post, firma og passord.", "error");
+        return;
+      }
+      if (role !== "project_manager" && role !== "onsite_user") {
+        setMsg("createMsg", "Velg gyldig rolle.", "error");
+        return;
+      }
+      if (password.length < 10) {
+        setMsg("createMsg", "Passord ma vare minst 10 tegn.", "error");
+        return;
+      }
+
+      try {
+        setMsg("createMsg", "Oppretter bruker...");
+        await requestApi("admin/users.php", {
+          method: "POST",
+          body: JSON.stringify({ fullName, email, companyName, password, role })
+        });
+        resetCreateForm("Personell godkjent og opprettet.", "ok");
+        await loadUsers();
+      } catch (err) {
+        setMsg("createMsg", "Kunne ikke opprette bruker: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    async function loadCompanyLogo(){
+      if (!isOnlyAdminSession(state.session)) return;
+      const companyName = selectedLogoCompanyName();
+      if (!companyName) {
+        setMsg("logoMsg", "Velg firmanavn forst.", "error");
+        return;
+      }
+
+      try {
+        setMsg("logoMsg", "Henter logo...");
+        const data = await requestApi("admin/company-branding.php?companyName=" + encodeURIComponent(companyName));
+        const company = data && data.company ? data.company : null;
+        if (!company) {
+          setMsg("logoMsg", "Fant ikke valgt firma.", "error");
+          return;
+        }
+
+        if ($("logoCompanyName")) $("logoCompanyName").value = (company.name || "").toString();
+
+        if (window.CompanyBranding && typeof window.CompanyBranding.saveBranding === "function") {
+          window.CompanyBranding.saveBranding({
+            companyId: company.id,
+            companyName: company.name,
+            logoSrc: company.logoData || ""
+          });
+        }
+
+        updateCompanyLogoPreview((company.logoData || "").toString());
+        if (company.logoData) {
+          setMsg("logoMsg", "Logo lastet for " + company.name + ".", "ok");
+        } else {
+          setMsg("logoMsg", "Ingen logo lagret for " + company.name + ".", "ok");
+        }
+      } catch (err) {
+        setMsg("logoMsg", "Kunne ikke hente firma-logo: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    async function uploadCompanyLogo(){
+      if (!isOnlyAdminSession(state.session)) return;
+      const input = $("companyLogoInput");
+      if (!input || !input.files || input.files.length === 0) {
+        setMsg("logoMsg", "Velg en bildefil for opplasting.", "error");
+        return;
+      }
+
+      const companyName = selectedLogoCompanyName();
+      if (!companyName) {
+        setMsg("logoMsg", "Velg firmanavn for opplasting.", "error");
+        return;
+      }
+
+      const file = input.files[0];
+      if (!/^image\//.test(file.type || "")) {
+        setMsg("logoMsg", "Filtype ma vare bilde (PNG/JPG/WebP/SVG).", "error");
+        return;
+      }
+      if (file.size > (2 * 1024 * 1024)) {
+        setMsg("logoMsg", "Logoen er for stor. Maks 2 MB.", "error");
+        return;
+      }
+
+      let logoData = "";
+      try {
+        logoData = await readFileAsDataUrl(file);
+      } catch (err) {
+        setMsg("logoMsg", err && err.message ? err.message : "Kunne ikke lese bildefilen.", "error");
+        return;
+      }
+      if (!logoData) {
+        setMsg("logoMsg", "Kunne ikke lese bildefilen.", "error");
+        return;
+      }
+
+      try {
+        setMsg("logoMsg", "Lagrer logo...");
+        const data = await requestApi("admin/company-branding.php", {
+          method: "POST",
+          body: JSON.stringify({
+            companyName,
+            logoData
+          })
+        });
+
+        const company = data && data.company ? data.company : null;
+        if (!company) {
+          setMsg("logoMsg", "Kunne ikke bekrefte lagret logo.", "error");
+          return;
+        }
+
+        if (data.session) {
+          state.session = writeSession(data.session) || state.session;
+        }
+
+        if ($("logoCompanyName")) $("logoCompanyName").value = (company.name || "").toString();
+
+        if (window.CompanyBranding && typeof window.CompanyBranding.saveBranding === "function") {
+          window.CompanyBranding.saveBranding({
+            companyId: company.id,
+            companyName: company.name,
+            logoSrc: company.logoData || ""
+          });
+        }
+
+        updateCompanyLogoPreview((company.logoData || "").toString());
+        applyBranding();
+
+        input.value = "";
+        setMsg("logoMsg", "Firmalogo lagret for " + company.name + ".", "ok");
+      } catch (err) {
+        setMsg("logoMsg", "Kunne ikke lagre logo: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    async function clearCompanyLogo(){
+      if (!isOnlyAdminSession(state.session)) return;
+      const companyName = selectedLogoCompanyName();
+      if (!companyName) {
+        setMsg("logoMsg", "Velg firmanavn forst.", "error");
+        return;
+      }
+
+      try {
+        setMsg("logoMsg", "Fjerner logo...");
+        const data = await requestApi("admin/company-branding.php", {
+          method: "POST",
+          body: JSON.stringify({
+            companyName,
+            logoData: ""
+          })
+        });
+
+        const company = data && data.company ? data.company : null;
+        if (!company) {
+          setMsg("logoMsg", "Kunne ikke bekrefte fjerning av logo.", "error");
+          return;
+        }
+
+        if (data.session) {
+          state.session = writeSession(data.session) || state.session;
+        }
+
+        if ($("logoCompanyName")) $("logoCompanyName").value = (company.name || "").toString();
+
+        if (window.CompanyBranding && typeof window.CompanyBranding.saveBranding === "function") {
+          window.CompanyBranding.saveBranding({
+            companyId: company.id,
+            companyName: company.name,
+            logoSrc: ""
+          });
+        }
+
+        updateCompanyLogoPreview("");
+        applyBranding();
+        setMsg("logoMsg", "Firmalogo fjernet for " + company.name + ".", "ok");
+      } catch (err) {
+        setMsg("logoMsg", "Kunne ikke fjerne logo: " + (err && err.message ? err.message : "ukjent feil"), "error");
+      }
+    }
+
+    function showGuard(message){
+      const guardMsg = $("guardMsg");
+      if (guardMsg) {
+        guardMsg.textContent = message;
+        guardMsg.classList.remove("ok");
+      }
+      if ($("guardView")) $("guardView").hidden = false;
+      if ($("appView")) $("appView").hidden = true;
+      applyBranding();
+    }
+
+    function showApp(){
+      if ($("guardView")) $("guardView").hidden = true;
+      if ($("appView")) $("appView").hidden = false;
+    }
+
+    function bindCommonActions(){
+      if ($("topLogoutBtn")) $("topLogoutBtn").addEventListener("click", logout);
+      if ($("guardLogoutBtn")) $("guardLogoutBtn").addEventListener("click", logout);
+      if ($("refreshUsersBtn")) $("refreshUsersBtn").addEventListener("click", loadUsers);
+      if ($("userSearch")) $("userSearch").addEventListener("input", renderUsers);
+      if ($("showInactive")) $("showInactive").addEventListener("change", renderUsers);
+      if ($("createUserForm")) $("createUserForm").addEventListener("submit", createUserFromForm);
+      if ($("clearCreateFormBtn")) $("clearCreateFormBtn").addEventListener("click", resetCreateForm);
+      if ($("companyLogoInput")) $("companyLogoInput").addEventListener("change", uploadCompanyLogo);
+      if ($("loadCompanyLogoBtn")) $("loadCompanyLogoBtn").addEventListener("click", loadCompanyLogo);
+      if ($("clearCompanyLogoBtn")) $("clearCompanyLogoBtn").addEventListener("click", clearCompanyLogo);
+      if ($("newCompanyName")) $("newCompanyName").addEventListener("blur", syncLogoCompanyField);
+    }
+
+    async function init(){
+      bindCommonActions();
+      resetCreateForm();
+
+      state.session = readSession();
+      const fresh = await refreshSessionFromApi();
+      state.session = fresh || readSession();
+      applyBranding();
+      applyAccessScopedUi();
+      syncLogoCompanyField();
+      if (isOnlyAdminSession(state.session)) {
+        setMsg("logoMsg", "Velg firma, hent logo og/eller last opp ny.");
+      }
+
+      if (!state.session) {
+        showGuard("Ikke innlogget. Logg inn pa software-siden.");
+        return;
+      }
+
+      if (!canAccessPersonnelPage(state.session)) {
+        showGuard("Du mangler tilgang til personelladministrasjon.");
+        return;
+      }
+
+      showApp();
+      resetCreateForm();
+      applyBranding();
+      applyAccessScopedUi();
+      if (isOnlyAdminSession(state.session)) {
+        await loadCompanyLogo();
+      }
+      await loadUsers();
+    }
+
+    window.addEventListener("storage", (ev) => {
+      if (ev.key === STORAGE_AUTH_KEY) {
+        state.session = readSession();
+        applyBranding();
+        applyAccessScopedUi();
+        if (!state.session || !canAccessPersonnelPage(state.session)) {
+          showGuard("Tilgang avsluttet i annen fane.");
+        }
+      }
+      if (ev.key && ev.key.indexOf("esp_company_brand_v1__") === 0) {
+        applyBranding();
+      }
+    });
+
+    init();
+  })();
+</script>
+</body>
+</html>

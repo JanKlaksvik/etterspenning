@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="no">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TSNDL4ZB7Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TSNDL4ZB7Y');
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data | Etterspenning.no</title>
+  <meta name="description" content="Beregninger og tilbudsforespørsel for etterspenning og forankringer." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#101a2f;
+      --card:#0f1a33;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#f47a20;
+      --accent2:#8bb93d;
+      --blue:#204f85;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(32,79,133,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(139,185,61,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14 70%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px 18px 60px}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1100px;margin:0 auto;
+      padding:14px 18px;
+      display:flex;align-items:center;gap:16px
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .logo{
+      width:38px;height:38px;border-radius:10px;
+      background: linear-gradient(135deg, var(--blue), rgba(32,79,133,.45));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      display:grid;place-items:center;
+      font-weight:700;
+    }
+
+    .lang-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+      padding:0;
+      line-height:1;
+    }
+    .lang-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    nav.primary{
+      display:flex;flex-wrap:wrap;gap:10px;margin-left:auto
+    }
+    .navlink{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color:var(--muted);
+      white-space: nowrap;
+    }
+    .navlink:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
+    .navlink.active{background: rgba(244,122,32,.12); border-color: rgba(244,122,32,.45); color: var(--text)}
+
+    /* Hamburger + off-canvas */
+    .menu-btn{
+      display:none;
+      margin-left:auto;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .menu-btn:hover{border-color:rgba(255,255,255,.18)}
+    .burger{width:18px;height:12px;position:relative;}
+    .burger::before, .burger::after, .burger div{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background: var(--text);
+      border-radius:4px;
+    }
+    .burger::before{top:0}
+    .burger div{top:5px}
+    .burger::after{bottom:0}
+
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      z-index: 90;
+    }
+    .overlay.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(84vw, 340px);
+      background: rgba(7,11,20,.96);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -18px 0 40px rgba(0,0,0,.35);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawer-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .drawer-head strong{font-size:14px;letter-spacing:.2px}
+    .close-btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .close-btn:hover{border-color:rgba(255,255,255,.18)}
+
+    .drawer-nav{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .drawer-nav a{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(16,26,47,.35);
+      color: var(--text);
+      font-weight:700;
+    }
+    .drawer-nav a:hover{border-color:rgba(255,255,255,.18)}
+    .drawer-nav a.active{
+      background: rgba(244,122,32,.12);
+      border-color: rgba(244,122,32,.45);
+    }
+
+    @media (max-width: 720px){
+      nav.primary{display:none;}
+      .menu-btn{display:flex;}
+      .brand{min-width:auto}
+      .topbar{gap:12px}
+    }
+
+    /* Sideinnhold */
+    .hero{padding:28px 0 18px}
+    .hero h1{margin:0 0 8px;font-size: clamp(24px, 3.2vw, 40px);letter-spacing:-0.02em}
+    .hero p{margin:0;color:var(--muted);max-width:72ch;line-height:1.5}
+    .grid{display:grid;gap:14px;grid-template-columns: 1.15fr .85fr;align-items:start}
+    @media (max-width: 920px){.grid{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,47,.70), rgba(15,26,51,.50));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .cardhead h2{margin:0;font-size:16px}
+    .cardhead small{color:var(--muted)}
+    .cardbody{padding:16px}
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    @media (max-width:620px){.row{grid-template-columns:1fr}}
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input, select, textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(6,10,18,.55);
+      color:var(--text);
+      padding:11px 12px;
+      outline:none;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(244,122,32,.55);
+      box-shadow: 0 0 0 4px rgba(244,122,32,.10);
+    }
+    textarea{min-height:92px;resize:vertical}
+    .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+    .inline{display:flex;gap:10px;align-items:center}
+    .inline > *{flex:1}
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .btn{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      background: rgba(16,26,47,.50);
+      color:var(--text);
+      font-weight:600;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(244,122,32,.95), rgba(244,122,32,.55));
+      border-color: rgba(244,122,32,.65);
+      color:#130b04;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, rgba(139,185,61,.85), rgba(139,185,61,.45));
+      border-color: rgba(139,185,61,.60);
+      color:#071002;
+    }
+    .btn.small{padding:6px 10px;font-size:12px}
+    .grouphead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:6px 0 8px;
+    }
+    .group-results{
+      display:grid;
+      gap:8px;
+      margin-top:12px;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+    .group-results .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 12px;
+    }
+    .group-results .tag{
+      border:1px solid rgba(255,255,255,.10);
+      padding:4px 8px;
+      border-radius:999px;
+      background: rgba(7,11,20,.25);
+      color: var(--text);
+      font-size:11px;
+      white-space:nowrap;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    .kpi .box{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,11,20,.35);
+    }
+    .kpi .val{font-size:18px;font-weight:700;margin-top:4px}
+    .kpi .lab{font-size:12px;color:var(--muted)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+    .notice{
+      border-radius:14px;
+      border:1px solid rgba(244,122,32,.35);
+      background: rgba(244,122,32,.10);
+      padding:12px;
+      color: var(--text);
+      line-height:1.45;
+      font-size:13px;
+    }
+    .warn{
+      margin-top:6px;
+      border-radius:12px;
+      border:1px solid rgba(255,170,0,.45);
+      background: rgba(255,170,0,.10);
+      color: var(--text);
+      padding:8px 10px;
+      font-size:12px;
+      line-height:1.35;
+      display:none;
+    }
+    .warn.show{display:block;}
+    .qmark{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:18px;
+      height:18px;
+      margin-left:6px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.25);
+      background: rgba(16,26,47,.5);
+      color: var(--text);
+      font-size:11px;
+      font-weight:800;
+      cursor:pointer;
+      vertical-align:middle;
+    }
+    .qmark:hover{border-color:rgba(255,255,255,.45)}
+    .tip{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+    }
+    .tooltip{
+      position:absolute;
+      top:calc(100% + 6px);
+      left:0;
+      z-index:30;
+      min-width:220px;
+      max-width:320px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(7,11,20,.95);
+      color: var(--text);
+      font-size:12px;
+      line-height:1.35;
+      box-shadow: var(--shadow);
+      display:none;
+    }
+    .tip:hover .tooltip{display:block;}
+    .tip.open .tooltip{display:block;}
+    footer{margin-top:18px;color:var(--muted);font-size:12px;padding:14px 0}
+    .sep{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    /* Små hjelpeklasser */
+    .hidden{display:none !important;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">E</div>
+      <div>
+        <div style="font-weight:800;letter-spacing:.2px">Etterspenning.no</div>
+        <div style="font-size:12px;color:var(--muted)">Data & beregninger</div>
+      </div>
+    </div>
+
+    <button class="lang-btn" id="langBtn" aria-label="Språk" title="Språk">
+      🇳🇴
+    </button>
+
+    <!-- Hamburger (mobile) -->
+    <button class="menu-btn" id="openMenu" aria-label="Åpne meny" aria-controls="drawer" aria-expanded="false">
+      <div class="burger" aria-hidden="true"><div></div></div>
+    </button>
+
+    <!-- Desktop nav -->
+    <nav class="primary" aria-label="Hovedmeny">
+      <a class="navlink" href="index.html">Start</a>
+      <a class="navlink" href="forankringer.html">Forankringer</a>
+      <a class="navlink" href="verktoy.html">Verktøy</a>
+      <a class="navlink" href="software.html">Software</a>
+      <a class="navlink active" href="data.html">Data</a>
+      <a class="navlink" href="bilder.html">Bilder</a>
+      <a class="navlink" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Overlay + Drawer -->
+<div class="overlay" id="overlay" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Meny" aria-hidden="true">
+  <div class="drawer-head">
+    <strong>Meny</strong>
+    <button class="close-btn" id="closeMenu" aria-label="Lukk meny">Lukk</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Hovedmeny mobil">
+    <a href="index.html">Start</a>
+    <a href="forankringer.html">Forankringer</a>
+    <a href="verktoy.html">Verktøy</a>
+    <a href="software.html">Software</a>
+    <a class="active" href="data.html">Data</a>
+    <a href="bilder.html">Bilder</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Data, beregninger og tilbudsforespørsel</h1>
+    <p>
+      Denne siden lar deg gjøre en rask kontrollberegning (kraft, spenning og teoretisk forlengelse)
+      og sende en strukturert forespørsel med samme input direkte i e-post.
+    </p>
+    <div class="notice" style="margin-top:12px">
+      Produkt produseres under System 1+. Ankerhode i henhold til ETA, underlagsplate har sertifikat 3.1,
+      og spenntau/stang produseres i henhold til EN 10138.
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- INPUT / BEREGNING -->
+    <div class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Prosjekt og input</h2>
+          <small>Fyll inn – beregning oppdateres automatisk</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="row">
+          <div>
+            <label for="projectName">Prosjektnavn</label>
+            <input id="projectName" placeholder="f.eks. Kai K241 / Fundament / Bru" />
+          </div>
+          <div>
+            <label for="projectNo">Prosjektnummer</label>
+            <input id="projectNo" placeholder="f.eks. 24-00123" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="deliveryCountry">Leveringssted – land</label>
+            <select id="deliveryCountry">
+              <option value="NO">🇳🇴 Norge</option>
+              <option value="DK">🇩🇰 Danmark</option>
+              <option value="SE">🇸🇪 Sverige</option>
+              <option value="FI">🇫🇮 Finland</option>
+            </select>
+          </div>
+          <div>
+            <label for="deliveryPostal">Leveringssted – postnr.</label>
+            <input id="deliveryPostal" type="text" inputmode="numeric" maxlength="5" placeholder="f.eks. 0150" />
+            <div class="hint">NO/DK/FI: 4 sifre. SE: 5 sifre.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="deliveryPlace">Leveringssted – sted</label>
+            <input id="deliveryPlace" type="text" placeholder="Skriv inn sted" />
+            <div class="hint" id="deliveryStatus"></div>
+          </div>
+          <div></div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="contactName">Kontaktperson</label>
+            <input id="contactName" placeholder="Navn" />
+          </div>
+          <div>
+            <label for="contactEmail">E-post (avsender)</label>
+            <input id="contactEmail" type="email" placeholder="navn@firma.no" />
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div id="anchorGroups">
+          <div class="anchor-group" data-group="1">
+            <div class="grouphead">
+              <strong>Ankergruppe 1</strong>
+              <button class="btn small" type="button" data-role="removeGroup" hidden>Fjern gruppe</button>
+            </div>
+        <div class="row">
+          <div>
+            <label for="permanence">Permanent / midlertidig</label>
+            <select id="permanence" data-field="permanence">
+              <option value="permanent">Permanent</option>
+              <option value="midlertidig">Midlertidig</option>
+            </select>
+          </div>
+          <div>
+            <label for="anchorCount">Antall ankere</label>
+            <input id="anchorCount" type="number" min="1" step="1" value="1" data-field="anchorCount" />
+            <div class="hint">Oppgi totalt antall ankere i prosjektet.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="anchorScheme">Forankrings ordning</label>
+            <select id="anchorScheme" data-field="anchorScheme">
+              <option value="normalt">Normalt</option>
+              <option value="differensiert">Differensiert</option>
+            </select>
+          </div>
+          <div></div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="systemType">System</label>
+            <select id="systemType" data-field="systemType">
+              <option value="strands">Spenntau (strand)</option>
+              <option value="bars">Stang (bar)</option>
+            </select>
+          </div>
+
+          <!-- Dette feltet skifter rolle:
+               - Strand: antall spenntau
+               - Bar: stangdiameter (Ø mm) -->
+          <div>
+            <label for="nElements" id="nElementsLabel" data-role="nElementsLabel">Antall spenntau</label>
+            <input id="nElements" type="number" min="1" step="1" value="12" data-field="nElements" />
+            <div class="hint" id="nElementsHint" data-role="nElementsHint">Antall elementer (spenntau) i beregningen.</div>
+            <div class="hint" id="nElementsRec" data-role="nElementsRec"></div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="areaOneSelect">Tverrsnitt pr. element, A (mm²)</label>
+
+            <!-- Strand: fast valg -->
+            <select id="areaOneSelect" data-field="areaOneSelect">
+              <option value="140" selected>140 mm²</option>
+              <option value="150">150 mm²</option>
+              <option value="165">165 mm²</option>
+            </select>
+
+            <!-- Bar: beregnet A (readonly) -->
+            <input id="areaOneBar" class="hidden" type="number" step="0.1" readonly data-field="areaOneBar" />
+
+            <div class="hint" id="areaHint" data-role="areaHint">Velg standard tverrsnitt for elementet.</div>
+          </div>
+
+          <div>
+            <label for="lengthL">Fri lengde, L (m)</label>
+            <input id="lengthL" type="number" min="0.1" step="0.01" value="5.0" data-field="lengthL" />
+            <div class="hint">Bruk effektiv lengde for beregning av teoretisk forlengelse.</div>
+            <div class="warn" id="lengthLWarn" data-role="lengthLWarn">Anbefaler sterkt å bruke minst 4 meter.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="bondedLength">Forankringslengde (bonded) (m)</label>
+            <input id="bondedLength" type="number" min="0.1" step="0.01" value="5.0" data-field="bondedLength" />
+            <div class="hint">Oppgis som bonded lengde (forankringsdel).</div>
+            <div class="warn" id="bondedLengthWarn" data-role="bondedLengthWarn">Anbefaler sterkt å bruke minst 4 meter.</div>
+          </div>
+          <div>
+            <label for="extension">Utstikk (m)
+              <span class="tip" id="extensionTipWrap">
+                <button class="qmark" id="extensionHelp" type="button" aria-label="Hva er utstikk?">?</button>
+                <span class="tooltip" id="extensionTip">Utstikk er for jekken å ta fatt i når det skal spennes, sjekk jekk type.</span>
+              </span>
+            </label>
+            <input id="extension" type="number" min="0" step="0.01" value="1.0" data-field="extension" />
+            <div class="hint">Vanlig 1,0 m, men kan variere.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="capType">Lokk
+              <span class="tip" id="capTipWrap">
+                <button class="qmark" id="capHelp" type="button" aria-label="Hva betyr behandlet?">?</button>
+                <span class="tooltip" id="capTip">Behandlet betyr galvanisert eller rustfritt stål.</span>
+              </span>
+            </label>
+            <select id="capType" data-field="capType">
+              <option value="ingen" selected>Ingen</option>
+              <option value="plastic">Plastik</option>
+              <option value="metal-ubehandlet">Metal - ubehandlet</option>
+              <option value="metal-behandlet">Metal - behandlet</option>
+            </select>
+            <div class="hint">Ved 19 eller flere spenntau: kun metall.</div>
+          </div>
+          <div>
+            <label for="plateType">Underlagsplate
+              <span class="tip" id="plateTipWrap">
+                <button class="qmark" id="plateHelp" type="button" aria-label="Hva betyr behandlet?">?</button>
+                <span class="tooltip" id="plateTip">Behandlet betyr galvanisert eller rustfritt stål.</span>
+              </span>
+            </label>
+            <select id="plateType" data-field="plateType">
+              <option value="ingen">Ingen</option>
+              <option value="standard-ubehandlet">Standard - ubehandlet</option>
+              <option value="standard-behandlet">Standard - behandlet</option>
+              <option value="ikke-standard-ubehandlet">Ikke standard - ubehandlet</option>
+              <option value="ikke-standard-behandlet">Ikke standard - behandlet</option>
+            </select>
+            <div class="hint">Velg type underlagsplate.</div>
+            <div class="hint" id="plateStandardInfo" data-role="plateStandardInfo"></div>
+            <div id="plateSizeWrap" class="hidden" style="margin-top:8px" data-role="plateSizeWrap">
+              <label for="plateSize">Plate størrelse (L × B × H, mm)</label>
+              <input id="plateSize" type="text" placeholder="f.eks. 300x300x20" data-field="plateSize" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="proofLoad">Prøvelast (kN)</label>
+            <input id="proofLoad" type="number" min="1" step="1" value="0" data-field="proofLoad" />
+            <div class="hint">Oppgi ønsket prøvelast i kN.</div>
+          </div>
+          <div>
+            <label for="lockLoad">Låselast (kN)</label>
+            <input id="lockLoad" type="number" min="1" step="1" value="0" data-field="lockLoad" />
+            <div class="hint">Oppgi ønsket låselast i kN.</div>
+          </div>
+        </div>
+
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <button class="btn secondary" type="button" id="addGroup">Legg til ankergruppe</button>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label for="notes">Tilleggsinfo (valgfrie kommentarer)</label>
+            <textarea id="notes" placeholder="Krav, omfang, standardhenvisninger, leveringstid, tegninger, etc."></textarea>
+          </div>
+          <div>
+            <div class="notice">
+              <strong>Merk:</strong> Prosjektering/utførelse må alltid følge prosjektdokumenter og relevante standarder.
+            </div>
+
+            <div class="btnrow">
+              <button class="btn" id="btnReset" type="button">Nullstill</button>
+              <button class="btn secondary" id="btnCopy" type="button">Kopier oppsummering</button>
+              <button class="btn primary" id="btnQuote" type="button">Be om tilbud</button>
+            </div>
+
+            <div class="hint" id="sendHint" style="margin-top:10px">
+              “Be om tilbud” åpner e-postklienten din med ferdig utfylt innhold (mailto).
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RESULTAT -->
+    <aside class="card">
+      <div class="cardhead">
+        <div>
+          <h2>Resultater</h2>
+          <small>Oppdateres live</small>
+        </div>
+      </div>
+      <div class="cardbody">
+
+        <div class="kpi">
+          <div class="box">
+            <div class="lab">Totalt areal, A<sub>tot</sub> (mm²)</div>
+            <div class="val mono" id="outAtot">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Total lengde, L<sub>tot</sub> (m)</div>
+            <div class="val mono" id="outLtot">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Anbefalt kile plate</div>
+            <div class="val mono" id="outKile">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Underlagsplate</div>
+            <div class="val mono" id="outPlate">–</div>
+          </div>
+          <div class="box">
+            <div class="lab">Lokk (antall + type)</div>
+            <div class="val mono" id="outCaps">–</div>
+          </div>
+        </div>
+
+        <div class="group-results" id="groupResults"></div>
+
+        <div class="sep"></div>
+
+        <div style="font-size:12px;color:var(--muted);line-height:1.55">
+          <div><strong>Formler (forenklet):</strong></div>
+          <div class="mono">A_tot = n · A</div>
+          <div class="mono">L_tot = (L + L_bonded + utstikk) · antall ankere</div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div>
+          <label for="preview">E-post-innhold (forhåndsvisning)</label>
+          <textarea id="preview" readonly></textarea>
+          <div class="hint">Dette er teksten som legges inn i e-posten når du trykker “Be om tilbud”.</div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    © 2026 Etterspenning.no – Data-siden. Denne nettsiden bruker Google Analytics for anonym trafikkstatistikk. Ingen informasjonskapsler brukes til markedsføring. Ingen cookies.
+  </footer>
+</div>
+
+<script>
+  // ========= KONFIG =========
+  const RECEIVER_EMAIL = "jan@etterspenning.no";
+  const GEPPOSIT_API_KEY = ""; // TODO: legg inn API-nøkkel
+  const postalCache = new Map();
+
+  // ========= SMÅHJELP =========
+  const fmt = (x, digits=2) => {
+    if (!isFinite(x)) return "–";
+    return Number(x).toLocaleString("no-NO", { maximumFractionDigits: digits, minimumFractionDigits: digits });
+  };
+
+  function getEl(id){ return document.getElementById(id); }
+
+  function getVal(id){
+    const el = getEl(id);
+    if (!el) return "";
+    return (el.value ?? "").toString().trim();
+  }
+
+  function getNumFromValue(v){
+    const n = parseFloat(String(v).replace(",", "."));
+    return isFinite(n) ? n : NaN;
+  }
+
+  function getNum(id){
+    return getNumFromValue(getVal(id));
+  }
+
+  function getField(group, name){
+    return group ? group.querySelector(`[data-field="${name}"]`) : null;
+  }
+  function getRole(group, name){
+    return group ? group.querySelector(`[data-role="${name}"]`) : null;
+  }
+  function getGroupVal(group, name){
+    const el = getField(group, name);
+    if (!el) return "";
+    return (el.value ?? "").toString().trim();
+  }
+  function getGroupOptionLabel(group, name){
+    const el = getField(group, name);
+    if (!el || !el.options) return "";
+    const opt = el.options[el.selectedIndex];
+    return opt ? (opt.textContent || "").trim() : "";
+  }
+  function getGroupNum(group, name){
+    return getNumFromValue(getGroupVal(group, name));
+  }
+  function isBarsGroup(group){
+    return getGroupVal(group, "systemType") === "bars";
+  }
+
+  function getGroups(){
+    return Array.from(document.querySelectorAll(".anchor-group"));
+  }
+
+  function reindexGroups(){
+    const groups = getGroups();
+    groups.forEach((group, i) => {
+      group.dataset.group = String(i + 1);
+      const head = group.querySelector(".grouphead strong");
+      if (head) head.textContent = `Ankergruppe ${i + 1}`;
+      const removeBtn = group.querySelector('[data-role="removeGroup"]');
+      if (removeBtn) removeBtn.hidden = (groups.length === 1);
+    });
+  }
+
+  function updateGroupIds(group, index){
+    const idMap = new Map();
+    group.querySelectorAll("[id]").forEach(el => {
+      const oldId = el.id;
+      const newId = `${oldId}-g${index}`;
+      idMap.set(oldId, newId);
+      el.id = newId;
+    });
+    group.querySelectorAll("label[for]").forEach(label => {
+      const oldFor = label.getAttribute("for");
+      if (idMap.has(oldFor)) label.setAttribute("for", idMap.get(oldFor));
+    });
+  }
+
+  function setGroupDefaults(group){
+    const setVal = (field, value) => {
+      const el = getField(group, field);
+      if (el) el.value = value;
+    };
+    setVal("systemType", "strands");
+    setVal("permanence", "permanent");
+    setVal("anchorScheme", "normalt");
+    setVal("nElements", "12");
+    setVal("anchorCount", "1");
+    setVal("areaOneSelect", "140");
+    setVal("areaOneBar", "");
+    setVal("lengthL", "5.0");
+    setVal("bondedLength", "5.0");
+    setVal("extension", "1.0");
+    setVal("capType", "ingen");
+    setVal("plateType", "standard-ubehandlet");
+    setVal("plateSize", "");
+    setVal("proofLoad", "0");
+    setVal("lockLoad", "0");
+
+    const rec = getRole(group, "nElementsRec");
+    if (rec) rec.textContent = "";
+    const warnL = getRole(group, "lengthLWarn");
+    if (warnL) warnL.classList.remove("show");
+    const warnB = getRole(group, "bondedLengthWarn");
+    if (warnB) warnB.classList.remove("show");
+    const plateInfo = getRole(group, "plateStandardInfo");
+    if (plateInfo) plateInfo.textContent = "";
+    const plateWrap = getRole(group, "plateSizeWrap");
+    if (plateWrap) plateWrap.classList.add("hidden");
+  }
+
+  function addGroup(){
+    const groups = getGroups();
+    const base = groups[0];
+    if (!base) return;
+    const clone = base.cloneNode(true);
+    const newIndex = groups.length + 1;
+    updateGroupIds(clone, newIndex);
+    setGroupDefaults(clone);
+    document.getElementById("anchorGroups").appendChild(clone);
+    reindexGroups();
+    updateSystemUI(clone);
+    compute();
+  }
+
+  // ========= LOGIKK: UI ved systemskifte =========
+  // Strand:
+  //  - nElements = antall spenntau
+  //  - A = velges 140/150/165
+  //
+  // Bar:
+  //  - nElements = stangdiameter Ø (mm)
+  //  - A beregnes automatisk og settes i feltet for A pr. element (readonly)
+  //  - n (antall) settes til 1 i beregningen (enkeltbar som standard)
+  function updateSystemUI(group){
+    const bars = isBarsGroup(group);
+
+    const nLabel = getRole(group, "nElementsLabel");
+    const nInput = getField(group, "nElements");
+    const nHint  = getRole(group, "nElementsHint");
+
+    const areaSelect = getField(group, "areaOneSelect");
+    const areaBar    = getField(group, "areaOneBar");
+    const areaHint   = getRole(group, "areaHint");
+    if (!nLabel || !nInput || !nHint || !areaSelect || !areaBar || !areaHint) return;
+
+    if (bars){
+      nLabel.textContent = "Stangdiameter, Ø (mm)";
+      nInput.type = "number";
+      nInput.min = "1";
+      nInput.step = "0.1";
+      if (!nInput.value || getGroupNum(group, "nElements") === 12){ nInput.value = "32"; } // fornuftig default ved bytte
+      nHint.textContent = "Skriv inn diameter på stang. Areal beregnes automatisk.";
+
+      areaSelect.classList.add("hidden");
+      areaBar.classList.remove("hidden");
+      areaHint.textContent = "A beregnes fra Ø: A = π·Ø²/4 (mm²).";
+    } else {
+      nLabel.textContent = "Antall spenntau";
+      nInput.type = "number";
+      nInput.min = "1";
+      nInput.step = "1";
+      if (!nInput.value || getGroupNum(group, "nElements") === 32){ nInput.value = "12"; } // fornuftig default ved bytte
+      nHint.textContent = "Antall elementer (spenntau) i beregningen.";
+
+      areaSelect.classList.remove("hidden");
+      areaBar.classList.add("hidden");
+      areaHint.textContent = "Velg standard tverrsnitt for elementet.";
+    }
+
+    updateCapType(group);
+    updatePlateUI(group);
+    updateStrandRecommendation(group);
+    compute();
+  }
+
+  // ========= LOGIKK: A pr element =========
+  function getAreaOneMm2(group){
+    if (!isBarsGroup(group)){
+      return getNumFromValue(getGroupVal(group, "areaOneSelect"));
+    }
+    // Bars: A = pi * d^2 / 4
+    const d = getGroupNum(group, "nElements"); // her er nElements = diameter
+    if (!isFinite(d) || d <= 0) return NaN;
+    const A = Math.PI * d * d / 4.0; // mm²
+    // sett i readonly feltet
+    const areaBar = getField(group, "areaOneBar");
+    if (areaBar) areaBar.value = isFinite(A) ? (Math.round(A * 10) / 10).toString() : "";
+    return A;
+  }
+
+  // ========= SUMMARY =========
+  function buildSummary(groups){
+    const lines = [];
+    lines.push("TILBUDSFORESPØRSEL – Etterspenning.no");
+    lines.push("");
+    lines.push("PROSJEKT");
+    lines.push(`- Prosjektnavn: ${getVal("projectName") || "—"}`);
+    lines.push(`- Prosjektnr.:  ${getVal("projectNo") || "—"}`);
+    lines.push(`- Leveringsland: ${getVal("deliveryCountry") || "—"}`);
+    lines.push(`- Postnr.:       ${getVal("deliveryPostal") || "—"}`);
+    lines.push(`- Sted:          ${getVal("deliveryPlace") || "—"}`);
+    lines.push("");
+    lines.push("KONTAKT");
+    lines.push(`- Kontaktperson: ${getVal("contactName") || "—"}`);
+    lines.push(`- E-post:        ${getVal("contactEmail") || "—"}`);
+
+    groups.forEach((g, idx) => {
+      lines.push("");
+      lines.push(`ANKERGRUPPE ${idx + 1}`);
+      lines.push(`- Permanent/midlertidig: ${g.permanenceText || "—"}`);
+      lines.push(`- Forankrings ordning: ${g.anchorSchemeText || "—"}`);
+      if (g.anchorSchemeValue === "differensiert"){
+        lines.push("- Dokumentasjon: inkluder tegning av forankring i dokumentasjon");
+      }
+      lines.push(`- System:        ${g.systemText}`);
+      if (g.bars){
+        lines.push(`- Stangdiameter: Ø ${fmt(g.nElements, 1)} mm`);
+        lines.push(`- Antall:        1`);
+        lines.push(`- A pr. stang:   ${fmt(g.A, 1)} mm²`);
+      } else {
+        lines.push(`- Antall spenntau: ${isFinite(g.nElements) ? Math.round(g.nElements) : "—"}`);
+        lines.push(`- A pr. element: ${g.areaOne || "—"} mm²`);
+      }
+      lines.push(`- Antall ankere: ${g.anchorCount || "—"}`);
+      lines.push(`- Fri lengde L:  ${fmt(g.lengthL, 2)} m`);
+      lines.push(`- Forankringslengde: ${fmt(g.bondedLength, 2)} m`);
+      lines.push(`- Utstikk:       ${fmt(g.extension, 2)} m`);
+      lines.push(`- Total lengde:  ${fmt(g.Ltot, 2)} m`);
+      lines.push(`- Prøvelast:     ${g.proofLoad || "—"} kN`);
+      lines.push(`- Låselast:      ${g.lockLoad || "—"} kN`);
+      lines.push(`- Lokk:          ${g.capType || "—"}`);
+      lines.push(`- Underlagsplate: ${g.plateText || "—"}`);
+    });
+
+    lines.push("");
+    lines.push("TILLEGG / KOMMENTARER");
+    lines.push(getVal("notes") || "—");
+    lines.push("");
+    lines.push("Vedlegg: (legg ved tegninger/beskrivelse ved behov).");
+
+    return lines.join("\n");
+  }
+
+  function computeGroup(group, index){
+    updateCapType(group);
+    updatePlateUI(group);
+    updateLengthWarnings(group);
+    updateStrandRecommendation(group);
+
+    const bars = isBarsGroup(group);
+    const systemText = bars ? "Stang (bar)" : "Spenntau (strand)";
+    const nElements = getGroupNum(group, "nElements");
+    const n = bars ? 1 : nElements;
+    const A = getAreaOneMm2(group);
+    const areaOne = bars ? (getGroupVal(group, "areaOneBar") || "") : (getGroupVal(group, "areaOneSelect") || "");
+
+    const Lm = getGroupNum(group, "lengthL");
+    const bonded = getGroupNum(group, "bondedLength");
+    const ext = getGroupNum(group, "extension");
+    const anchorCount = getGroupNum(group, "anchorCount");
+    const nAnchors = isFinite(anchorCount) && anchorCount > 0 ? anchorCount : 0;
+    const Lsingle = (isFinite(Lm) ? Lm : 0) + (isFinite(bonded) ? bonded : 0) + (isFinite(ext) ? ext : 0);
+    const Ltot = Lsingle * nAnchors;
+
+    const nRec = Math.round(nElements);
+    const kile = (!bars) ? getRecommendedKilePlate(nRec) : null;
+
+    const plateType = getGroupVal(group, "plateType");
+    const plateSize = getGroupVal(group, "plateSize");
+    let plateText = plateLabel(plateType);
+    if (plateType.startsWith("standard")){
+      const stdSize = getPlateStandardSize(kile);
+      plateText = `${plateLabel(plateType)}${stdSize ? `, ${stdSize} (S355)` : " (S355)"}`;
+    } else if (plateType.startsWith("ikke-standard")){
+      plateText = `${plateLabel(plateType)}${plateSize ? `, ${plateSize} mm` : ""}`;
+    }
+
+    return {
+      index,
+      permanenceText: getGroupOptionLabel(group, "permanence"),
+      anchorSchemeText: getGroupOptionLabel(group, "anchorScheme"),
+      anchorSchemeValue: getGroupVal(group, "anchorScheme"),
+      bars,
+      systemText,
+      nElements,
+      A,
+      Atot: n * A,
+      areaOne,
+      anchorCount: nAnchors,
+      lengthL: Lm,
+      bondedLength: bonded,
+      extension: ext,
+      Ltot,
+      kile,
+      capType: getGroupVal(group, "capType"),
+      plateText,
+      proofLoad: getGroupVal(group, "proofLoad"),
+      lockLoad: getGroupVal(group, "lockLoad")
+    };
+  }
+
+  // ========= BEREGNING =========
+  function compute(){
+    const groups = getGroups();
+    const data = groups.map((g, idx) => computeGroup(g, idx + 1));
+
+    const totalLength = data.reduce((sum, g) => sum + (isFinite(g.Ltot) ? g.Ltot : 0), 0);
+    getEl("outLtot").textContent = isFinite(totalLength) ? fmt(totalLength, 2) : "–";
+
+    if (data.length === 1){
+      const g = data[0];
+      getEl("outAtot").textContent = isFinite(g.Atot) ? fmt(g.Atot, 1) : "–";
+      if (!g.bars && g.kile){
+        getEl("outKile").textContent = `${g.kile} liners`;
+      } else if (!g.bars && isFinite(g.nElements) && g.nElements > 0){
+        getEl("outKile").textContent = "Kontakt leverandør";
+      } else {
+        getEl("outKile").textContent = "—";
+      }
+      getEl("outPlate").textContent = g.plateText || "—";
+      getEl("outCaps").textContent = g.anchorCount ? `${g.anchorCount} × ${g.capType || "—"}` : "—";
+    } else {
+      getEl("outAtot").textContent = "Flere grupper";
+      getEl("outKile").textContent = "Se grupper";
+      getEl("outPlate").textContent = "Se grupper";
+      const totalCaps = data.reduce((sum, g) => sum + (isFinite(g.anchorCount) ? g.anchorCount : 0), 0);
+      getEl("outCaps").textContent = totalCaps ? `${totalCaps} × (flere typer)` : "—";
+    }
+
+    const groupResults = getEl("groupResults");
+    if (groupResults){
+      groupResults.innerHTML = "";
+      data.forEach((g) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        const kileText = (!g.bars && g.kile) ? `${g.kile} liners` : (!g.bars && g.nElements > 0 ? "Kontakt leverandør" : "—");
+        row.innerHTML = `<span class="tag">Gruppe ${g.index}</span>
+          <span>L<sub>tot</sub>: ${fmt(g.Ltot, 2)} m</span>
+          <span>Kile plate: ${kileText}</span>
+          <span>Underlagsplate: ${g.plateText || "—"}</span>
+          <span>Lokk: ${g.anchorCount ? `${g.anchorCount} × ${g.capType || "—"}` : "—"}</span>`;
+        groupResults.appendChild(row);
+      });
+    }
+
+    const summary = buildSummary(data);
+    getEl("preview").value = summary;
+    return { data, summary };
+  }
+
+  function updateStrandRecommendation(group){
+    const recEl = getRole(group, "nElementsRec");
+    if (!recEl) return;
+
+    if (isBarsGroup(group)){
+      recEl.textContent = "";
+      return;
+    }
+
+    const n = Math.round(getGroupNum(group, "nElements"));
+    if (!isFinite(n) || n <= 0){
+      recEl.textContent = "";
+      return;
+    }
+
+    const kile = getRecommendedKilePlate(n);
+    let msg = "";
+    if (kile) msg = `Anbefaling: bruk kile plate ${kile} liners.`;
+    else msg = "Anbefaling: kontakt leverandør.";
+
+    recEl.textContent = msg;
+  }
+
+  function getRecommendedKilePlate(n){
+    if (!isFinite(n) || n <= 0) return null;
+    if (n <= 4) return 4;
+    if (n <= 7) return 7;
+    if (n <= 9) return 9;
+    if (n <= 12) return 12;
+    if (n <= 15) return 15;
+    if (n <= 19) return 19;
+    if (n <= 22) return 22;
+    return null;
+  }
+
+  function getPlateStandardSize(kile){
+    const sizes = {
+      4: "230x230x35 mm",
+      7: "250x250x40 mm",
+      9: "295x295x50 mm",
+      12: "330x330x55 mm",
+      19: "450x450x60 mm"
+    };
+    return sizes[kile] || null;
+  }
+
+  function plateLabel(type){
+    if (type === "ingen") return "Ingen";
+    if (type === "standard-ubehandlet") return "Standard - ubehandlet";
+    if (type === "standard-behandlet") return "Standard - behandlet";
+    if (type === "ikke-standard-ubehandlet") return "Ikke standard - ubehandlet";
+    if (type === "ikke-standard-behandlet") return "Ikke standard - behandlet";
+    return "—";
+  }
+
+  function updateCapType(group){
+    const cap = getField(group, "capType");
+    if (!cap) return;
+
+    if (isBarsGroup(group)){
+      cap.disabled = false;
+      return;
+    }
+
+    const n = Math.round(getGroupNum(group, "nElements"));
+    const mustMetal = isFinite(n) && n >= 19;
+    if (mustMetal && cap.value !== "ingen"){
+      cap.value = "metal-ubehandlet";
+      cap.disabled = true;
+    } else {
+      cap.disabled = false;
+    }
+  }
+
+  function updatePlateUI(group){
+    const type = getGroupVal(group, "plateType");
+    const wrap = getRole(group, "plateSizeWrap");
+    const info = getRole(group, "plateStandardInfo");
+    if (!wrap) return;
+    wrap.classList.toggle("hidden", !type.startsWith("ikke-standard"));
+
+    if (info){
+      if (type.startsWith("standard")){
+        const n = isBarsGroup(group) ? NaN : Math.round(getGroupNum(group, "nElements"));
+        const kile = getRecommendedKilePlate(n);
+        const size = getPlateStandardSize(kile);
+        if (kile && size){
+          info.textContent = `Standard størrelse for kile plate ${kile} liners: ${size} (S355).`;
+        } else if (kile){
+          info.textContent = `Standard størrelse for kile plate ${kile} liners: ikke definert her (S355).`;
+        } else {
+          info.textContent = "Standard størrelse avhenger av kile plate (S355).";
+        }
+      } else {
+        info.textContent = "";
+      }
+    }
+  }
+
+  function normalizePostal(country, raw){
+    const digits = (raw || "").replace(/\D/g, "");
+    if (country === "SE") return digits.slice(0, 5);
+    return digits.slice(0, 4);
+  }
+
+  async function updatePostalLookup(){
+    const country = getVal("deliveryCountry");
+    const postalRaw = getVal("deliveryPostal");
+    const postal = normalizePostal(country, postalRaw);
+    const placeEl = getEl("deliveryPlace");
+    const statusEl = getEl("deliveryStatus");
+
+    if (postalRaw !== postal) getEl("deliveryPostal").value = postal;
+
+    statusEl.textContent = "";
+
+    const needed = (country === "SE") ? 5 : 4;
+    if (postal.length !== needed) return;
+
+    if (!GEPPOSIT_API_KEY){
+      statusEl.textContent = "Skriv inn sted manuelt (postnummer-oppslag er ikke aktivert).";
+      return;
+    }
+
+    try{
+      statusEl.textContent = "Søker…";
+      const cacheKey = `${country}:${postal}`;
+      if (postalCache.has(cacheKey)){
+        const cached = postalCache.get(cacheKey);
+        placeEl.value = cached;
+        statusEl.textContent = "";
+        return;
+      }
+      const url = `https://valid.geposit.se/1.7/suggest/postalcode?country=${encodeURIComponent(country)}&postalcode=${encodeURIComponent(postal)}&apikey=${encodeURIComponent(GEPPOSIT_API_KEY)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Lookup failed");
+      const data = await res.json();
+      const hit = (data && data.results && data.results[0]) ? data.results[0] : null;
+      if (hit && (hit.place || hit.city || hit.locality)){
+        const place = hit.place || hit.city || hit.locality;
+        postalCache.set(cacheKey, place);
+        placeEl.value = place;
+        statusEl.textContent = "";
+      } else {
+        statusEl.textContent = "Fant ikke sted for postnummer. Du kan skrive sted manuelt.";
+      }
+    }catch(e){
+      statusEl.textContent = "Kunne ikke slå opp postnummer. Du kan skrive sted manuelt.";
+    }
+  }
+
+  function updateLengthWarnings(group){
+    const minWarn = 4;
+    const L = getGroupNum(group, "lengthL");
+    const bonded = getGroupNum(group, "bondedLength");
+
+    const LWarn = getRole(group, "lengthLWarn");
+    const bWarn = getRole(group, "bondedLengthWarn");
+
+    if (LWarn){
+      LWarn.classList.toggle("show", isFinite(L) && L > 0 && L < minWarn);
+    }
+    if (bWarn){
+      bWarn.classList.toggle("show", isFinite(bonded) && bonded > 0 && bonded < minWarn);
+    }
+  }
+
+  function attachEvents(){
+    const ids = [
+      "projectName","projectNo","deliveryCountry","deliveryPostal","deliveryPlace",
+      "contactName","contactEmail",
+      "notes"
+    ];
+
+    ids.forEach(id => {
+      const el = getEl(id);
+      if (!el) return;
+      el.addEventListener("input", compute);
+      el.addEventListener("change", compute);
+    });
+
+    const groupsEl = getEl("anchorGroups");
+    if (groupsEl){
+      groupsEl.addEventListener("input", (e) => {
+        if (e.target && e.target.matches("[data-field]")){
+          compute();
+        }
+      });
+      groupsEl.addEventListener("change", (e) => {
+        if (!e.target || !e.target.matches("[data-field]")) return;
+        const group = e.target.closest(".anchor-group");
+        if (!group) return;
+        if (e.target.dataset.field === "systemType") updateSystemUI(group);
+        compute();
+      });
+      groupsEl.addEventListener("click", (e) => {
+        const removeBtn = e.target.closest('[data-role="removeGroup"]');
+        if (!removeBtn) return;
+        const group = removeBtn.closest(".anchor-group");
+        if (!group) return;
+        group.remove();
+        reindexGroups();
+        compute();
+      });
+    }
+
+    const addBtn = getEl("addGroup");
+    if (addBtn){
+      addBtn.addEventListener("click", addGroup);
+    }
+    getEl("deliveryCountry").addEventListener("change", () => {
+      getEl("deliveryPostal").value = "";
+      getEl("deliveryPlace").value = "";
+      getEl("deliveryStatus").textContent = "";
+      updatePostalLookup();
+      compute();
+    });
+    getEl("deliveryPostal").addEventListener("input", () => {
+      updatePostalLookup();
+      compute();
+    });
+
+    getEl("btnReset").addEventListener("click", () => {
+      getEl("projectName").value = "";
+      getEl("projectNo").value = "";
+      getEl("deliveryCountry").value = "NO";
+      getEl("deliveryPostal").value = "";
+      getEl("deliveryPlace").value = "";
+      getEl("deliveryStatus").textContent = "";
+      getEl("contactName").value = "";
+      getEl("contactEmail").value = "";
+      const groups = getGroups();
+      groups.slice(1).forEach(g => g.remove());
+      reindexGroups();
+      const first = getGroups()[0];
+      if (first){
+        setGroupDefaults(first);
+        updateSystemUI(first);
+      }
+      getEl("notes").value = "";
+
+      compute();
+    });
+
+    getEl("btnCopy").addEventListener("click", async () => {
+      const { summary } = compute();
+      const hint = getEl("sendHint");
+      try{
+        await navigator.clipboard.writeText(summary);
+        hint.textContent = "Oppsummering kopiert til utklippstavle.";
+      }catch(e){
+        hint.textContent = "Kunne ikke kopiere automatisk. Marker teksten og kopier manuelt.";
+      }
+      setTimeout(()=> hint.textContent = "“Be om tilbud” åpner e-postklienten din med ferdig utfylt innhold (mailto).", 2800);
+    });
+
+    getEl("btnQuote").addEventListener("click", () => {
+      const { summary } = compute();
+
+      const email = getVal("contactEmail");
+      if (!email || !email.includes("@")) {
+        getEl("sendHint").textContent = "Legg inn en gyldig e-post (avsender) før du sender forespørsel.";
+        return;
+      }
+
+      const subjProject = (getVal("projectName") || getVal("projectNo") || "Prosjekt").slice(0, 80);
+      const subject = `Tilbudforespørsel – ${subjProject}`;
+
+      const mailto = `mailto:${encodeURIComponent(RECEIVER_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary)}`;
+      window.location.href = mailto;
+    });
+  }
+
+  // ========= MENY (hamburger) =========
+  function initMenu(){
+    const openBtn = getEl("openMenu");
+    const closeBtn = getEl("closeMenu");
+    const overlay = getEl("overlay");
+    const drawer = getEl("drawer");
+    if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+    function openMenu(){
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      overlay.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeMenu(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      setTimeout(() => { overlay.hidden = true; }, 180);
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) closeMenu();
+    });
+
+    const langBtn = getEl("langBtn");
+    if(langBtn){
+      langBtn.addEventListener("click", () => {
+        alert("Språkvalg kommer senere (NO/EN/SV/DA).");
+      });
+    }
+  }
+
+  function initHelp(){
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".qmark");
+      const tip = btn ? btn.closest(".tip") : null;
+      if (btn && tip){
+        e.preventDefault();
+        tip.classList.toggle("open");
+        return;
+      }
+      document.querySelectorAll(".tip.open").forEach(el => el.classList.remove("open"));
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape"){
+        document.querySelectorAll(".tip.open").forEach(el => el.classList.remove("open"));
+      }
+    });
+  }
+
+  // Init
+  initMenu();
+  initHelp();
+  updatePostalLookup();
+  attachEvents();
+  reindexGroups();
+  const firstGroup = getGroups()[0];
+  if (firstGroup) updateSystemUI(firstGroup);
+  compute();
+</script>
+
+</body>
+</html>
